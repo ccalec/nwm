@@ -1,0 +1,64 @@
+{
+  "name": "nw",
+  "description": "node-webkit client for test",
+  "version": "0.0.1",
+  "nw-version": "0.12.0",
+  "branch": "ju",
+  "main": "app/views/index.html",
+  "node-main": "index.js",
+  "window": {
+    "toolbar": true,
+    "width": 1280,
+    "height": 720
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git@gitlab.alibaba-inc.com:junode/nw.git",
+  "keywords": [
+    "node-webkit"
+  ],
+  "dependencies": {
+    "co": "4.6.0",
+    "co-fs": "1.2.0",
+    "copy-to": "2.0.1",
+    "debug": "2.0.0",
+    "json2csv": "~3.2.0",
+    "moment": "2.8.3",
+    "multiline": "1.0.0",
+    "mysql": "2.9.0",
+    "node-mysql-transaction": "0.2.1",
+    "node-xls": "0.0.8",
+    "parameter": "1.0.2",
+    "plug-base": "*",
+    "thunkify-wrap": "1.0.2"
+  },
+  "devDependencies": {
+    "merge": "~1.2.0",
+    "appdmg": "~0.3.5",
+    "archiver": "~0.16.0",
+    "del": "~2.2.0",
+    "fs-extra": "~0.26.2",
+    "gulp-vulcanize": "~6.1.0",
+    "nw-builder": "~2.0.2",
+    "@ali/gulp-civet": "*",
+    "father": "*",
+    "flex-combo": "*",
+    "gulp": "*",
+    "gulp-param": "~0.6.3",
+    "gulp-clean": "*",
+    "gulp-concat": "^2.2.0",
+    "gulp-concat-util": "*",
+    "gulp-cssmin": "^0.1.5",
+    "gulp-less": "^1.2.3",
+    "gulp-native2ascii": "*",
+    "gulp-rename": "^1.2.0",
+    "gulp-seajs-combine": "~0.3.2",
+    "gulp-shell": "0.2.x",
+    "gulp-uglify": "^0.3.0",
+    "requirejs": "*",
+    "run-sequence": "~1.1.5",
+    "through2": "*",
+    "uglify-js": "*"
+  }
+}

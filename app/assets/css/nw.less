@@ -1,0 +1,553 @@
+@import "mixin.less";
+html{
+  height: 100%;
+}
+body{
+  margin: 0;
+  padding-top: 40px;
+  font-size: 12px;
+  height: 100%;
+  padding-top: 0px;
+  .FWApp{
+    display: none;
+  }
+  table{
+    font-size: 12px;
+    th{
+      text-align: center!important;
+    }
+    td{
+      input{
+        text-align: center!important;
+      }
+    }
+    .th_gmt_create{
+      width: 120px;
+    }
+    .img_file{
+      width: 30px!important;
+      height: 30px!important;
+    }
+  }
+  .fl{
+    float: left;
+  }
+  .fr{
+    float: right;
+  }
+  .dil{
+    display: inline-block;
+  }
+  a{
+    cursor: pointer;
+  }
+}
+.skin-3{
+  .main-content{
+    background: transparent!important;
+  }
+}
+input,select,textarea{
+  box-shadow: 0px 1px 3px #e9e9e9 inset!important;
+}
+.btn-group+.btn-group{
+  margin-left: -4px;
+}
+.widget-header{
+  height: 28px;
+  line-height: 28px;
+  min-height: 28px;
+  span.widget-toolbar{
+    line-height: 28px;
+    padding: 0 10px;
+    &:before{
+      border: none;
+    }
+  }
+}
+.widget-header>.widget-caption, .widget-header>:first-child{
+  line-height: 28px;
+  font-weight: 13px;
+}
+
+//收银台样式
+.cashpage{
+  input,label{
+    display: inline-block;
+    margin: 0 1px;
+  }
+  input{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .user_info,.cash_info{
+    p{
+      display: inline-block;
+      height: 40px;
+      line-height: 40px;
+      margin: 0 5px;
+    }
+    span{
+      margin-right: 10px;
+      b{
+        color: #ff4800;
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+  }
+  .user_info{
+    span{
+      b{
+        font-size: 12px;
+        font-weight: normal;
+      }
+    }
+  }
+  .th_store_name,.td_store_name{
+    display: none;
+  }
+}
+.nodata{
+  text-align:center;
+  height: 60px;
+  line-height: 60px
+}
+.search-box{
+  position: absolute;
+  width: 600px;
+  z-index: 10000;
+  display: none;
+  background: #f7f7f7;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, .25);
+  border-radius: 0 0 4px 4px;
+  table{
+    margin-bottom: 0;
+    thead{
+      tr{
+        background: #08c!important;
+        color: #fff;
+      }
+    }
+  }
+}
+#J_outBox{
+  margin-bottom: 0;
+  .f_formList{
+    margin-bottom: 0;
+  }
+  table{
+    border: 1px solid #ddd;
+  }
+}
+.hidden{
+  display: none!important;
+}
+#J_serBox{
+  background: rgba(255,255,255,.9);
+}
+#J_serBox .table thead tr{
+  background: #307ecc;
+  border-color: #307ecc;
+  color: #fff;
+}
+#J_serBox .table tbody tr{
+  cursor: pointer;
+  background: transparent;
+}
+#formCashDetailList {
+  margin-bottom: 0;
+  // min-height: 145px;
+  .table_formlist .input-append .add-on,
+  .table_formlist .input-append .btn,
+  .table_formlist .input-append .btn-group{
+    margin-left: 0px;
+  }
+  .inp_text.readOnly{
+    border: none!important;
+    box-shadow: none!important;
+  }
+  .f_formList{
+    margin-bottom: 0;
+  }
+  .th_do,.td_do{
+    width: 60px!important;
+  }
+  .th_technician_id{
+    width: 40px;
+  }
+  .th_technician_name{
+    width: 60px;
+  }
+  .th_checkbox,.td_checkbox,
+  .th_id,.td_id,
+  .th_user_name,.td_user_name,
+  ._formlist_technician_id_inp,
+  .td_total_amount .spinner-buttons,
+  .ploptions{
+    display: none!important;
+  }
+  .th_item_type,.th_quantity,.th_unit_price,.th_total_amount,.th_push_amount{
+    width: 70px;
+  }
+}
+
+
+//会员刷卡
+.kj-menu{
+  margin: 15px 0;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #c5d0dc;
+  border-bottom: 1px solid darken(#c5d0dc, 5%);
+  .tit{
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #2679b5;
+    line-height: 24px;
+  }
+  span{
+    display: inline-block;
+    padding-right: 20px;
+  }
+  i{
+    color: #dd5a43;
+    padding-right: 3px;
+  }
+  button{
+    margin: 0 3px;
+    color: #555;
+  }
+}
+
+.tabbable_zdy{
+  margin-top: 10px;
+  .nav-tabs>li>a{
+    padding: 6px 12px;
+  }
+  .tab-content{
+    padding: 10px 0;
+    border: none;
+    form{
+      width: 800px;
+    }
+    .modal-body{
+      padding: 0;
+      .th_id{
+        width: 60px;
+      }
+      .th_cash_no,.th_cash_time{
+        width: 150px;
+      }
+      .th_checkbox,.td_checkbox,
+      .th_cash_type,.td_cash_type,
+      .th_card_no,.td_card_no,
+      .th_user_name,.td_user_name{
+        display: none;
+      }
+    }
+  }
+}
+
+.table_zdy{
+  width: 650px;
+  th{
+    width: 100px;
+    padding-right: 20px;
+    text-align: right;
+    background: #f5f5f5;
+  }
+  td{
+    font-weight: normal;
+    color: #2679b5;
+  }
+  #amount,#score,#status{
+    color: red;
+  }
+}
+
+.user_head{
+  position: absolute;
+  left: 660px;
+  top: 10px;
+}
+
+
+/*会员登记*/
+.form-horizontal .control-group{
+  margin: 0;
+  background: #fafafa;
+}
+.form-horizontal .control-label{
+  padding: 5px 20px 5px 10px;
+  width: 140px;
+  background: #f2f2f2;
+  margin-bottom: 1px;
+}
+._address_inp{
+  width: 400px;
+}
+.f_gmt_create,.f_store_name{
+  display: none;
+}
+.inp_text.readOnly,.inp_text.outerlink{
+  background: #FEFFCF!important;
+}
+.f_formList{
+  .inp_text.readOnly,.inp_text.outerlink{
+    background: none!important;
+  }
+}
+
+
+.th_id{
+  width: 60px;
+}
+.outlinkform_sms_record{
+  .th_name{
+    width: 120px;
+  }
+}
+
+/* filterGadget */
+.serarea{
+  margin-top: -5px;
+  margin-bottom: 10px;
+  padding: 5px 180px 5px 10px;
+  position: relative;
+  background: #f0f0f0;
+  min-height: 80px;
+  label,.catsel{
+    display: inline-block;
+    margin-right: 40px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    span{
+      margin: 0 10px;
+    }
+  }
+  input{
+    margin-bottom: 0!important;
+    width: 150px;
+  }
+  select{
+    margin-bottom: 0!important;
+    width: 150px;
+  }
+  .btndiv{
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    button{
+      outline: none;
+    }
+  }
+}
+
+.cash_record_conList{
+  .th_cash_no,.th_cash_time{
+    width: 120px;
+  }
+  .th_cash_type{
+    width: 60px;
+  }
+  .td_cash_type input,
+  .td_real_amount input{
+    color: #dd5a43!important;
+  }
+}
+#cashDetailGadget{
+  .th_gmt_create,.td_gmt_create,
+  .th_cash_type,.td_cash_type,
+  .th_card_no,.td_card_no{
+    display: none!important;
+  }
+}
+.cash_detail_conList{
+  .th_technician_id,.td_technician_id{
+    display: none;
+  }
+  .th_quantity{
+    width: 60px;
+  }
+  .td_push_amount input,
+  .td_total_amount input{
+    color: #dd5a43!important;
+  }
+  .td_item_type input{
+    color: #2679b5!important;
+  }
+}
+.card_conList{
+  .th_technician_id,.td_technician_id{
+    display: none;
+  }
+  .th_user_phone{
+    width: 80px;
+  }
+  .td_status input[value="正常使用"]{
+    color: green!important;
+  }
+  .td_status input,
+  .td_amount input,
+  .td_user_name input{
+    color: #dd5a43!important;
+  }
+  .td_item_type input{
+    color: #2679b5!important;
+  }
+}
+.score_record_conList{
+  .td_type input[value="增加"]{
+    color: green!important;
+  }
+  .td_type input[value="减少"]{
+    color: red!important;
+  }
+  .th_gmt_create{
+    width: 140px;
+  }
+  .td_user_name input{
+    color: #dd5a43!important;
+  }
+  .td_score input{
+    color: #2679b5!important;
+  }
+}
+.case_conList{
+  .th_clinic_time{
+    width: 140px;
+  }
+  .td_user_name input{
+    color: #dd5a43!important;
+  }
+}
+.reservation_conList{
+  .th_reserva_time{
+    width: 140px;
+  }
+  .td_user_name input{
+    color: #dd5a43!important;
+  }
+}
+.technician_conList{
+  .th_gmt_create{
+    width: 150px;
+  }
+  .td_name input{
+    color: #dd5a43!important;
+  }
+}
+.prepaid_record_conList{
+  .td_OuterLink{
+    a{
+      display: none;
+    }
+  }
+  .th_gmt_create{
+    width: 150px;
+  }
+  .th_id,.th_card_no,.th_user_name{
+    width: 60px;
+  }
+}
+.user_conList{
+  .td_name input{
+    color: #dd5a43!important;
+  }
+  .th_head,.td_head{
+    width: 40px;
+  }
+}
+#tjUserCashGadget{
+  .th_checkbox,.td_checkbox,
+  .th_id,.td_id{
+    display: none;
+  }
+  .td_tj_total_amount input{
+    color: #2679b5!important;
+  }
+  .td_user_name input{
+   color: #dd5a43!important;
+  }
+}
+
+.batchin_cg{
+  .f_type .controls{
+    label:last-child{
+      display: none;
+    }
+  }
+  .f_from_store_id,.f_from_store_name{
+    display: none;
+  }
+}
+.batchin_db{
+  .f_type .controls{
+    label:first-child{
+      display: none;
+    }
+  }
+  .f_supplier_id,.f_supplier_name{
+    display: none;
+  }
+}
+.goods_conList{
+  .td_name input{
+    color: #2679b5!important;
+  }
+  .td_active_price input{
+    color: #dd5a43!important;
+  }
+  .td_inventory input{
+    color: #A069C5!important
+  }
+  .td_inventory input[value="0"]{
+    color: red!important
+  }
+  .td_status input[value="正常售卖中"]{
+    color: green!important;
+  }
+  .td_status input[value="已下架"]{
+    color: red!important;
+  }
+  .th_gmt_create{
+    width: 140px;
+  }
+}
+.batch_out_conList,
+.batch_in_conList{
+  .td_goods_name input{
+    color: #2679b5!important;
+  }
+  .td_quantity input{
+    color: #dd5a43!important;
+  }
+  .th_gmt_create{
+    width: 140px;
+  }
+}
+.sms_template_conList{
+  .th_name,.th_store_name{
+    width: 120px;
+  }
+  .td_content input{
+    text-align: left!important;
+  }
+}
+#tjStoreDataGadget{
+  .th_checkbox,.td_checkbox,
+  .th_id,.td_id{
+    display: none;
+  }
+  .td_store_cash_amount input{
+    color: #2679b5!important;
+  }
+  .td_store_name input{
+   color: #dd5a43!important;
+  }
+}
+

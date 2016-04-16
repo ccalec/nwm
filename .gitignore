@@ -1,0 +1,17 @@
+node_modules
+.idea
+*.iml
+.project
+*.tmp
+Thumbs.rb
+.DS_Store
+.bowerrc
+.sass-cache
+.swp
+*.swp
+build
+npm-debug.log
+userconfig.json
+hammer.js
+log
+.cache/

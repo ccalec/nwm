@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>系统工具</title>
+    <!--basic styles-->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
+    <!--page specific plugin styles-->
+    <link rel="stylesheet" href="../assets/css/jquery-ui-1.10.3.custom.min.css" />
+    <link rel="stylesheet" href="../assets/css/chosen.css" />
+    <!--ace styles-->
+    <link rel="stylesheet" href="../assets/css/ace.min.css" />
+    <link rel="stylesheet" href="../assets/css/ace-responsive.min.css" />
+    <link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="../assets/css/nw.css" />
+</head>
+
+<body>
+  <div class="page-content clearfix">
+    <div class="page-header position-relative">
+      <h1 id="pageH1">
+        <div class="pull-right" id="btnAction">
+          <div class="btn-toolbar">
+          <div class="btn-group">
+            <a href="/tools/service" class="btn btn-primary">
+              <i class="icon-exchange"></i>
+              Service管理
+            </a>
+          </div><!--/btn-group-->
+
+          <div class="btn-group">
+            <a href="/tools/workflow" class="btn btn-success">
+              <i class="icon-refresh"></i>
+              Flow 管理
+            </a>
+          </div><!--/btn-group-->
+
+          <div class="btn-group">
+            <a href="/tools/debug" class="btn btn-pink">
+              <i class="icon-eye-close"></i>
+              Debug调试
+            </a>
+          </div><!--/btn-group-->
+        </div>
+        </div>
+        <span id="aliasTitle">富前端RFBreeze框架工具</span>
+      </h1>
+    </div>
+    <div class="createdbform">
+      数据库地址:<input name="host" type="text" value="localhost"/><br/>
+      数据库名:<input name="database" type="text" value="rfbreeze"/><br/>
+      数据库帐号:<input name="user" type="text" value="root" /><br/>
+      数据库密码:<input name="password" type="text" value="" /><br/>
+      <button>创建数据库</button>
+    </div>
+  </div>
+  <script src="../breeze/lib/js/jquery.js"></script>
+  <script src="../breeze/lib/js/sea.js"></script>
+  <script src="../assets/js/bootstrap.min.js"></script><!-- //前端框架JS -->
+  <script src="../assets/js/nw.js"></script>
+
+  <script type="text/javascript">
+    var NW = process.mainModule.exports;
+    $('button').click(function(){
+      NW.tools({
+        host: $('input[name="host"]').val(),
+        database: $('input[name="database"]').val(),
+        user: $('input[name="user"]').val(),
+        password: $('input[name="password"]').val()
+      },function(res){
+        alert(res.msg);
+      })
+    });
+  </script>
+
+</body>
+</html>

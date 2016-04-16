@@ -1,0 +1,281 @@
+/*自定义*/
+body{
+  font-family:'Open Sans','Microsoft YaHei';
+}
+.form-wrap{
+  min-width: 800px;
+}
+.control-group .controls>label{
+  float: left;
+  margin-right: 20px;
+}
+.formJsonModal .modal-body .form-horizontal .control-label{
+  width:120px;
+}
+.formJsonModal .modal-body form{
+  min-height: 100px;
+  background: url(images/loading.gif) center center no-repeat;
+}
+.formJsonModal .modal-body .form-horizontal .controls {
+    margin-left: 140px;
+    padding-right: 50px;
+}
+.formJsonModal.modal,
+.formJsonModal.modal.fade,
+.formJsonModal.modal.fade.in{
+  top:50%;
+  left: 50%;
+  margin-top: -300px;
+  margin-left: -500px;
+  width: 1000px;
+  height: 600px;
+}
+.FWApp{
+  display:none;
+}
+.c_Hidden{
+  display: none;
+}
+.form-actions{
+  padding: 9px 20px 10px;
+  text-align: center;
+}
+/*list css*/
+#formContentList .th_id{
+  width: 50px;
+}
+.modal-body .islist .control-group select,
+.modal-body .islist .control-group textarea,
+.modal-body .islist .control-group input[type="text"],
+.modal-body .islist .control-group input[type="password"],
+.conList .islist .control-group select,
+.conList .islist .control-group textarea,
+.conList .islist .control-group input[type="text"],
+.conList .islist .control-group input[type="password"]
+ {
+  border:none;
+    background: none repeat scroll 0 0 transparent;
+}
+.modal-body .islist .date .add-on,
+.conList .islist .date .add-on{
+  display: none;
+}
+.table_formlist select,
+.table_formlist textarea,
+.table_formlist input[type="text"],
+.table_formlist input[type="password"],
+.table_formlist .date
+ {
+  margin-left: -3px;
+  margin-right: -2px;
+  padding-left: 2px!important;
+  padding-right: 2px!important;
+  width: 100%;
+}
+.date-picker input,
+.td_OuterLink input
+{
+  min-width: 60px!important;
+}
+.td_Select select
+{
+  min-width: 80px!important;
+}
+.islist .inp_file_val,
+.islist .thumbBtn,
+.islist .inp_file,
+.islist .th_Hidden,.islist .td_Hidden,
+.channel_conAdd .c_ReadOnly
+{
+  display: none;
+}
+.model_conEdit .th_Hidden, .model_conEdit .td_Hidden{
+  display: none;
+}
+
+input[readonly],input[readonly]:focus,input[readonly]:active{
+  background: transparent!important;
+
+}
+._model_desc_valuerange_tex{
+  height:20px;
+}
+.table-list .help-inline{
+  display: none;
+}
+
+.form-horizontal .islist .controls {
+    margin-left: 0;
+}
+
+/*.inp_text.readOnly,.inp_text.readOnly:focus{
+  background-color: #f7f7f7!important;
+}*/
+
+/*栏目管理*/
+.nodetree{
+  float: left;
+  width: 240px;
+}
+.shownodecontent{
+  margin-left: 260px;
+}
+.center, .align-center {
+    text-align: left;
+}
+/*编辑器*/
+#xhePanel label,#xheShadow label,#xheCntLine label{
+  display: inline-block;
+}
+#btnAction .dropdown-menu{
+  min-width: 124px;
+}
+#btnAction .dropdown-menu>li>a{
+  line-height: 28px;
+}
+
+/*外联弹出层里面套list*/
+#outerLinkEditForm .controls{
+    margin-left: 0!important;
+    padding-right: 0!important;
+}
+
+/*formoper Pics*/
+#PicsField{
+  margin: 20px 0;
+}
+#PicsField .PicItem{
+  background: #f1f1f1;
+  padding:8px;
+  border-radius: 6px;
+  border: 1px dashed #6FB3E0;
+  width: 120px;
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  display: inline;
+}
+#PicsField .PicItem .picsThumb{
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  max-width:120px;
+  max-height:120px;
+  vertical-align: center;
+  line-height: 120px;
+  text-align: center;
+}
+.date-picker input{
+  width: 100px;
+}
+/* -----------------------------------------------
+  www.swfupload.org
+  Description: Common Screen Stylesheet for SWFUpload Demos
+  Updated on:  May 1, 2008
+----------------------------------------------- */
+
+#divFileProgressContainer .progressWrapper {
+  width: 357px;
+  overflow: hidden;
+}
+
+#divFileProgressContainer .progressContainer {
+  margin: 5px;
+  padding: 4px;
+  border: solid 1px #E8E8E8;
+  background-color: #F7F7F7;
+  overflow: hidden;
+}
+/* Message */
+#divFileProgressContainer .message {
+  margin: 1em 0;
+  padding: 10px 20px;
+  border: solid 1px #FFDD99;
+  background-color: #FFFFCC;
+  overflow: hidden;
+}
+/* Error */
+#divFileProgressContainer .red {
+  border: solid 1px #B50000;
+  background-color: #FFEBEB;
+}
+
+/* Current */
+#divFileProgressContainer .green {
+  border: solid 1px #DDF0DD;
+  background-color: #EBFFEB;
+}
+
+/* Complete */
+#divFileProgressContainer .blue {
+  border: solid 1px #CEE2F2;
+  background-color: #F0F5FF;
+}
+
+#divFileProgressContainer .progressName {
+  font-size: 8pt;
+  font-weight: 700;
+  color: #555;
+  width: 323px;
+  height: 18px;
+  margin-bottom: 5px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#divFileProgressContainer .progressBarInProgress,
+#divFileProgressContainer .progressBarComplete,
+#divFileProgressContainer .progressBarError {
+  font-size: 0;
+  width: 0%;
+  height: 2px;
+  background-color: blue;
+  margin-top: 2px;
+}
+
+#divFileProgressContainer .progressBarComplete {
+  width: 100%;
+  background-color: green;
+  visibility: hidden;
+}
+
+#divFileProgressContainer .progressBarError {
+  width: 100%;
+  background-color: red;
+  visibility: hidden;
+}
+
+#divFileProgressContainer .progressBarStatus {
+  margin-top: 2px;
+  width: 337px;
+  font-size: 7pt;
+  font-family: Arial;
+  text-align: left;
+  white-space: nowrap;
+  display: none;
+}
+
+#divFileProgressContainer a.progressCancel {
+  font-size: 0;
+  display: block;
+  height: 14px;
+  width: 14px;
+  background-image: url(../images/cancelbutton.gif);
+  background-repeat: no-repeat;
+  background-position: -14px 0px;
+  float: right;
+}
+
+#divFileProgressContainer a.progressCancel:hover {
+  background-position: 0px 0px;
+}
+
+/* -- SWFUpload Object Styles ------------------------------- */
+.swfupload {
+  vertical-align: top;
+}
+
+#jsonEditForm .form-wrap{
+  height: 250px;
+  overflow-y: auto;
+}

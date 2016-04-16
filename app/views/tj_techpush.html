@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>开发后台</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <!-- css assets -->
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap-responsive.min.css" />
+  <link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
+  <!--page specific plugin styles-->
+  <link rel="stylesheet" href="../assets/css/chosen.css" />
+  <!--ace styles-->
+  <link rel="stylesheet" href="../assets/css/ace.min.css" />
+  <link rel="stylesheet" href="../assets/css/ace-modify.css" />
+  <link rel="stylesheet" href="../assets/css/ace-responsive.min.css" />
+  <link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
+  <link rel="stylesheet" href="../assets/css/nw.css" />
+</head>
+<body class="skin-1">
+  <div class="page-content clearfix">
+    <div class="FWApp " id="cmsListHeadGadget">
+      <!--@cmsListHeadGadget@
+      {
+      }
+      -->
+      <div id="viewCmsListHead">
+        <div class="page-header position-relative" id="pageH1">
+          <h1>
+            <div class="pull-right" id="btnAction">
+              <div class="btn-toolbar">
+                <!--$if(data.addBtnShow){ -->
+                <button class="btn btn-small btn-light">
+                  <i class="icon-plus"></i>添加
+                </button>
+                <!--$}-->
+                <!-- <button class="btn btn-small btn-light">
+                  <i class="icon-print"></i>打印
+                </button> -->
+                <button class="btn btn-small btn-light">
+                  <i class="icon-download"></i>导出
+                </button>
+              </div>
+            </div>
+            <span>员工提成</span>
+            <small>
+              <i class="icon-double-angle-right"></i>
+              <span>统计汇总</span>
+            </small>
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="FWApp" id="filterGadget">
+      <!--@filterGadget@
+      {
+        alias: 'tj_push_amount'
+      }
+      -->
+      <div id="viewFilter">
+        <div class="filter-wrap" id="J_filter"></div>
+      </div>
+    </div>
+    <div class="FWApp" id="totalGadget">
+      <!--@totalGadget@
+      {
+        totalDesc: [{
+          aggrModel: {
+            fields: [{
+              fieldName: 'push_amount',
+              asName: 'tj_amount',
+              type: 'sum'
+            }]
+          }
+        },{
+          aggrModel: {
+            fields: [{
+              fieldName: 'technician_id',
+              asName: 'technician_count',
+              type: 'count'
+            }]
+          },
+          groupByField: 'technician_id',
+          tableWhere: 'nw_cash_detail.technician_id > 0'
+        }]
+      }
+      -->
+      <div id="viewTotal">
+        <div class="kj-menu">
+          <span class="tit">技师提成统计：</span>
+          <span>提成总金额：<i>${data.totalData[0].listData[0].tj_amount/100}</i>元</span>
+          <span>提成总人数：<i>${data.totalData[1].listData[0].technician_count}</i>人</span>
+        </div>
+      </div>
+    </div>
+    <div class="FWApp" id="tjUserCashGadget">
+      <!--@tjUserCashGadget@
+      {
+        totalConListDesc: {
+          fields: ['technician_name','tj_amount','store_name'],
+          modelDesc: {
+            tj_amount:  {
+              title: '提成总额',
+              type: 'Price',
+              islist: 1
+            }
+          },
+          aggrModel: {
+            fields: [
+              'technician_name',
+              {
+                fieldName: 'push_amount',
+                asName: 'tj_amount',
+                type: 'sum'
+              },
+              'store_name'
+            ],
+            groupByField: 'technician_id',
+            orderBy: [{
+              fieldName: 'tj_amount'
+            }],
+          },
+          tableWhere: 'nw_cash_detail.technician_id > 0'
+        }
+      }
+      -->
+      <div id="viewContentList">
+        <form id="formContentList" class="form-horizontal clearfix"></form>
+      </div>
+    </div>
+    <div id="submitBtn" style="clear:both;padding:20px 0 0 180px; border-top:1px solid #E2E2E2; display:none;">
+      <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerSubmit')" class="btn btn-info">
+        <i class="icon-ok bigger-110"></i>
+        确认提交
+      </a>
+      &nbsp; &nbsp; &nbsp;
+      <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerGoBack')" class="btn">
+        <i class="icon-undo bigger-110"></i>
+        返回列表
+      </a>
+    </div>
+  </div>
+
+
+  <script src="../breeze/lib/js/jquery.js"></script>
+  <script src="../breeze/lib/js/sea.js"></script>
+  <!-- 图片上传 -->
+  <script src="../breeze/lib/js/ajaxfileupload.js"></script>
+  <!--page specific plugin scripts-->
+  <script src="../assets/js/bootstrap.min.js"></script>
+  <script src="../assets/js/bootstrap-hover-dropdown.min.js"></script>
+  <script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+  <script src="../assets/js/date-time/moment.min.js"></script>
+  <script src="../assets/js/bootbox.min.js"></script>
+  <script src="../assets/js/chosen.jquery.min.js"></script>
+  <script src="../assets/js/jquery.easy-pie-chart.min.js"></script>
+  <script src="../assets/js/jquery.sparkline.min.js"></script>
+  <script src="../assets/js/flot/jquery.flot.min.js"></script>
+  <script src="../assets/js/flot/jquery.flot.pie.min.js"></script>
+  <script src="../assets/js/flot/jquery.flot.resize.min.js"></script>
+  <script src="../assets/js/My97DatePicker/WdatePicker.js"></script>
+  <!-- html编辑器 -->
+  <script src="../breeze/xheditor/jquery-migrate-1.1.0.min.js"></script>
+  <script src="../breeze/xheditor/xheditor-1.2.1.min.js"></script>
+  <script src="../breeze/xheditor/xheditor_lang/zh-cn.js"></script>
+  <!-- 多图上传函数 -->
+  <script src="../breeze/swfupload/swfupload.js"></script>
+  <script src="../breeze/swfupload/handlers.js"></script>
+  <!--ace scripts-->
+  <script src="../assets/js/ace-elements.min.js"></script>
+  <script src="../assets/js/ace.min.js"></script>
+  <script src="../assets/js/nw.js"></script>
+  <!-- 菜单高亮展开 -->
+  <script type="text/javascript">
+  $(function(){
+    //判断是否有菜单操作权限，显示该用户拥有权限的菜单
+    $("[actionName]").each(function(){
+      //获取页面权限的severname
+      var actionName = $(this).attr("actionName");
+      //格式是actionName@ServiceName.
+      actionInfoArry = actionName.split("@");
+      if(actionInfoArry.length !=2) return true;
+      var actionList = authorityData[actionInfoArry[1]] || null;
+      if(!actionList) return true;
+      //遍历权限数组，寻找对应alias和servename
+      for (var i = 0; i < actionList.length; i++){
+        if(actionList[i].actionName == actionInfoArry[0]){
+          $(this).show();
+          break;
+        }
+      }
+    })
+  })
+</script>
+
+  <script>
+  seajs.use(['../privategadget/cmsListHeadGadget','../privategadget/filterGadget','../privategadget/totalGadget','../privategadget/tjUserCashGadget'],function(a) {
+    a.go();
+    window.FW = a;
+  });
+</script>
+
+</body>
+</html>

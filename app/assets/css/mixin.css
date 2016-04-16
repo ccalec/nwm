@@ -1,0 +1,10 @@
+.triangle,
+.arrow {
+  _border: 0 !important;
+}
+.arrow small {
+  _display: none !important;
+}
+.d-inline {
+  display: inline;
+}
