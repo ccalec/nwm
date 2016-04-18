@@ -14,7 +14,7 @@
 
 var path = require('path');
 var fs = require('co-fs');
-var _Cache = require('../class/cacheClass');
+var QueryData = require('../flowunit/queryData');
 var Mysql = require('../lib/mysql');
 var copy = require('copy-to');
 
@@ -61,7 +61,16 @@ function* oneServiceHandler(context, reqParam){
   // 0. 创建事务链
   var chain = yield Mysql.trans();
   // 1. 根据serviceName和package获取对应的service配置文件
-  var serviceCfg = yield _Cache.service(serviceName);  // 获取service配置
+  var serviceParam = {
+    alias: 'service',
+    filterFields:[{
+      keyField: 'service_name' // 对应数据表的字段
+    }],
+    filterParam: {
+      service_name: serviceName
+    }
+  };
+  var serviceCfg = ((yield new QueryData({_Param: serviceParam}).execute()).data).listData[0];
   // 2. 定义工作单元共享的上下文环境
   var extendContext = {
     _Chain : chain,  //事物链
@@ -71,8 +80,14 @@ function* oneServiceHandler(context, reqParam){
   };
   copy(extendContext).toCover(context);
   // 3. 根据service配置文件，找到workflow名称，并获取workflow配置
-  var res = yield _Cache.workflow(serviceCfg.flow_id); // 获取workflow配置
-  var flow_units = JSON.parse(res.flow_units);
+  var workflowParam = {
+    alias: 'workflow',
+    filterParam: {
+      id: serviceCfg.flow_id
+    }
+  };
+  var workflowRes = ((yield new QueryData({_Param: workflowParam}).execute()).data).listData[0]; // 获取workflow配置
+  var flow_units = JSON.parse(workflowRes.flow_units);
   var flowUnitMap = {};
   for(var uObj of flow_units){
     flowUnitMap[uObj.unit_name] = uObj.result;

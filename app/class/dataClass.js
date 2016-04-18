@@ -180,9 +180,9 @@ module.exports = class DataClass {
     if(config.aggrModel){ //是否是聚合统计
       queryDataSQL =  createAggrSQL(config.aggrModel, queryDataSQL);
     }
-    if(config.tableName!='sys_model' && config.tableName!='sys_service' && config.tableName!='sys_workflow'){
+    // if(config.tableName!='sys_model' && config.tableName!='sys_service' && config.tableName!='sys_workflow'){
       console.log('queryDataSQL:\n%s', queryDataSQL);
-    }
+    // }
     return yield Mysql.query(queryDataSQL);
   };
   /**
@@ -195,9 +195,9 @@ module.exports = class DataClass {
   static * queryDataCount(config, filterParams){
     filterParams = filterParams || {};
     var queryDataCountSQL = createQueryDataCountSQL(config, filterParams);
-    if(config.tableName!='sys_model' && config.tableName!='sys_service' && config.tableName!='sys_workflow'){
+    // if(config.tableName!='sys_model' && config.tableName!='sys_service' && config.tableName!='sys_workflow'){
       console.log('queryDataCountSQL:\n%s', queryDataCountSQL);
-    }
+    // }
     var res = yield Mysql.queryOne(queryDataCountSQL);
     return res ? res.count : 0;
   };

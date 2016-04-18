@@ -24,8 +24,7 @@
   * 删除所有表附属权限
 */
 
-var _Cache = require('../class/cacheClass');
-var DataClass = require('../class/dataClass');
+var QueryModel = require('../flowunit/queryModel');
 var TableClass = require('../class/tableClass');
 var FlowUnitClass = require('../class/flowUnitClass');
 var DelData = require('./delData');
@@ -39,7 +38,7 @@ module.exports = class DelModel extends FlowUnitClass {
     var idArr = [];
     var aliasArr = param.target_alias.split(',');
     for (var alias of aliasArr){
-      var model = yield _Cache.model(alias);
+      var model = (yield new QueryModel({_Param: {alias: alias}}).execute()).data;
       if(!model) continue;
       tableArr.push(model['table_name']);
       idArr.push(model.id);

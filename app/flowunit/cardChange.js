@@ -12,6 +12,7 @@
 
 var FlowUnitClass = require('../class/flowUnitClass');
 var DataClass = require('../class/dataClass');
+var _Cache = require('../class/cacheClass');
 
 module.exports = class CardChange extends FlowUnitClass {
   * execute(){
@@ -25,6 +26,7 @@ module.exports = class CardChange extends FlowUnitClass {
     var sql = `update nw_card set no = ${param.new_no}, comment = '${param.comment}' where no = ${param.no}`;
     var res = yield DataClass.execsql(sql);
     if(res.affectedRows == 1){
+      _Cache.clearDataCache('card');  //清楚查询缓存
       return this.execEnd(1, '操作成功');
     }else{
       return this.execEnd(0, '操作失败');

@@ -18,7 +18,18 @@ define(function(require, exports, module) {
 	require("../gadget/cmsMgrGadget"); //引入扩展函数
 	FW.register({
 		param:{
-			listType: 2
+			listType: {
+				'cash_record':2,
+				'cash_detail':2,
+				'prepaid_record':2,
+				'score_record':2,
+				'case':2,
+				'reservation': 2,
+				'sms_record':2,
+				'tj_store':2,
+				'batch_in':2,
+				'batch_out':2
+			}
 		},
 		name:"cmsMgrExtGadget",
 		extends:["cmsMgrGadget"],

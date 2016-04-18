@@ -316,12 +316,14 @@ define(function(require, exports, module) {
               comment: "会员消费积分，消费总金额["+this.MY.tjData.daTAmout*100+"]，获得积分["+this.MY.tjData.cScore+"]"
             }
           }
-          this.API.doServer('cashSubmit','cms', param, function(code, data){
+          this.API.doServer('cashSubmit','cms', param, function(code, data, msg){
             if(code==1){
               FW.use('Widget').alert('收银成功','success',1500);
               setTimeout(function(){
                 FW.trigerEvent('reShowDefault');
               },1500)
+            }else{
+              FW.use('Widget').alert(msg,'danger');
             }
           })
         },

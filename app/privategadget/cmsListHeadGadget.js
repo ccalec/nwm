@@ -44,27 +44,32 @@ define(function(require, exports, module) {
       },
       name:'cmsListHeadGadget',
       onCreate:function(){
-        var self = this;
-        //获取alias
-        self.MY.alias = FW.use().getParameter("alias") || '';
-        var addBtnShow = FW.use().getParameter("addcon") == 'true';
-        //默认导出数据
-        self.MY.param = {
-          alias: self.MY.alias,
-          target: 'self',
-          resultSet: '',
-          limit: 1000
-        };
-        //更新导航栏
-        if(self.param.navTxt[self.MY.alias]){
-          $(".cateName",window.parent.document).text(self.param.navTxt[self.MY.alias][0]);
-          $(".aliasName",window.parent.document).text(self.param.navTxt[self.MY.alias][1]);
+        this.API.private('showDefault');
+      },
+      private:{
+        showDefault: function(){
+          var self = this;
+          //获取alias
+          self.MY.alias = FW.use().getParameter("alias") || '';
+          var addBtnShow = FW.use().getParameter("addcon") == 'true';
+          //默认导出数据
+          self.MY.param = {
+            alias: self.MY.alias,
+            target: 'self',
+            resultSet: '',
+            limit: 1000
+          };
+          //更新导航栏
+          if(self.param.navTxt[self.MY.alias]){
+            $(".cateName",window.parent.document).text(self.param.navTxt[self.MY.alias][0]);
+            $(".aliasName",window.parent.document).text(self.param.navTxt[self.MY.alias][1]);
+          }
+          //显示默认视图
+          self.API.show('viewCmsListHead', {
+            addBtnShow: addBtnShow,
+            aliasName: self.param.navTxt[self.MY.alias] && self.param.navTxt[self.MY.alias][1]
+          });
         }
-        //显示默认视图
-        self.API.show('viewCmsListHead', {
-          addBtnShow: addBtnShow,
-          aliasName: self.param.navTxt[self.MY.alias] && self.param.navTxt[self.MY.alias][1]
-        });
       },
       FireEvent:{
         fireGoToList: function(){
@@ -78,22 +83,30 @@ define(function(require, exports, module) {
           }
         },
         firePrinter: function(){
-
         },
-        fireExport: function(){
+        fireExport: function(e){
+          if($(e).data('status')) return;
+          $(e).data('status','true');
+          $(e).find('i').attr('class','icon-spinner icon-spin orange');
           var self = this;
           self.MY.param.resultSet = '';
           self.API.doServer("jsonToXls", "cms", self.MY.param, function(code,data){
-            if(code==1){
-              alert('导出成功');
+            if(code==1 && data){
+              $(e).attr('href',data.filepath)
+              .attr('download',data.filename)
+              .removeClass('btn-light').addClass('btn-success')
+              .html('<i class="icon-download"></i>下载');
+            }else if(code==-1){
+              FW.use('Widget').alert('无任何数据','warning');
+            }else{
+              FW.use('Widget').alert('导出失败','danger');
             }
           })
         }
       },
-      private:{
-      },
       TrigerEvent:{
         trigerUpdatefilterParam: function(param){
+          this.API.private('showDefault');
           this.MY.param = $.extend({}, param);
         }
       }

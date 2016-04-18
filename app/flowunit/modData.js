@@ -27,6 +27,7 @@ var SysConfig = require('../global/config');
 var FlowUnitClass = require('../class/flowUnitClass');
 var QueryModel = require('./queryModel');
 var moment = require('moment');
+var _Cache = require('../class/cacheClass');
 
 module.exports = class ModData extends FlowUnitClass {
   // 单元执行主逻辑
@@ -67,6 +68,8 @@ module.exports = class ModData extends FlowUnitClass {
     }else{
       var data = yield DataClass.batchModData(model['table_name'], param.id, _param, this.chain);
     }
+    //清楚查询缓存
+    _Cache.clearDataCache(param.alias);
     // 返回修改结果
     return this.execEnd(1,'数据修改成功', data);
   }

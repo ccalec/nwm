@@ -72,6 +72,14 @@ define(function(require, exports, module) {
 				*/
 				plAddSetNum:10,
 				/**
+				*@name listType
+				*@memberOf cmsMgrGadget
+				*@description 自定义扩张列表视图的操作按钮
+				*/
+				listType: {
+					xxalias:0 //0,1,2
+				},
+				/**
 				*@name btnForList
 				*@memberOf cmsMgrGadget
 				*@description 自定义扩张列表视图的操作按钮
@@ -240,6 +248,8 @@ define(function(require, exports, module) {
 					_this.MY.nodeid = _this.param.nodeid || FW.use().getParameter("nodeid") || "";
 					//获取默认参数norole，页面权限判断开关按钮 默认为false，需要权限判断
 					_this.MY.isrole = _this.param.norole || FW.use().getParameter("norole") || "";
+					//获取列表显示模式
+					_this.MY.listType = _this.param.listType[this.MY.alias] || FW.use().getParameter("listType") || "";
 					//存储默认alias及子集alias的数据描述
 					_this.MY.contentDesc = {};
 					//存储子集alias变量
@@ -674,11 +684,13 @@ define(function(require, exports, module) {
 							for(var i = 0; i < _arrData.length; i++){
 								if(!_arrData[i][v_prop]) continue;
 								if($.inArray(_desc[v_prop].type, ['List','Pics','CheckBox','MultSelect']) != -1){
+									if(_arrData[i][v_prop]==='string'){
 										_arrData[i][v_prop] = FW.use().evalJSON(_arrData[i][v_prop]);
+									}
 								}else if(_desc[v_prop].type == 'DatePicker'){
-										_arrData[i][v_prop] = FW.use('DateTime').format(new Date(_arrData[i][v_prop]),'yyyy-MM-dd');
+									_arrData[i][v_prop] = FW.use('DateTime').format(new Date(_arrData[i][v_prop]),'yyyy-MM-dd');
 								}else if(_desc[v_prop].type == 'DateTimePicker'){
-										_arrData[i][v_prop] = FW.use('DateTime').format(new Date(_arrData[i][v_prop]),'yyyy-MM-dd hh:mm:ss');
+									_arrData[i][v_prop] = FW.use('DateTime').format(new Date(_arrData[i][v_prop]),'yyyy-MM-dd hh:mm:ss');
 								}
 							}
 						}
@@ -792,7 +804,7 @@ define(function(require, exports, module) {
 						_param.filterParam.nodeid = curNodeid;  //查询
 					}
 					//显示分页列表
-					_this.API.private("privateBindFormListPage",formDom,_param, (_this.param.listType || 0),function(data){
+					_this.API.private("privateBindFormListPage",formDom,_param, (_this.MY.listType || 0),function(data){
 						//内容列表回调函数
 						_this.API.private("privateShowConListCB",data);
 					});

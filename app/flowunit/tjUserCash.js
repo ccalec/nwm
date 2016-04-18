@@ -23,13 +23,12 @@ module.exports = class TjUserCash extends FlowUnitClass {
       select c.user_name, c.card_no, c.store_id, s.store_name, from nw_cash_detail as c
       left join nw_store as s on c.store_id = s.id
       where ${wheresql}
-      limit
     `;
     var res = yield DataClass.execsql(sql);
     if(res.affectedRows == 1){
-      return this.execEnd(1, '充值成功');
+      return this.execEnd(1, '查询成功');
     }else{
-      return this.execEnd(0, '充值失败');
+      return this.execEnd(0, '查询失败');
     }
   }
 }

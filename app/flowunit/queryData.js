@@ -41,11 +41,18 @@ var UtilsClass = require('../class/utilsClass');
 var DataClass = require('../class/dataClass');
 var FlowUnitClass = require('../class/flowUnitClass');
 var QueryModel = require('./queryModel');
+var crypto = require('crypto');
+var _Cache = require('../class/cacheClass');
 
 module.exports = class QueryData extends FlowUnitClass {
   // 单元执行主逻辑
   * execute(){
     var param = this.param;
+    //判断是否走缓存
+    var md5 = crypto.createHash('md5');
+    var cachaKey = md5.update(JSON.stringify(param)).digest('hex');
+    var cacheData = _Cache.getDataCache(param.alias, cachaKey);
+    if(cacheData!=='NOCACHE') return this.execEnd(1,'数据查询成功', cacheData);
     // 根据参数获取alias对应的数据描述
     var model = (yield new QueryModel(this.context).execute()).data;
     if(!model) return this.execEnd(-1,'alias对应的数据描述不存在');
@@ -80,6 +87,8 @@ module.exports = class QueryData extends FlowUnitClass {
     }else{
       Data.listData = yield DataClass.queryData(aliasConfig, filterParam);  // 获取列表数据
     }
+    //存进缓存
+    _Cache.setDataCache(param.alias, cachaKey, Data);
     // 单元操作结果码
     return this.execEnd(1,'数据查询成功',Data);
   }

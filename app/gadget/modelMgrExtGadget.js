@@ -53,7 +53,9 @@ define(function(require, exports, module) {
 						for(var i = 0; i < _arrData.length; i++){
 							var _modelDesc = [];
 							if(_arrData[i].model_desc){
-								_arrData[i].model_desc = FW.use().evalJSON(_arrData[i].model_desc);
+								if(typeof _arrData[i].model_desc === 'string'){
+									_arrData[i].model_desc = FW.use().evalJSON(_arrData[i].model_desc);
+								}
 								for(var prop in _arrData[i].model_desc){
 									var fieldObj = _arrData[i].model_desc[prop];
 									//模型修改的时候, 将fieldname值复制到old_fieldname

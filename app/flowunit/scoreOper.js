@@ -13,6 +13,7 @@
 var FlowUnitClass = require('../class/flowUnitClass');
 var AddData = require('./addData');
 var DataClass = require('../class/dataClass');
+var _Cache = require('../class/cacheClass');
 
 module.exports = class scoreOper extends FlowUnitClass {
   * execute(){
@@ -33,6 +34,7 @@ module.exports = class scoreOper extends FlowUnitClass {
     }
     var res = yield DataClass.execsql(updateScoreSql);
     if(res.affectedRows == 1){
+      _Cache.clearDataCache('card'); //清楚查询缓存
       return this.execEnd(1, '操作成功');
     }else{
       return this.execEnd(0, '操作失败');

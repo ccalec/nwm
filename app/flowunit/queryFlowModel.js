@@ -18,23 +18,22 @@
     };
 */
 
-var DataClass = require('../class/dataClass');
+var QueryData = require('./queryData');
 var FlowUnitClass = require('../class/flowUnitClass');
 
 module.exports = class QueryFlowModel extends FlowUnitClass {
   // 单元执行主逻辑
   * execute(){
     var param = this.param;
-    var flowUnits = yield DataClass.queryData({
-      tableName: 'sys_workflow',
-      filterFields:[{
-        keyField: 'id' // 对应数据表的字段
-      }]
-    },{
-      id: param.flowId
-    });
+    var flowUnits = yield new QueryData({
+      alias: 'workflow',
+      filterParam: {
+        id: param.flowId
+      }
+    }).execute();
     try{
-      flowUnits = JSON.parse(flowUnits[0].flow_units);
+      flowUnits = flowUnits.data.listData[0];
+      flowUnits = JSON.parse(flowUnits.flow_units);
     }catch(err){
       return this.execEnd(-1,'查询的工作单元不存在或单元配置为空');
     }

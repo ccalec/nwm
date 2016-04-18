@@ -13,6 +13,7 @@
 var FlowUnitClass = require('../class/flowUnitClass');
 var AddData = require('./addData');
 var DataClass = require('../class/dataClass');
+var _Cache = require('../class/cacheClass');
 
 module.exports = class CardPrepaid extends FlowUnitClass {
   * execute(){
@@ -29,6 +30,7 @@ module.exports = class CardPrepaid extends FlowUnitClass {
     var sql = `update nw_card set amount = amount + ${param.amount} where no = ${param.card_no} and status = 1`;
     var res = yield DataClass.execsql(sql);
     if(res.affectedRows == 1){
+      _Cache.clearDataCache();  //清楚查询缓存
       return this.execEnd(1, '充值成功');
     }else{
       return this.execEnd(0, '充值失败');

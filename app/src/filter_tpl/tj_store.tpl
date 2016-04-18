@@ -8,5 +8,10 @@
       {@/each}
     </select>
   </label>
+  <label>
+  <button type="button" class="btn btn-primary btn-mini J_submitBtn" style="padding:0 10px">
+      <i class="icon-search"></i> 查询
+  </button>
+  </label>
   <button type="submit" style="display:none;"></button>
 </form>

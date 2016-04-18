@@ -26,6 +26,7 @@ var SysConfig = require('../global/config');
 var QueryModel = require('./queryModel');
 var copy = require('copy-to');
 var moment = require('moment');
+var _Cache = require('../class/cacheClass');
 
 module.exports = class AddData extends FlowUnitClass {
   // 单元执行主逻辑
@@ -82,6 +83,8 @@ module.exports = class AddData extends FlowUnitClass {
     }else{ //批量添加
       var data = yield DataClass.batchAddData(model['table_name'], arrKV, this.chain);
     }
+    //清楚查询缓存
+    _Cache.clearDataCache(param.alias);
     // 返回修改结果
     return this.execEnd(1,'数据添加成功', data);
   }

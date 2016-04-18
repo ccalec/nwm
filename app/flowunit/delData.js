@@ -23,6 +23,7 @@ var UtilsClass = require('../class/utilsClass');
 var DataClass = require('../class/dataClass');
 var FlowUnitClass = require('../class/flowUnitClass');
 var QueryModel = require('./queryModel');
+var _Cache = require('../class/cacheClass');
 
 module.exports = class DelData extends FlowUnitClass {
   // 单元执行主逻辑
@@ -35,6 +36,8 @@ module.exports = class DelData extends FlowUnitClass {
     var len = param.id.toString().split(',').length;
     var methodName = len==1?'delData':'batchDelData';
     var data = yield DataClass[methodName](model['table_name'], param.id, this.chain);
+    //清楚查询缓存
+    _Cache.clearDataCache(param.alias);
     // 返回修改结果
     return this.execEnd(1,'数据删除成功', data);
   }

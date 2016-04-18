@@ -72,8 +72,8 @@ module.exports = class FlowUnitClass {
   */
   getConfig(cfgName){
     if(!this.config['unit_param']) return;
-    this.config['unit_param'] = JSON.parse(this.config.unit_param);
-    return this.config['unit_param'][this.name+'.'+cfgName];
+    var unit_param = JSON.parse(this.config.unit_param);
+    return unit_param[this.name+'.'+cfgName];
   }
   /**
     * @name getCodeMap

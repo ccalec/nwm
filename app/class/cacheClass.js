@@ -8,84 +8,47 @@
 'use strict';
 
 
-var DataClass = require('./dataClass');
 var path = require('path');
-var fs = require('co-fs');
+var DataClass = require('./dataClass');
+
+var DataCache = {};
+var cacheSwitch = true;
 
 /**
 * @namespace
-* @name model
-* @description 将模型描述缓存到内存当中
+* @name getDataCache
+* @description get数据缓存
 */
-exports.model = function* (alias){
-  var res = yield DataClass.queryData({
-    tableName: 'sys_model',
-    filterFields:[{
-      keyField: 'model_alias' // 对应数据表的字段
-    }]
-  },{
-    model_alias: alias
-  });
-  if(res.length){
-    res[0]['model_desc'] = JSON.parse(res[0]['model_desc']);
-    return res[0];
+exports.getDataCache = function (alias, hex){
+  if(DataCache[alias] && DataCache[alias][hex] && cacheSwitch){
+    return DataCache[alias][hex];
+  }
+  return 'NOCACHE';
+}
+/**
+* @namespace
+* @name setDataCache
+* @description set数据缓存
+*/
+exports.setDataCache = function (alias,hex,data){
+  DataCache[alias] = DataCache[alias] || {};
+  DataCache[alias][hex] = data;
+}
+/**
+* @namespace
+* @name clearDataCache
+* @description 清除数据数据缓存
+*/
+exports.clearDataCache = function (alias){
+  if(alias){
+    DataCache[alias] = {};
+  }else{
+    DataCache = {};
   }
 }
-/**
-* @namespace
-* @name sonModels
-* @description 将子内容模型缓存到内存当中
-*/
-exports.sonModels = function* (alias){
-  var sonModels = [];
-  var res = yield DataClass.queryData({
-    tableName: 'sys_model',
-    filterFields:[{
-      keyField: 'parent_alias' // 对应数据表的字段
-    }]
-  },{
-    parent_alias: alias
-  });
-  res.forEach(function(model){
-    sonModels.push({
-      alias: model['model_alias'],
-      model_name: model['model_name']
-    });
-  })
-  return sonModels;
-}
-/**
-* @namespace
-* @name service
-* @description 将service配置缓存到内存当中
-*/
-exports.service = function* (serviceName){
-  var res = yield DataClass.queryData({
-    tableName: 'sys_service',
-    filterFields:[{
-      keyField: 'service_name' // 对应数据表的字段
-    }]
-  },{
-    service_name: serviceName
-  });
-  return res[0];
-}
-/**
-* @namespace
-* @name workflow
-* @description 将service配置缓存到内存当中
-*/
-exports.workflow = function* (flowId){
-  var res = yield DataClass.queryData({
-    tableName: 'sys_workflow',
-    filterFields:[{
-      keyField: 'id' // 对应数据表的字段
-    }]
-  },{
-    id: flowId
-  });
-  return res[0];
-}
+
+
+
 
 
 

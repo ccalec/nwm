@@ -67,7 +67,7 @@ var config = {
 */
 
 var debug = require('debug')('class:utilsClass');
-var _Cache = require('../class/cacheClass');
+var QueryModel = require('../flowunit/queryModel');
 
 module.exports = class UtilsClass {
   /**
@@ -97,7 +97,7 @@ module.exports = class UtilsClass {
         oAliasMap[oAlias]['fields'] = oAliasMap[oAlias]['fields'] || {};
         oAliasMap[oAlias]['fields'][oField] = field;
       }else{ // 设置为keyField, 设置tableName
-        var oModel = yield _Cache.model(oAlias);
+        var oModel = (yield new QueryModel({_Param: {alias: oAlias}}).execute()).data;
         if(oModel){
           oAliasMap[oAlias]['keyField'] = field;
           oAliasMap[oAlias]['tableName'] = oModel.table_name;
