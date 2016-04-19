@@ -26,9 +26,11 @@ module.exports = class QueryFlowModel extends FlowUnitClass {
   * execute(){
     var param = this.param;
     var flowUnits = yield new QueryData({
-      alias: 'workflow',
-      filterParam: {
-        id: param.flowId
+      _Param: {
+        alias: 'workflow',
+        filterParam: {
+          id: param.flowId
+        }
       }
     }).execute();
     try{

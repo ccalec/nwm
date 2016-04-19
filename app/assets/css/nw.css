@@ -77,6 +77,28 @@ textarea {
   line-height: 28px;
   font-weight: 13px;
 }
+.sysinfo .widget-box {
+  border: none;
+}
+.sysinfo .widget-header {
+  height: 30px;
+  line-height: 30px;
+  background: none;
+  border: 1px solid #ddd;
+}
+.sysinfo .widget-body {
+  border: 1px solid #ddd;
+  border-top: none;
+}
+.sysinfo .con {
+  margin-left: 120px;
+}
+.sysinfo .con p {
+  margin-bottom: 5px;
+}
+.sysinfo .con em {
+  color: red;
+}
 .cashpage input,
 .cashpage label {
   display: inline-block;
@@ -512,11 +534,29 @@ textarea {
 .batch_in_conList .th_gmt_create {
   width: 140px;
 }
+.sms_record_conList .th_phones,
+.sms_record_conList .th_store_name,
+.sms_record_conList .th_template_name {
+  width: 100px;
+}
+.sms_record_conList .th_phone_num,
+.sms_record_conList .th_succ_num,
+.sms_record_conList .th_fail_num {
+  width: 60px;
+}
+.sms_record_conAdd .f_phone_num,
+.sms_record_conAdd .f_succ_num,
+.sms_record_conAdd .f_fail_num {
+  display: none;
+}
 .sms_template_conList .th_name,
-.sms_template_conList .th_store_name {
+.outlinkform_sms_record .th_name,
+.sms_template_conList .th_store_name,
+.outlinkform_sms_record .th_store_name {
   width: 120px;
 }
-.sms_template_conList .td_content input {
+.sms_template_conList .td_content input,
+.outlinkform_sms_record .td_content input {
   text-align: left!important;
 }
 #tjStoreDataGadget .th_checkbox,

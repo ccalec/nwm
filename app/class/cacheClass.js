@@ -12,7 +12,7 @@ var path = require('path');
 var DataClass = require('./dataClass');
 
 var DataCache = {};
-var cacheSwitch = true;
+var cacheSwitch = false;
 
 /**
 * @namespace

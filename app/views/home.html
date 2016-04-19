@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>开发后台</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <!-- css assets -->
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap-responsive.min.css" />
+  <link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
+  <!--page specific plugin styles-->
+  <link rel="stylesheet" href="../assets/css/chosen.css" />
+  <!--ace styles-->
+  <link rel="stylesheet" href="../assets/css/ace.min.css" />
+  <link rel="stylesheet" href="../assets/css/ace-modify.css" />
+  <link rel="stylesheet" href="../assets/css/ace-responsive.min.css" />
+  <link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
+  <link rel="stylesheet" href="../assets/css/nw.css" />
+</head>
+<body class="skin-1">
+
+  <div class="page-content home clearfix">
+    <div class="FWApp~" id="homeGadget">
+      <!--@cashGadget@{
+    }
+    -->
+      <div id="viewHomeGadget">
+        <div class="widget-container sysinfo" style="width:100%;">
+          <div class="widget-box">
+            <div class="widget-header">
+              <h5><i class="icon-cog"></i>系统信息</h5>
+            </div>
+            <div class="widget-body">
+              <div class="widget-main">
+                <div class="widget-main padding-10">
+                  <div class="pull-left">
+                    <img src="../assets/images/nophoto.gif" width="100" height="100" alt="">
+                  </div>
+                  <div class="con">
+                    <p><i class="icon-home blue icon-primary"></i> <b>总部</b>  操作权限：<b style="color: #08c;">超级管理员</b></p>
+                    <p><i class="icon-user red"></i> 新增会员：今日 <em>17</em> 人/昨日 <em>5</em> 人 充值金额： 今日 62300.00 元/昨日 4700.00 元 现金收入：今日 63488.00 元/昨日 4700.00 元 </p>
+                    <p><i class="icon-money pink"></i> 银联收入：今日 0.00 元/昨日 0.00 元</p>
+                    <p>联系人：总部  电话：  地址：承德</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="../breeze/lib/js/jquery.js"></script>
+    <script src="../breeze/lib/js/sea.js"></script>
+    <!-- 图片上传 -->
+    <script src="../breeze/lib/js/ajaxfileupload.js"></script>
+    <!--page specific plugin scripts-->
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+    <script src="../assets/js/fuelux/fuelux.spinner.min.js"></script>
+    <script src="../assets/js/date-time/moment.min.js"></script>
+    <script src="../assets/js/bootbox.min.js"></script>
+    <script src="../assets/js/chosen.jquery.min.js"></script>
+    <script src="../assets/js/jquery.easy-pie-chart.min.js"></script>
+    <script src="../assets/js/jquery.sparkline.min.js"></script>
+    <script src="../assets/js/flot/jquery.flot.min.js"></script>
+    <script src="../assets/js/flot/jquery.flot.pie.min.js"></script>
+    <script src="../assets/js/flot/jquery.flot.resize.min.js"></script>
+    <script src="../assets/js/My97DatePicker/WdatePicker.js"></script>
+    <!-- html编辑器 -->
+    <script src="../breeze/xheditor/jquery-migrate-1.1.0.min.js"></script>
+    <script src="../breeze/xheditor/xheditor-1.2.1.min.js"></script>
+    <script src="../breeze/xheditor/xheditor_lang/zh-cn.js"></script>
+    <!-- 多图上传函数 -->
+    <script src="../breeze/swfupload/swfupload.js"></script>
+    <script src="../breeze/swfupload/handlers.js"></script>
+    <!--ace scripts-->
+    <script src="../assets/js/ace-elements.min.js"></script>
+    <script src="../assets/js/ace.min.js"></script>
+    <script src="../assets/js/nw.js"></script>
+    <!-- 菜单高亮展开 -->
+
+    <script>
+      seajs.use(['../privategadget/cashGadget','../privategadget/cashDetailGadget'],function(a) {
+        a.go();
+        window.FW = a;
+      });
+    </script>
+
+</body>
+  </html>

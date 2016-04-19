@@ -494,21 +494,6 @@ define(function(require, exports, module) {
 
 				//缩略图函数
 				case "File":
-					var onclickStr = "";
-					onclickStr+="this.id = this.id.replace(/\\]/ig,'_');";
-					onclickStr+="this.id = this.id.replace(/[\\[\\.]/ig,'_');";
-
-					onclickStr+="var tmpid=this.id;";
-					onclickStr+="$.ajaxFileUpload({";
-					onclickStr+="url:'${Cfg.ajaxFileUpLoadUrl}',";
-					onclickStr+="secureuri:false,";
-					onclickStr+="fileElementId:tmpid,";
-					onclickStr+="dataType: 'json',";
-					onclickStr+="success: function (data, status){";
-					onclickStr+="document.getElementById('"+fName+"_hidden').value = data.succUrl; ";
-					onclickStr+="$(document.getElementById('"+fName+"_img_file')).attr('src',Cfg.baseUrl+'/'+data.succUrl);";
-					onclickStr+="}";
-					onclickStr+="});";
 
 					formStr+="<input id='"+fName+"_hidden' type='text' class='inp_file_val' style='width:300px; float:left;' name='"+fName+"' ";
 					formStr+="<!--$if(valueStatus){-->";
@@ -516,12 +501,11 @@ define(function(require, exports, module) {
 					formStr+="<!--$}-->";
 					formStr+="/>";
 					formStr+="<button type='button' style='line-height:26px; float:left;' class='btn btn-mini btn-info thumbBtn'><i class='icon-edit bigger-120'> 上传</i></button>";
-					formStr+="<input style='opacity:0; cursor:pointer; filter:alpha(opacity=0); float:left; width:62px; margin-right:-42px; overflow:hidden; position:relative; left:-62px; zindex:10;' id='"+fName+"_file' name='upload' class='inp_file "+fClass+"_file' type='file' onchange=\""+onclickStr+"\"/>";
-
-					formStr+="<div style='float:left; position:relative; margin:0 10px 0 0;'><div style='position:absolute; left:0; top:0; max-width:90px; max-height:90px; background:url(../assets/images/nophoto.gif) no-repeat;'>";
+					formStr+="<input style='opacity:0; cursor:pointer; filter:alpha(opacity=0); float:left; width:62px; margin-right:-42px; overflow:hidden; position:relative; left:-62px; zindex:10;' id='"+fName+"_file' class='inp_file "+fClass+"_file J_SaveImg' type='file' />";
+					formStr+="<div style='float:left; position:relative; margin:0 10px 0 0;'><div style='position:absolute; left:0; top:0; max-width:90px; max-height:90px;'>";
 					formStr+="<img class='img_file "+fName+"_img_file' id='"+fName+"_img_file' style='max-height:90px; max-width:90px;' ";
 					formStr+="<!--$if(valueStatus){-->";
-					formStr+="src='${Cfg.baseUrl}/${lang:formatQuota("+fValue+")}' />";
+					formStr+="src='${lang:formatQuota("+fValue+")}' />";
 					formStr+="<!--$}else{-->";
 					formStr+="src='../assets/images/nophoto.gif' />";
 					formStr+="<!--$}-->";
@@ -855,7 +839,6 @@ define(function(require, exports, module) {
 				});
 			});
 
-
 			//xheditor编辑器
 			try{
 				if($('.xheditor').length && !islist){
@@ -865,8 +848,19 @@ define(function(require, exports, module) {
 					})
 				}
 			}catch(e){
-
 			}
+
+			//文件上传操作
+			var NW = process.mainModule.exports;
+			dom.find('.J_SaveImg').on('change',function(evt){
+				var self = this;
+				var files = evt.target.files;
+	      NW.saveFiles(files, function(fileurl){
+		      $(self).prev().prev().val(fileurl);
+		      $(self).next().find('img').attr('src',fileurl);
+		      $(self).val('');
+	      });
+			})
 
 			//给生成的表单绑定 JSON 编辑事件
 			dom.find('.J_ObjectEdit').on('click',function(){

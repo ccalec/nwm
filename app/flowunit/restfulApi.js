@@ -44,6 +44,8 @@ module.exports = class RestfulApi extends FlowUnitClass {
           "统计会员消费":"tjUserCash"
         },{
           "导出xls接口":"jsonToXls"
+        },{
+          "发送短信接口":"sendSms"
         }]
       }
     }

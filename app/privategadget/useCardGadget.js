@@ -215,7 +215,7 @@ define(function(require, exports, module) {
           }else if(page=='JFBD'){ //积分变动
             location.href = "scoreoper.html?alias=score_record&card_no="+this.MY.userInfo.no;
           }else if(page=='FSDX'){ //发送短信
-            location.href = "cmsadd.html?alias=sms_record&action=conAdd&phones="+this.MY.userInfo.user_phone;
+            location.href = "sendsms.html?alias=sms_record&action=conAdd&phones="+this.MY.userInfo.user_phone;
           }else if(page=='MMXG'){ //密码修改
             location.href = "modpsd.html?card_no="+this.MY.userInfo.no;
           }else if(page=='GSJG'){ //挂失解挂

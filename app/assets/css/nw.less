@@ -70,6 +70,33 @@ input,select,textarea{
   font-weight: 13px;
 }
 
+//home
+.sysinfo{
+  .widget-box{
+    border: none;
+  }
+  .widget-header{
+    height: 30px;
+    line-height: 30px;
+    background: none;
+    border: 1px solid #ddd;
+  }
+  .widget-body{
+    border: 1px solid #ddd;
+    border-top: none;
+  }
+  .con{
+    margin-left: 120px;
+    p{
+      margin-bottom: 5px;
+    }
+    em{
+      color: red;
+    }
+  }
+}
+
+
 //收银台样式
 .cashpage{
   input,label{
@@ -530,7 +557,20 @@ input,select,textarea{
     width: 140px;
   }
 }
-.sms_template_conList{
+.sms_record_conList{
+  .th_phones,.th_store_name,.th_template_name{
+    width: 100px;
+  }
+  .th_phone_num,.th_succ_num,.th_fail_num{
+    width: 60px;
+  }
+}
+.sms_record_conAdd{
+  .f_phone_num,.f_succ_num,.f_fail_num{
+    display: none;
+  }
+}
+.sms_template_conList,.outlinkform_sms_record{
   .th_name,.th_store_name{
     width: 120px;
   }

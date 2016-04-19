@@ -112,7 +112,7 @@ define(function(require, exports, module) {
 		},
 		TrigerEvent:{
 			trigerUpdatefilterParam: function(param){
-	      this.MY.param = $.extend({}, param);
+      	this.MY.param = param ? $.extend({}, param) : null;
 	      this.API.private("privateShowConList");
 	    }
 		}

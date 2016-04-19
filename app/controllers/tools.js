@@ -10,10 +10,11 @@
 
 var mysql = require('mysql');
 var thunkify = require('thunkify-wrap');
+var util = require("util");
 var fs = require('fs');
 var path = require('path');
 
-module.exports = function* (params) {
+exports.createDB = function* (params) {
   //创建数据库链接
   var connection = mysql.createConnection({
     host     : params.host,
@@ -36,3 +37,20 @@ module.exports = function* (params) {
   }
 }
 
+exports.saveFiles = function* (files) {
+  var file = files[0];
+  var readS = fs.createReadStream(file.path);
+  var fileurl = path.join(__dirname, '../assets/images', new Date().getTime()+'.'+file.name.split('.')[1]);
+  var writeS = fs.createWriteStream(fileurl);
+  yield writeFun(readS,writeS);
+  return fileurl;
+}
+
+function writeFun(readS, writeS){
+  return function(cb){
+    readS.pipe(writeS);
+    readS.on("end", function(){
+      cb && cb();
+    })
+  }
+}
