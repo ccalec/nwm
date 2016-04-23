@@ -54,7 +54,7 @@ module.exports = class ModData extends FlowUnitClass {
       if(fieldType==='outerField') continue;
       if(fieldType=='datetime'){
         if(!keyValue[fieldName]) continue;
-        _param[fieldName] = moment(parseInt(keyValue[fieldName])).format('YYYY-MM-DD HH:mm:ss');
+        _param[fieldName] = moment(keyValue[fieldName]).format('YYYY-MM-DD HH:mm:ss');
       }else if(fieldType=='int' || fieldType=='bigint'){
         _param[fieldName] = (keyValue[fieldName] || keyValue[fieldName]===0) ? parseInt(keyValue[fieldName]) : null;
       }else{

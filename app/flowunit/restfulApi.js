@@ -29,23 +29,16 @@ module.exports = class RestfulApi extends FlowUnitClass {
         title:"选择API单元",
         type:"Select",
         valueRange:[{
-          "收银台提交接口":"cashSubmit"
-        },{
-          "修改卡密码接口":"modPassword"
-        },{
-          "会员卡充值接口":"cardPrepaid"
-        },{
-          "挂失解挂接口":"cardStatus"
-        },{
-          "会员换卡接口":"cardChange"
-        },{
-          "会员积分变更":"scoreOper"
-        },{
-          "统计会员消费":"tjUserCash"
-        },{
-          "导出xls接口":"jsonToXls"
-        },{
-          "发送短信接口":"sendSms"
+          "收银台提交接口":"cashSubmit",
+          "修改卡密码接口":"modPassword",
+          "会员卡充值接口":"cardPrepaid",
+          "挂失解挂接口":"cardStatus",
+          "会员换卡接口":"cardChange",
+          "会员积分变更":"scoreOper",
+          "统计会员消费":"tjUserCash",
+          "导出xls接口":"jsonToXls",
+          "发送短信接口":"sendSms",
+          "首页系统信息查询":"queryHome"
         }]
       }
     }

@@ -86,6 +86,39 @@ define(function(require, exports, module) {
 		return {
 			/**
 			*@function
+			*@name getHtml
+			*@memberOf API
+			*@description 获取某个视图的html代码
+			*@param {String} viewId 要显示的视图名称，某个顶级的标签的id
+			*@param {Object} data 视图中使用的解析数据，在视图中将使用data引用这个对象
+			*@example
+			*this.API.getHtml("view1",data);
+			*/
+			getHtml:function(__viewId,__data){
+				//先将数据记录到本地存储中
+				if (__data){
+					_useAPI.lang.save("__viewId:"+__viewId,__data);
+				}
+
+				var src = _$app.view[__viewId];
+
+				//针对火狐把href中的${进行转移到处理
+				src = src.replace(/(href=["'])([^"']+)(["'])/ig,
+						function(all,a,b,c){
+							return a+b.replace(/\$%7B/ig,function(a){return "${"}).replace(/%7D/ig,"}")+c;
+						});
+				var htmlStr = _useAPI.lang.parserTemplate(src,__data,_useAPI);
+				//进行事件替换
+				htmlStr = htmlStr.replace(/["]?\s*FireEvent\.(\w+)\(([^\)]*)\)\s*["]?/ig,function(a,b,c){
+					var result = "\"var args=[" + c + "];";
+					result += ("var app = $('#" + _$app.id + "')[0].app;");
+					result += ("app.FireEvent." + b + ".apply(app,args)" + "\"");
+					return result;
+				});
+				return htmlStr;
+			},
+			/**
+			*@function
 			*@name show
 			*@memberOf API
 			*@description 显示视图，即在本APP中显示一个指定的视图，视图即在html中，声明于app下的任何顶级带id的标签,建议这些标签id为view_前缀

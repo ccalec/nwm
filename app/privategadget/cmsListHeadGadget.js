@@ -18,7 +18,7 @@ define(function(require, exports, module) {
       param:{
         navTxt: {
           'user': ['会员管理','会员信息'],
-          'card': ['会员管理','开会员卡'],
+          'card': ['会员管理','会员开卡'],
           'cash_record': ['会员消费','消费记录'],
           'cash_detail': ['会员消费','消费明细'],
           'card_rank': ['会员管理','会员卡等级'],
@@ -39,7 +39,10 @@ define(function(require, exports, module) {
           'tj_usercash': ['统计报表','消费汇总'],
           'batch_in': ['商品管理','采购明细'],
           'batch_out': ['商品管理','出库明细'],
-          'tj_store': ['统计报表','店铺数据']
+          'tj_store': ['统计报表','店铺数据'],
+          'global_announcement': ['系统信息','公告'],
+          'administrator': ['系统管理','管理员管理'],
+          'role': ['系统管理','权限配置']
         }
       },
       name:'cmsListHeadGadget',

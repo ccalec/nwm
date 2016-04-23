@@ -65,7 +65,7 @@ module.exports = class AddData extends FlowUnitClass {
         if(fieldType==='outerField') continue;
         if(fieldType=='datetime'){
           if(!keyV[fieldName]) continue;
-          oneKV[fieldName] = moment(parseInt(keyV[fieldName])).format('YYYY-MM-DD HH:mm:ss');
+          oneKV[fieldName] = moment(keyV[fieldName]).format('YYYY-MM-DD HH:mm:ss');
         }else if(fieldType=='int' || fieldType=='bigint'){
           oneKV[fieldName] = (keyV[fieldName] || keyV[fieldName]===0) ? parseInt(keyV[fieldName]) : null;
           oneKV.nodeid = oneKV.nodeid?oneKV.nodeid:'0';

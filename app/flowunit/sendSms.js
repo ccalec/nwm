@@ -61,7 +61,7 @@ module.exports = class SendSms extends FlowUnitClass {
           otherFields: [{
             keyField: 'user_id',
             tableName: 'nw_user',
-            fields: ['birthday']
+            fields: ['birthday','name']
           }],
           limit: 1,
           filterParam: {

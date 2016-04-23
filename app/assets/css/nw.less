@@ -89,13 +89,100 @@ input,select,textarea{
     margin-left: 120px;
     p{
       margin-bottom: 5px;
+      span{
+        padding-right: 20px;
+      }
     }
     em{
       color: red;
     }
   }
+  .aalist{
+    li{
+      position: relative;
+      padding: 2px 0;
+      line-height: 18px;
+      font-size: 14px;
+      color: #08c;
+      a{
+        display: inline-block;
+        margin-right: 100px;
+        height: 18px;
+        overflow: hidden;
+        width: 280px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      span{
+        position: absolute;
+        right: 0;
+        top: 5px;
+        color: gray;
+      }
+    }
+  }
 }
-
+.aadiolag{
+  width: 800px;
+  max-height: 500px;
+  padding: 30px 40px 50px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  .tit{
+    font-size: 20px;
+    color: #08c;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  .pubtime{
+    border-top: 1px solid #ccc;
+    padding-top: 15px;
+    line-height:20px;
+    color: gray;
+    text-align: center;
+  }
+  .content{
+    margin-top: 20px;
+    text-indent: 2em;
+    line-height: 2em;
+    text-align: left;
+    font-size: 13px;
+    p{
+      padding-bottom: 10px;
+    }
+  }
+}
+.hometx{
+  .tab-content{
+    padding: 0!important;
+    form{
+      padding: 5px;
+      margin-bottom: 0!important;
+    }
+  }
+  .th_checkbox,.td_checkbox,
+  .th_id,.td_id{
+    display: none;
+  }
+  .th_head{
+    width: 50px;
+  }
+  .td_head{
+    img{
+      margin-left: 10px;
+    }
+  }
+  .td_birthday input,
+  .td_reserva_time input,{
+    color: #08c;
+  }
+  .td_inventory input{
+    color: red;
+  }
+  .loading{
+    min-height: 60px;
+  }
+}
 
 //收银台样式
 .cashpage{
@@ -588,6 +675,18 @@ input,select,textarea{
   }
   .td_store_name input{
    color: #dd5a43!important;
+  }
+}
+.global_announcement_conList{
+  .th_checkbox,.td_checkbox{
+    display: none;
+  }
+  .th_do{
+    width: 60px!important;
+    text-align: center!important;
+  }
+  .th_gmt_create{
+    width: 180px;
   }
 }
 

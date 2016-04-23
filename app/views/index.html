@@ -64,9 +64,9 @@
           <a href="cms.html?alias=service" class="btn btn-small btn-warning">
             <i class="icon-exchange"></i>
           </a>
-          <button class="btn btn-small btn-danger">
+          <a href="cmslist.html?alias=role" class="btn btn-small btn-danger">
             <i class="icon-cogs"></i>
-          </button>
+          </a>
         </div>
         <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
           <span class="btn btn-success"></span>
@@ -77,6 +77,12 @@
       </div>
       <!--#sidebar-shortcuts-->
       <ul class="nav nav-list">
+        <li>
+          <a href="home.html">
+            <i class="icon-home"></i>
+            <span class="menu-text">店铺首页</span>
+          </a>
+        </li>
         <li>
           <a href="cash.html">
             <i class="icon-shopping-cart"></i>
@@ -92,13 +98,13 @@
         <li>
           <a href="cmsadd.html?alias=user&action=conAdd">
             <i class="icon-user"></i>
-            <span class="menu-text">会员登记</span>
+            <span class="menu-text">会员注册</span>
           </a>
         </li>
         <li>
           <a href="cmsadd.html?alias=card&action=conAdd">
             <i class="icon-credit-card"></i>
-            <span class="menu-text">开会员卡</span>
+            <span class="menu-text">会员开卡</span>
           </a>
         </li>
         <li>
@@ -244,16 +250,18 @@
           </div>
           <div class="btn-group">
             <button data-toggle="dropdown" data-hover="dropdown" class="btn btn-small btn-inverse dropdown-toggle">
-              <i class="icon-home"></i>门店管理
+              <i class="icon-cogs"></i>系统管理
               <i class="icon-angle-down icon-on-right"></i>
             </button>
             <ul class="dropdown-menu dropdown-inverse pull-right">
-              <li><a href="cmslist.html?alias=store&addcon=true">门店列表</a></li>
+              <li><a href="cmslist.html?alias=store&addcon=true">门店管理</a></li>
+              <li><a href="cmslist.html?alias=administrator&addcon=true">管理员管理</a></li>
+              <li><a href="cmslist.html?alias=role&addcon=true">权限配置</a></li>
             </ul>
           </div>
         </div>
       </div>
-      <iframe name="myframe" id="ifr" src="sendsms.html?alias=sms_record&action=conAdd" width="100%" height="500" scrolling-y="yes" frameborder="0"></iframe>
+      <iframe name="myframe" id="ifr" src="home.html" width="100%" height="500" scrolling-y="yes" frameborder="0"></iframe>
     </div>
 </div>
 

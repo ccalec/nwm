@@ -148,7 +148,7 @@ define(function(require, exports, module) {
         width: width,
         height: height,
         left: ($(window).width() - width) / 2,
-        top: ($(window).height() - height) / 2,
+        top: ($(window).height() - height) / 2 - 100,
         border: 'none',
         background: "transparent"
       }

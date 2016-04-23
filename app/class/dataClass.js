@@ -15,7 +15,7 @@
 
 
 
-
+var debug = require('debug')('class:dataClass');
 var Mysql = require('../lib/mysql');
 
 module.exports = class DataClass {
@@ -70,7 +70,7 @@ module.exports = class DataClass {
       valueArr.push(`(${vStr})`);
     });
     SQL += valueArr.join(',');
-    console.log('batchAddData sql: s%',SQL);
+    debug('batchAddData sql: s%',SQL);
     if(chain) return yield chain.do(SQL);
     return yield Mysql.query(SQL);
   }
@@ -180,9 +180,7 @@ module.exports = class DataClass {
     if(config.aggrModel){ //是否是聚合统计
       queryDataSQL =  createAggrSQL(config.aggrModel, queryDataSQL);
     }
-    // if(config.tableName!='sys_model' && config.tableName!='sys_service' && config.tableName!='sys_workflow'){
-      console.log('queryDataSQL:\n%s', queryDataSQL);
-    // }
+    debug('queryDataSQL:\n%s', queryDataSQL);
     return yield Mysql.query(queryDataSQL);
   };
   /**
@@ -195,9 +193,7 @@ module.exports = class DataClass {
   static * queryDataCount(config, filterParams){
     filterParams = filterParams || {};
     var queryDataCountSQL = createQueryDataCountSQL(config, filterParams);
-    // if(config.tableName!='sys_model' && config.tableName!='sys_service' && config.tableName!='sys_workflow'){
-      console.log('queryDataCountSQL:\n%s', queryDataCountSQL);
-    // }
+    debug('queryDataCountSQL:\n%s', queryDataCountSQL);
     var res = yield Mysql.queryOne(queryDataCountSQL);
     return res ? res.count : 0;
   };
@@ -224,7 +220,7 @@ module.exports = class DataClass {
     var filterData = {};
     var objFilterSql = getFilterSQL(config, filterParams);
     if(config.tableName!='sys_model' && config.tableName!='sys_service' && config.tableName!='sys_workflow'){
-      console.log('FilterSql: %j', objFilterSql);
+      debug('FilterSql: %j', objFilterSql);
     }
     for(var field in objFilterSql){
       if(!objFilterSql.hasOwnProperty(field)) continue;

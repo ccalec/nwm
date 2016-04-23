@@ -18,6 +18,14 @@ define(function(require, exports, module) {
 	require("../gadget/cmsMgrGadget"); //引入扩展函数
 	FW.register({
 		param:{
+			btnForList:{
+				global_announcement:[{
+					title:"系统公告",
+					class:"btn btn-mini btn-primary",
+					html:" <i class='icon-bullhorn bigger-120'>查看详情</i>",
+					onclick:"privateSeeMoreAA"
+				}]
+			},
 			listType: {
 				'cash_record':2,
 				'cash_detail':2,
@@ -29,6 +37,7 @@ define(function(require, exports, module) {
 				'tj_store':2,
 				'batch_in':2,
 				'batch_out':2
+				// 'global_announcement':2
 			}
 		},
 		name:"cmsMgrExtGadget",
@@ -106,8 +115,15 @@ define(function(require, exports, module) {
 					this.API.find('._phone_num_inp').val(val.split(',').length);
 				}
 			},
-			privateSetListParam: function(_param){
+			privateSetListParam: function(_param){ //设置列表参数
   			return this.MY.param || _param;
+			},
+			privateSeeMoreAA:function(dom, data){ //公告详情
+				var html = [];
+        html.push('<div class="aadiolag"><div class="tit">'+data.title+'</div>');
+        html.push('<div class="pubtime">发表于：'+FW.use('DateTime').format(new Date(data.gmt_create),'yyyy-MM-dd hh:mm:ss')+'</div>');
+        html.push('<div class="content">'+data.content+'</div></div>');
+        FW.use('Widget').prompt($(html.join('')), '系统公告');
 			}
 		},
 		TrigerEvent:{

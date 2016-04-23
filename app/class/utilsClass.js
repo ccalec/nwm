@@ -85,6 +85,7 @@ module.exports = class UtilsClass {
     // otherFields外联字断处理：
     config.otherFields = [];
     var oAliasMap = {};
+
     for(var field in model['model_desc']){
       var fobj = model['model_desc'][field];
       if(!fobj.outerLink) continue;
@@ -96,9 +97,10 @@ module.exports = class UtilsClass {
       if(fobj.fieldType==='outerField'){ // 添加进fields
         oAliasMap[oAlias]['fields'] = oAliasMap[oAlias]['fields'] || {};
         oAliasMap[oAlias]['fields'][oField] = field;
-      }else{ // 设置为keyField, 设置tableName
+      }else{ // 设置为keyField, 设置tableName，设置joinField
         var oModel = (yield new QueryModel({_Param: {alias: oAlias}}).execute()).data;
         if(oModel){
+          oAliasMap[oAlias]['joinField'] = oField;
           oAliasMap[oAlias]['keyField'] = field;
           oAliasMap[oAlias]['tableName'] = oModel.table_name;
         }
@@ -106,7 +108,7 @@ module.exports = class UtilsClass {
     }
     for(var alias in oAliasMap){
       var sobj = oAliasMap[alias];
-      if(sobj.tableName && sobj.keyField && sobj.fields){
+      if(sobj.tableName && sobj.keyField && sobj.fields && sobj.joinField){
         config.otherFields.push(sobj);
       }
     }
