@@ -38,7 +38,10 @@ module.exports = class RestfulApi extends FlowUnitClass {
           "统计会员消费":"tjUserCash",
           "导出xls接口":"jsonToXls",
           "发送短信接口":"sendSms",
-          "首页系统信息查询":"queryHome"
+          "首页系统信息查询":"queryHome",
+          "权限设置接口": "modRoleAction",
+          "管理员登录接口": "adminLogin",
+          "密码修改接口": "modAdminPassword"
         }]
       }
     }

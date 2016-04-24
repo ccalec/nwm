@@ -138,7 +138,7 @@ define(function(require, exports, module) {
 				//视图: view_contentList
 				//contentList 查询当前alias,指定id栏目的内容列表,
 				if(_this.param.viewObj == "contentList"){
-					_this.serverName = "queryContent";
+					_this.serverName = "queryData";
 					if(_this.id && _this.id != "-1"){
 						_this.doServerParam.param.nodeid = _this.id;
 					}
@@ -147,7 +147,7 @@ define(function(require, exports, module) {
 				//视图: view_contentDetail
 				//contentDetail 查询当前alias，当前id的内容详情
 				if(_this.param.viewObj == "contentDetail"){
-					_this.serverName = "queryContent";
+					_this.serverName = "queryData";
 					delete _this.doServerParam.spes;
 					if(_this.id){
 						_this.doServerParam.param.id = _this.id;
@@ -157,7 +157,7 @@ define(function(require, exports, module) {
 				//视图: view_firstContent
 				//firstContent 查询当前alias，当前栏目id下面的第一条内容的内容详情
 				if(_this.param.viewObj == "firstContent"){
-					_this.serverName = "queryContent";
+					_this.serverName = "queryData";
 					_this.doServerParam.spes.limit.length = 1;
 					if(_this.id){
 						_this.doServerParam.param.nodeid = _this.id;

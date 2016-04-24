@@ -19,6 +19,27 @@ define(function(require, exports, module) {
 	FW.register({
 		param:{
 			btnForList:{
+				administrator:[{
+					title: "设置密码",
+					action: "modData",
+					class:"btn btn-mini btn-pink",
+					html:" <i class='icon-key bigger-120'> 设置密码</i>",
+					onclick:"privateModPassword"
+				},{
+					title:"编辑",
+					action:"modData",
+					class:"btn btn-mini btn-info",
+					style:"display:none",
+					html:" <i class='icon-edit bigger-120'> 编辑</i>",
+					onclick:"privateBtnConEdit"
+				},{
+					title:"删除",
+					action:"delData",
+					class:"btn btn-mini btn-danger",
+					style:"display:none",
+					html:" <i class='icon-trash bigger-120'> 删除</i>",
+					onclick:"privateBtnConDel"
+				}],
 				global_announcement:[{
 					title:"系统公告",
 					class:"btn btn-mini btn-primary",
@@ -45,6 +66,48 @@ define(function(require, exports, module) {
 		FireEvent:{
 		},
 		private:{
+			// 修改密码
+			privateModPassword:function(_dom,_data){
+				var self = this;
+				//定义当前状态指针
+				self.MY.action = 'modPwd';
+				//显示提交\返回按钮
+				$("#submitBtn").show();
+				//替换操作标题
+				$("#actionName").text("密码修改");
+				// 显示对应视图
+				_data.password = _data.password || "密码尚未设置";
+				self.API.show('viewModPassword',_data);
+			},
+			privateSubmit_modPwd: function(){
+				var self = this;
+				var aid = self.API.find('#adminId').val();
+				var psd = self.API.find('#password').val();
+				var repsd = self.API.find('#repassword').val();
+				if(!psd || !repsd){
+					FW.use('Widget').alert("密码输入不能为空");
+					return;
+				}
+				if(psd!==repsd){
+					FW.use('Widget').alert("两次密码输入不一致，请重新输入");
+					self.API.find('#password').val('');
+					self.API.find('#repassword').val('');
+					return;
+				}
+				self.API.doServer("modAdminPassword",'cms',{id:aid, newPassword:psd},function(code,data){
+					if(code>0 && data){
+						FW.use('Widget').alert("密码修改成功",'success');
+						self.API.private("privateShowConList");
+					}else{
+						FW.use('Widget').alert("密码修改失败",'danger');
+					}
+				})
+			},
+			privateSetRoles:function(_dom,_data){
+				var curl = "/manager?path=roleaction&role_alias="+_data.role_alias;
+				top.history.replaceState(null, document.title, curl);
+				top.location.href = curl;
+			},
 			/**
 			*@function
 			*@name privateMessOutLinkOk

@@ -675,7 +675,7 @@ define(function(require, exports, module) {
 
 						//删除按钮
 						if(islist && !type){
-							formStr += "<button authority='deleteContent' type='button' class='btn btn-mini btn-danger btn-del btn-del-list'>";
+							formStr += "<button data-action='delData' type='button' class='btn btn-mini btn-danger btn-del btn-del-list'>";
 							formStr += "<i class='icon-trash bigger-120'> 批量删除</i>";
 							formStr += "</button>";
 						}else{

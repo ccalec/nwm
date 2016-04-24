@@ -87,14 +87,14 @@ define(function(require, exports, module) {
 				btnForList:{
 					default:[{
 						title:"编辑",
-						authority:"modifyContent",
+						action:"modData",
 						class:"btn btn-mini btn-info",
 						style:"display:none",
 						html:" <i class='icon-edit bigger-120'> 编辑</i>",
 						onclick:"privateBtnConEdit"
 					},{
 						title:"删除",
-						authority:"deleteContent",
+						action:"delData",
 						class:"btn btn-mini btn-danger",
 						style:"display:none",
 						html:" <i class='icon-trash bigger-120'> 删除</i>",
@@ -107,14 +107,14 @@ define(function(require, exports, module) {
 						onclick:"privateSetRoles"
 					},{
 						title:"编辑",
-						authority:"modifyContent",
+						action:"modData",
 						class:"btn btn-mini btn-info",
 						style:"display:none",
 						html:" <i class='icon-edit bigger-120'> 编辑</i>",
 						onclick:"privateBtnConEdit"
 					},{
 						title:"删除",
-						authority:"deleteContent",
+						action:"delData",
 						class:"btn btn-mini btn-danger",
 						style:"display:none",
 						html:" <i class='icon-trash bigger-120'> 删除</i>",
@@ -202,27 +202,27 @@ define(function(require, exports, module) {
 			*@example
 			*/
 			onCreate:function(){
-				var _this = this;
+				var self = this;
 				//全局设置
-				_this.API.private("privateSetGlobalVar");
+				self.API.private("privateSetGlobalVar");
 				//获取栏目数据描述
-				_this.API.private("privateGetNodeDesc");
+				self.API.private("privateGetNodeDesc");
 				//获取自身数据描述，并展示默认视图
-				_this.API.private("privateContentDesc", _this.MY.alias, function(_modelDesc){
+				self.API.private("privateContentDesc", self.MY.alias, function(_modelDesc){
 					//获取子集数据描述
-					_this.API.private("privateGetSonDesc", function(){
+					self.API.private("privateGetSonDesc", function(){
 						//判断是否自己挂接自己类型
-						if(_modelDesc['parent_alias'] ==  _this.MY.alias){
-							_this.MY.isSelfAlias = true;
+						if(_modelDesc['parent_alias'] ==  self.MY.alias){
+							self.MY.isSelfAlias = true;
 						}
 						//更新aliasTitle
 						$("#aliasTitle").text(_modelDesc.model_name);
 						$("#aliasTitle").text(_modelDesc.model_name);
 						$("#pageH1").show();
 						//显示默认视图
-						_this.API.private("privateShowDefaultView");
+						self.API.private("privateShowDefaultView");
 						//对整个文档中的操作按钮进行权限校验
-						_this.API.private("privateCheckAuth", $("body"));
+						self.API.private("privateCheckAuth", $("body"));
 					});
 				})
 			},
@@ -237,31 +237,31 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateSetGlobalVar: function(){
-					var _this = this;
+					var self = this;
 					//获取url中参数alias
-					_this.MY.alias =   _this.param.alias || FW.use().getParameter("alias") || "";
+					self.MY.alias =   self.param.alias || FW.use().getParameter("alias") || "";
 					//获取显示的视图指针action
-					_this.MY.action = _this.param.action || FW.use().getParameter("action") || "";
+					self.MY.action = self.param.action || FW.use().getParameter("action") || "";
 					//获取默认参数id
-					_this.MY.id = _this.param.id || FW.use().getParameter("id") || "";
+					self.MY.id = self.param.id || FW.use().getParameter("id") || "";
 					//获取默认参数nodeid
-					_this.MY.nodeid = _this.param.nodeid || FW.use().getParameter("nodeid") || "";
+					self.MY.nodeid = self.param.nodeid || FW.use().getParameter("nodeid") || "";
 					//获取默认参数norole，页面权限判断开关按钮 默认为false，需要权限判断
-					_this.MY.isrole = _this.param.norole || FW.use().getParameter("norole") || "";
+					self.MY.isrole = self.param.norole || FW.use().getParameter("norole") || "";
 					//获取列表显示模式
-					_this.MY.listType = _this.param.listType[this.MY.alias] || FW.use().getParameter("listType") || "";
+					self.MY.listType = self.param.listType[this.MY.alias] || FW.use().getParameter("listType") || "";
 					//存储默认alias及子集alias的数据描述
-					_this.MY.contentDesc = {};
+					self.MY.contentDesc = {};
 					//存储子集alias变量
-					_this.MY.sonAlias = _this.param.sonAlias || FW.use().getParameter("sonAlias") || "";
+					self.MY.sonAlias = self.param.sonAlias || FW.use().getParameter("sonAlias") || "";
 					//子集id,用于存在子集alias内容编辑时用
-					_this.MY.sonId = _this.param.sonId || FW.use().getParameter("sonId") || "";
+					self.MY.sonId = self.param.sonId || FW.use().getParameter("sonId") || "";
 					//判断是否自己挂接自己类型
-					_this.MY.isSelfAlias = false;
+					self.MY.isSelfAlias = false;
 					//判断是否没有挂接栏目
-					_this.MY.noClass = false;
+					self.MY.noClass = false;
 					//定义状态指针,6种视图命名定义
-					_this.MY.act = {
+					self.MY.act = {
 						conList: "conList",  			//内容列表
 						conAdd: "conAdd",    			//内容添加
 						conPLAdd: "conPLAdd",    		//内容批量添加
@@ -270,9 +270,9 @@ define(function(require, exports, module) {
 						conEdit: "conEdit"				//编辑内容
 					}
 					//定义package
-					_this.MY.package = "cms";
+					self.MY.package = "cms";
 					//定义各种情况的serverName
-					_this.MY.serverName = {
+					self.MY.serverName = {
 						aCon: "addData",				//内容表:增
 						dCon: "delData",     		//内容表:删
 						mCon: "modData",			//内容表:改
@@ -288,28 +288,28 @@ define(function(require, exports, module) {
 				*@name privateGetNodeDesc
 				*@memberOf cmsMgrGadget
 				*@description 初始化获取当前alias栏目树数据描述nodeDesc,主要实现如下：
-				*@ 1、判断是否没有栏目 指针_this.MY.noClass, 布尔类型 有栏目设为false；   没有栏目设为true
-				*@ 2、将nodeDesc保存在_this.MY.nodeDesc变量中
+				*@ 1、判断是否没有栏目 指针self.MY.noClass, 布尔类型 有栏目设为false；   没有栏目设为true
+				*@ 2、将nodeDesc保存在self.MY.nodeDesc变量中
 				*@ 3、在没有栏目的情况下，移除【栏目管理】按钮Group
 				*@example
 				*/
 				privateGetNodeDesc: function(){
-					var _this = this;
+					var self = this;
 					var _param = {
-						alias: _this.MY.alias,
+						alias: self.MY.alias,
 						target: "parent"
 					};
-					_this.API.doServer(_this.MY.serverName.qModel, _this.MY.package, _param, function(code,data){
+					self.API.doServer(self.MY.serverName.qModel, self.MY.package, _param, function(code,data){
 						//栏目列表的数据描述请求结果判断
 						if(code>0 && data){
-							_this.MY.nodeDesc = data.model_desc || {};
-							_this.MY.nodeDesc.id={
+							self.MY.nodeDesc = data.model_desc || {};
+							self.MY.nodeDesc.id={
 								type:'Hidden',
 								title:'id',
 								islist:"0"
 							};
 						}else{  //没有挂接栏目的情况
-							_this.MY.noClass = true;
+							self.MY.noClass = true;
 							$("#btnAction .btn-group:eq(1)").remove();
 						}
 					})
@@ -325,12 +325,12 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateGetSonDesc: function(callback){
-					var _this = this;
+					var self = this;
 					var param = {
-						alias: _this.MY.alias,
+						alias: self.MY.alias,
 						target: 'son'
 					};
-					_this.API.doServer(_this.MY.serverName.qModel, _this.MY.package, param,function(code,data){
+					self.API.doServer(self.MY.serverName.qModel, self.MY.package, param,function(code,data){
 						//子节点内容请求结果判断
 						//===================
 						if(code>0 && data){
@@ -353,24 +353,24 @@ define(function(require, exports, module) {
 								var index = $("#tabSonAlias>ul>li>a").index($(this));
 								if(index==0){
 									//删除sonAlias
-									delete _this.MY.sonAlias;
+									delete self.MY.sonAlias;
 									$("#btnAddSonAlias").hide();
 									$("#btnPLAddSonAlias").hide();
-									_this.API.private("privateShowConEdit");
+									self.API.private("privateShowConEdit");
 								}else{
 									//将对应li的sonAlias存入this对象
-									_this.MY.sonAlias = $(this).attr("sonalias");
+									self.MY.sonAlias = $(this).attr("sonalias");
 									//正常添加的情况
 									$("#btnAddSonAlias").show().on("click",function(){
-										_this.API.private("privateShowConAdd");
+										self.API.private("privateShowConAdd");
 									})
 									//批量添加的情况
 									$("#btnPLAddSonAlias").show().on("click",function(){
-										_this.API.private("privateShowConPLAdd");
-										_this.API.find(".table_formlist:eq(0)").next().find(".btn-add-con").show();
+										self.API.private("privateShowConPLAdd");
+										self.API.find(".table_formlist:eq(0)").next().find(".btn-add-con").show();
 									})
-									_this.API.private("privateContentDesc", _this.MY.sonAlias, function(){
-										_this.API.private("privateShowConList");
+									self.API.private("privateContentDesc", self.MY.sonAlias, function(){
+										self.API.private("privateShowConList");
 									})
 								}
 							})
@@ -390,12 +390,12 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateContentDesc: function(_alias,_callback){
-					var _this = this;
-					_this.API.doServer(_this.MY.serverName.qModel,_this.MY.package,{alias:_alias},function(code,data){
+					var self = this;
+					self.API.doServer(self.MY.serverName.qModel,self.MY.package,{alias:_alias},function(code,data){
 						if(code>0 && data){
-							_this.MY.contentDesc[_alias] = data.model_desc;
-							if(!_this.MY.contentDesc[_alias].id){
-								_this.MY.contentDesc[_alias].id={
+							self.MY.contentDesc[_alias] = data.model_desc;
+							if(!self.MY.contentDesc[_alias].id){
+								self.MY.contentDesc[_alias].id={
 									type:'Hidden',
 									title:'id',
 									islist:"1"
@@ -472,7 +472,7 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateOutLinkCB: function(_modelDesc, _formDom, _fieldName, _fieldValue, _callback){
-					var _this = this;
+					var self = this;
 					//获取外联数据的序号sn， -1标示不存在序号，非列表外联
 					var reVal = /data.formList\[(.*?)\].*?/g.exec(_fieldName);
 					var sn = reVal==null?-1:reVal[1];
@@ -504,13 +504,13 @@ define(function(require, exports, module) {
 					var conListDom = $("#preOuterLinkEditForm");
 					//定义包含内容列表的容器,包装内容列表函数，生成内容列表
 					function reShowListForOutlink(_wrapConListDom,_newParam,_reShowCB){
-						_this.API.private("privateContentDesc",_newParam.alias,function(data){
+						self.API.private("privateContentDesc",_newParam.alias,function(data){
 							//定义弹出层默认标题
 							if(!dialogTitle){
 								dialogTitle = "请选择"+data.model_name;
 							}
 							//显示分页列表
-							_this.API.private("privateBindFormListPage", conListDom, _newParam, 2, function(data){
+							self.API.private("privateBindFormListPage", conListDom, _newParam, 2, function(data){
 								//将内容列表移动到内容列表的节点
 								_wrapConListDom.empty();
 								conListDom.appendTo(_wrapConListDom);
@@ -519,7 +519,7 @@ define(function(require, exports, module) {
 						})
 					}
 					//执行外联视图自定义,可以转换_param, 返回外联视图Dom
-					_this.API.private("privateSetOutlinkView", newViewDom, param, sn, function(wrapConListDom, newParam){
+					self.API.private("privateSetOutlinkView", newViewDom, param, sn, function(wrapConListDom, newParam){
 						//给自定义视图筛选机制自定义param绑定事件接口函数
 						reShowListForOutlink(wrapConListDom,newParam);
 					},function(wrapConListDom, newParam, newDialogTitle){
@@ -528,14 +528,14 @@ define(function(require, exports, module) {
 						//生成内容列表，插入对应节点
 						reShowListForOutlink(wrapConListDom,newParam,function(){
 							//显示弹出层，定义保存按钮执行函数
-							_this.API.private("privateMaskLayer",newViewDom,dialogTitle,1000,function(){
+							self.API.private("privateMaskLayer",newViewDom,dialogTitle,1000,function(){
 								//获取选中的data数据
 								var __FormData = conListDom[0].batchEdit();
 								if(!__FormData.length) return;
 								//将已填写数据getData储存起来
 								var newData = _formDom[0].getData();
 								//判断是否是列表视图，如果是列表，就将data转成data.formList
-								if(_this.MY.action == _this.MY.act.conPLAdd || _this.MY.action == _this.MY.act.conList){
+								if(self.MY.action == self.MY.act.conPLAdd || self.MY.action == self.MY.act.conList){
 									newData = _formDom[0].getData().formList;
 								}
 								if(!newData) return;
@@ -558,7 +558,7 @@ define(function(require, exports, module) {
 									}
 								}
 								//执行回调，重新渲染原视图
-								_this.API.private('privateMessOutLinkOk',_modelDesc, _formDom, _fieldName, _fieldValue, newData);
+								self.API.private('privateMessOutLinkOk',_modelDesc, _formDom, _fieldName, _fieldValue, newData);
 								_callback && _callback(newData);
 							})
 						})
@@ -677,7 +677,7 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateDataToForm: function(_desc,_arrData){
-					var _this = this;
+					var self = this;
 					//转换data中数组字符串的情况为数组
 					if(_arrData && _arrData.length){
 						for(var v_prop in _desc){
@@ -707,7 +707,7 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateFormToData: function(_desc,_data){
-					var _this = this;
+					var self = this;
 					//转换_data中数组字符串的情况为数组
 					if(_data){
 						for(var v_prop in _desc){
@@ -738,14 +738,14 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateShowConList: function(){
-					var _this = this;
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+					var self = this;
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
 
 					//判断是否指定栏目
-					if(_this.MY.sonAlias){
-						var curNodeid = _this.MY.id;
-						var curAlias = _this.MY.sonAlias;
-						var curTabDom = $("#tabSonAlias>ul>li>a[sonalias='"+_this.MY.sonAlias+"']");
+					if(self.MY.sonAlias){
+						var curNodeid = self.MY.id;
+						var curAlias = self.MY.sonAlias;
+						var curTabDom = $("#tabSonAlias>ul>li>a[sonalias='"+self.MY.sonAlias+"']");
 						var sn = $("#tabSonAlias>ul>li>a").index(curTabDom);
 						$("#tabSonAlias>ul>li").removeClass("active").eq(sn).addClass("active");
 						//显示tab头
@@ -753,41 +753,41 @@ define(function(require, exports, module) {
 						$("#btnAddSonAlias").show();
 						$("#btnPLAddSonAlias").show();
 					}else{
-						var curNodeid = _this.MY.nodeid;
-						var curAlias = _this.MY.alias;
+						var curNodeid = self.MY.nodeid;
+						var curAlias = self.MY.alias;
 						$("#tabSonAlias").hide();
 						$("#btnAddSonAlias").hide();
 						$("#btnPLAddSonAlias").hide();
-						_this.MY.id = '';
+						self.MY.id = '';
 					}
 
 					//如果不是可快速编辑模式，否则隐藏
-					if(!_this.param.plModSet[curAlias]){
+					if(!self.param.plModSet[curAlias]){
 						$("#submitBtn").hide();
 					}
 					//定义当前状态指针
-					_this.MY.action = _this.MY.act.conList;
+					self.MY.action = self.MY.act.conList;
 
 					//修改history和地址栏URL
-					_this.API.private("privatePushState",{
-						action: _this.MY.action,
-						alias: _this.MY.alias,
-						sonAlias: _this.MY.sonAlias,
-						nodeid: _this.MY.nodeid,
-						id: _this.MY.id,
+					self.API.private("privatePushState",{
+						action: self.MY.action,
+						alias: self.MY.alias,
+						sonAlias: self.MY.sonAlias,
+						nodeid: self.MY.nodeid,
+						id: self.MY.id,
 						sonId: ''
 					});
 
 					//替换操作标题
 					$("#actionName").text("内容列表");
 					//显示列表视图
-					_this.API.show(_this.param.viewConList);
+					self.API.show(self.param.viewConList);
 					//获得List的dom
-					var formDom = _this.API.find("#"+_this.param.formConList);
+					var formDom = self.API.find("#"+self.param.formConList);
 					//增加视图独立样式class
 					//如果是可快速编辑模式，则显示视图class为editConList
-					if(!_this.param.plModSet[curAlias]){
-						formDom.addClass(curAlias+"_"+_this.MY.action).addClass(_this.MY.action);
+					if(!self.param.plModSet[curAlias]){
+						formDom.addClass(curAlias+"_"+self.MY.action).addClass(self.MY.action);
 					}else{
 						formDom.addClass(curAlias+"_editConList").addClass("editConList");
 					}
@@ -804,9 +804,9 @@ define(function(require, exports, module) {
 						_param.filterParam.nodeid = curNodeid;  //查询
 					}
 					//显示分页列表
-					_this.API.private("privateBindFormListPage",formDom,_param, (_this.MY.listType || 0),function(data){
+					self.API.private("privateBindFormListPage",formDom,_param, (self.MY.listType || 0),function(data){
 						//内容列表回调函数
-						_this.API.private("privateShowConListCB",data);
+						self.API.private("privateShowConListCB",data);
 					});
 				},
 				/**
@@ -823,33 +823,33 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateShowConListCB:function(_data){
-					var _this = this;
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+					var self = this;
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
 					//判断是否指定栏目
-					if(_this.MY.sonAlias){
-						var curNodeid = _this.MY.id;
-						var curAlias = _this.MY.sonAlias;
+					if(self.MY.sonAlias){
+						var curNodeid = self.MY.id;
+						var curAlias = self.MY.sonAlias;
 					}else{
-						var curNodeid = _this.MY.nodeid;
-						var curAlias = _this.MY.alias;
+						var curNodeid = self.MY.nodeid;
+						var curAlias = self.MY.alias;
 					}
 					//获得List的dom
-					var formDom = _this.API.find("#"+_this.param.formConList);
+					var formDom = self.API.find("#"+self.param.formConList);
 					//给列表每行的checkbox增加FW.trigerEvent事件
 					formDom.find("table:eq(0)>tbody>tr>td>label>input[type='checkbox']").on("click",function(){
 						var index = formDom.find("table:eq(0)>tbody>tr>td>label>input[type='checkbox']").index($(this));
 						FW.trigerEvent("trigerCheckBoxClick",_data[index]);
 					})
 					//给当前alias的内容列表操作区域绑定点击事件
-					if( _this.param.btnForList && _this.param.btnForList[curAlias]){
-						btnJoin(_this.param.btnForList[curAlias]);
-					}else if(_this.param.btnForList && _this.param.btnForList.default){
-						btnJoin(_this.param.btnForList.default);
+					if( self.param.btnForList && self.param.btnForList[curAlias]){
+						btnJoin(self.param.btnForList[curAlias]);
+					}else if(self.param.btnForList && self.param.btnForList.default){
+						btnJoin(self.param.btnForList.default);
 					}
 
 					//批量删除按钮
 					formDom.find(".btn-del-list").on("click",function(){
-						_this.API.private("privateBtnConPLDel");
+						self.API.private("privateBtnConPLDel");
 					});
 
 					//btn扩展处理内部函数
@@ -862,6 +862,8 @@ define(function(require, exports, module) {
 										var aonclick = arrBtn[iii][prop];
 									}else if(prop == "html"){
 										var ahtml = arrBtn[iii][prop];
+									}else if(prop == "action"){
+										aattr += "data-action='"+arrBtn[iii][prop]+"' ";
 									}else{
 										aattr += prop+"='"+arrBtn[iii][prop]+"' ";
 									}
@@ -871,17 +873,17 @@ define(function(require, exports, module) {
 								$(aattr+ahtml+"</a>").appendTo(formDom.find("table:eq(0)>tbody>tr>td>.actionBtnForList"))
 								.on("click",function(){
 									var index = formDom.find("table:eq(0)>tbody>tr>td>.actionBtnForList").index($(this).parents(".actionBtnForList"));
-									_this.API.private(aonclick,$(this),_data[index]);
+									self.API.private(aonclick,$(this),_data[index]);
 								})
 							})(i)
 						}
 					}
 					//权限判断
-					_this.API.private("privateCheckAuth",formDom);
+					self.API.private("privateCheckAuth",formDom);
 					//内容列表视图显示完发送的mess
-					_this.API.private("privateMessConListOk",_data);
+					self.API.private("privateMessConListOk",_data);
 					//如果是可快速编辑模式，则显示提交按钮
-					if(_this.param.plModSet[curAlias]){
+					if(self.param.plModSet[curAlias]){
 						setTimeout(function(){
 							$("#submitBtn").fadeIn(150);
 						},315);
@@ -915,23 +917,23 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateBindFormListPage:function(_dom,_param,_type,_callback){
-					var _this = this;
+					var self = this;
 					//生成列表前param的参数对外自定义接口
-					_param = _this.API.private("privateSetListParam",_param);
+					_param = self.API.private("privateSetListParam",_param);
 					//查询总数条件
 					_param.resultSet = 'count';
 					//计算list的数据总数
-					_this.API.doServer(_this.MY.serverName.qCon, _this.MY.package, _param, function(code,data){
+					self.API.doServer(self.MY.serverName.qCon, self.MY.package, _param, function(code,data){
 						if(code>0 && data){
 							//储存数据总数
 							var dataCount = parseInt(data.listCount) || 0;
 							//判断总数是否为0，如果为0则显示空数据视图
 							if(!dataCount){
-								_this.API.private("privateContentDesc", _param.alias, function(){
+								self.API.private("privateContentDesc", _param.alias, function(){
 									//表单生成前，对数据描述的自定义接口
-									_this.API.private("privateSetDescAndData", _param.alias, null, function(){
-										FW.use().createFormList(_this.MY.contentDesc[_param.alias],_dom,null,function(fieldName,fieldValue){
-											_this.API.private("privateOutLinkCB",_this.MY.contentDesc[_param.alias], _dom, fieldName, fieldValue);
+									self.API.private("privateSetDescAndData", _param.alias, null, function(){
+										FW.use().createFormList(self.MY.contentDesc[_param.alias],_dom,null,function(fieldName,fieldValue){
+											self.API.private("privateOutLinkCB",self.MY.contentDesc[_param.alias], _dom, fieldName, fieldValue);
 										},_type)
 										//显示分页
 										FW.use().showPagination(_dom.find("#pagination"));
@@ -941,7 +943,7 @@ define(function(require, exports, module) {
 								})
 							}else{
 								//获取pagesize
-								var pageSize = _this.param.pagesize || 20;
+								var pageSize = self.param.pagesize || 20;
 								var lsPageNum = _param.filterParam.nodeid ? (_param.alias + _param.filterParam.nodeid) : _param.alias;
 								var curPageNum = parseInt(FW.use().load(lsPageNum)) || 1;
 								if(curPageNum > Math.ceil(dataCount/pageSize)){
@@ -954,18 +956,18 @@ define(function(require, exports, module) {
 									//将_param参数修改为获取最新newData数据的param
 									_param.resultSet = '';
 									_param.limit = (pageSize*pageNum-pageSize).toString()+","+pageSize.toString();
-									_this.API.doServer(_this.MY.serverName.qCon, _this.MY.package, _param, function(code,data){
+									self.API.doServer(self.MY.serverName.qCon, self.MY.package, _param, function(code,data){
 										if(code>0){
 											//判断当前数据描述是否存在，如果不存在，则获取
-											_this.API.private("privateContentDesc", _param.alias, function(){
+											self.API.private("privateContentDesc", _param.alias, function(){
 												//表单生成前，对数据库数据类型转换
-												_this.API.private("privateDataToForm", _this.MY.contentDesc[_param.alias], data.listData);
+												self.API.private("privateDataToForm", self.MY.contentDesc[_param.alias], data.listData);
 												//重新显示列表数据
 												function reShowOutLink(_data){
 													//表单生成前，对数据描述和数据的自定义接口
-													_this.API.private("privateSetDescAndData", _param.alias, _data, function(){
+													self.API.private("privateSetDescAndData", _param.alias, _data, function(){
 														//在列表页，将控件类型显示成文本类型
-														var newDesc = FW.clone(_this.MY.contentDesc[_param.alias]);
+														var newDesc = FW.clone(self.MY.contentDesc[_param.alias]);
 														$.each(newDesc, function(fieldName, fd){
 															if(fd.islist==0) return true;
 															// 单选类型
@@ -999,7 +1001,7 @@ define(function(require, exports, module) {
 														});
 														//生成列表
 														FW.use().createFormList(newDesc, _dom, _data, function(fieldName,fieldValue){
-															_this.API.private("privateOutLinkCB",newDesc, _dom, fieldName, fieldValue,function(newdata){
+															self.API.private("privateOutLinkCB",newDesc, _dom, fieldName, fieldValue,function(newdata){
 																reShowOutLink(newdata);
 															})
 														},_type)
@@ -1031,7 +1033,7 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateSetListParam:function(_param){
-					var _this = this;
+					var self = this;
 					return _param;
 				},
 				/**
@@ -1051,33 +1053,33 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateShowConAdd: function(){
-					var _this = this;
+					var self = this;
 					//判断是否指定栏目
-					if(_this.MY.sonAlias){
-						var curNodeid = _this.MY.id;
-						var curAlias = _this.MY.sonAlias;
+					if(self.MY.sonAlias){
+						var curNodeid = self.MY.id;
+						var curAlias = self.MY.sonAlias;
 					}else{
-						var curNodeid = _this.MY.nodeid;
-						var curAlias = _this.MY.alias;
-						_this.MY.id = ''; //清空id
+						var curNodeid = self.MY.nodeid;
+						var curAlias = self.MY.alias;
+						self.MY.id = ''; //清空id
 					}
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
-					if(!curNodeid && !_this.MY.noClass){
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
+					if(!curNodeid && !self.MY.noClass){
 						FW.use('Widget').alert("请先选择栏目!","warning");
 						return;
 					}
 					//判断是否指定栏目
-					if(_this.MY.sonAlias){
-						var curNodeid = _this.MY.id;
-						var curAlias = _this.MY.sonAlias;
-						var curTabDom = $("#tabSonAlias>ul>li>a[sonalias='"+_this.MY.sonAlias+"']");
+					if(self.MY.sonAlias){
+						var curNodeid = self.MY.id;
+						var curAlias = self.MY.sonAlias;
+						var curTabDom = $("#tabSonAlias>ul>li>a[sonalias='"+self.MY.sonAlias+"']");
 						var sn = $("#tabSonAlias>ul>li>a").index(curTabDom);
 						$("#tabSonAlias>ul>li").removeClass("active").eq(sn).addClass("active");
 						//显示tab头
 						$("#tabSonAlias").show();
 					}else{
-						var curNodeid = _this.MY.nodeid;
-						var curAlias = _this.MY.alias;
+						var curNodeid = self.MY.nodeid;
+						var curAlias = self.MY.alias;
 						$("#tabSonAlias").hide();
 					}
 					$("#btnAddSonAlias").hide();
@@ -1087,32 +1089,32 @@ define(function(require, exports, module) {
 
 
 					//定义当前状态指针
-					_this.MY.action = _this.MY.act.conAdd;
+					self.MY.action = self.MY.act.conAdd;
 
 					//修改history和地址栏URL
-					_this.API.private("privatePushState",{
-						action: _this.MY.action,
-						alias: _this.MY.alias,
-						sonAlias: _this.MY.sonAlias,
-						nodeid: _this.MY.nodeid,
-						id: _this.MY.id,
+					self.API.private("privatePushState",{
+						action: self.MY.action,
+						alias: self.MY.alias,
+						sonAlias: self.MY.sonAlias,
+						nodeid: self.MY.nodeid,
+						id: self.MY.id,
 						sonId: ''
 					});
 
 					//替换操作标题
 					$("#actionName").text("内容添加");
 					//显示内容添加视图
-					_this.API.show(_this.param.viewConAdd);
+					self.API.show(self.param.viewConAdd);
 					//获得List的dom
-					var formDom = _this.API.find("#"+_this.param.formConAdd);
+					var formDom = self.API.find("#"+self.param.formConAdd);
 					//增加视图独立样式class
-					formDom.addClass(curAlias+"_"+_this.MY.action).addClass(_this.MY.action);
+					formDom.addClass(curAlias+"_"+self.MY.action).addClass(self.MY.action);
 					//重新显示列表数据
 					function reShowOutLink(_data){
 						//表单生成前，对数据描述和数据的自定义接口
-						_this.API.private("privateSetDescAndData", curAlias, _data, function(){
-							FW.use().createForm(_this.MY.contentDesc[curAlias], formDom, _data, function(fieldName,fieldValue){
-								_this.API.private("privateOutLinkCB",_this.MY.contentDesc[curAlias], formDom, fieldName, fieldValue,function(newdata){
+						self.API.private("privateSetDescAndData", curAlias, _data, function(){
+							FW.use().createForm(self.MY.contentDesc[curAlias], formDom, _data, function(fieldName,fieldValue){
+								self.API.private("privateOutLinkCB",self.MY.contentDesc[curAlias], formDom, fieldName, fieldValue,function(newdata){
 									reShowOutLink(newdata);
 								})
 							})
@@ -1120,7 +1122,7 @@ define(function(require, exports, module) {
 					}
 					reShowOutLink(null);
 					//内容添加视图显示完的mess
-					_this.API.private("privateMessConAddOk");
+					self.API.private("privateMessConAddOk");
 					//显示提交返回按钮
 					setTimeout(function(){
 						$("#submitBtn").fadeIn(150);
@@ -1152,24 +1154,24 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateShowConPLAdd: function(){
-					var _this = this;
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
-					if(_this.MY.sonAlias){
-						var curNodeid = _this.MY.id;
-						var curAlias = _this.MY.sonAlias;
+					var self = this;
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
+					if(self.MY.sonAlias){
+						var curNodeid = self.MY.id;
+						var curAlias = self.MY.sonAlias;
 					}else{
-						var curNodeid = _this.MY.nodeid;
-						var curAlias = _this.MY.alias;
-						_this.MY.id = ''; //清空id
+						var curNodeid = self.MY.nodeid;
+						var curAlias = self.MY.alias;
+						self.MY.id = ''; //清空id
 					}
 
-					if(!curNodeid && !_this.MY.noClass){
+					if(!curNodeid && !self.MY.noClass){
 						FW.use('Widget').alert("请先选择栏目!","warning");
 						return;
 					}
 					//判断是否指定栏目
-					if(_this.MY.sonAlias){
-						var curTabDom = $("#tabSonAlias>ul>li>a[sonalias='"+_this.MY.sonAlias+"']");
+					if(self.MY.sonAlias){
+						var curTabDom = $("#tabSonAlias>ul>li>a[sonalias='"+self.MY.sonAlias+"']");
 						var sn = $("#tabSonAlias>ul>li>a").index(curTabDom);
 						$("#tabSonAlias>ul>li").removeClass("active").eq(sn).addClass("active");
 						$("#tabSonAlias").show();
@@ -1181,42 +1183,42 @@ define(function(require, exports, module) {
 
 
 					//定义当前状态指针
-					_this.MY.action = _this.MY.act.conPLAdd;
+					self.MY.action = self.MY.act.conPLAdd;
 
 					//修改history和地址栏URL
-					_this.API.private("privatePushState",{
-						action: _this.MY.action,
-						alias: _this.MY.alias,
-						sonAlias: _this.MY.sonAlias,
-						id: _this.MY.id,
-						nodeid: _this.MY.nodeid,
+					self.API.private("privatePushState",{
+						action: self.MY.action,
+						alias: self.MY.alias,
+						sonAlias: self.MY.sonAlias,
+						id: self.MY.id,
+						nodeid: self.MY.nodeid,
 						sonId: ''
 					});
 
 					//替换操作标题
 					$("#actionName").text("内容批量添加");
 					//显示批量添加视图
-					_this.API.show(_this.param.viewConPLAdd);
+					self.API.show(self.param.viewConPLAdd);
 					//获得dom
-					var formDom = _this.API.find("#"+_this.param.formConPLAdd);
+					var formDom = self.API.find("#"+self.param.formConPLAdd);
 					//增加视图独立样式class
-					formDom.addClass(curAlias+"_"+_this.MY.action).addClass(_this.MY.action);
+					formDom.addClass(curAlias+"_"+self.MY.action).addClass(self.MY.action);
 					//初始化赋值10比空数据，并生成表单列表
 					var blankData = [];
 					var oneBlankData = {};
-					for(var prop in _this.MY.contentDesc[curAlias]){
+					for(var prop in self.MY.contentDesc[curAlias]){
 						oneBlankData[prop] = "";
 					}
-					for(var i=0;i<_this.param.plAddSetNum;i++){
+					for(var i=0;i<self.param.plAddSetNum;i++){
 						blankData.push(oneBlankData);
 					}
 					//重新显示列表数据
 					function reShowOutLink(_data){
 						//表单生成前，对数据描述和数据的自定义接口
-						_this.API.private("privateSetDescAndData", curAlias, _data, function(){
+						self.API.private("privateSetDescAndData", curAlias, _data, function(){
 							//生成列表
-							FW.use().createFormList(_this.MY.contentDesc[curAlias],formDom,_data,function(fieldName,fieldValue){
-								_this.API.private("privateOutLinkCB",_this.MY.contentDesc[curAlias], formDom, fieldName, fieldValue,function(newdata){
+							FW.use().createFormList(self.MY.contentDesc[curAlias],formDom,_data,function(fieldName,fieldValue){
+								self.API.private("privateOutLinkCB",self.MY.contentDesc[curAlias], formDom, fieldName, fieldValue,function(newdata){
 									reShowOutLink(newdata);
 								})
 							},1)
@@ -1224,7 +1226,7 @@ define(function(require, exports, module) {
 					}
 					reShowOutLink(blankData);
 					//内容批量添加视图显示完的mess
-					_this.API.private("privateMessConPLAddOk");
+					self.API.private("privateMessConPLAddOk");
 					//显示提交、返回按钮
 					setTimeout(function(){
 						$("#submitBtn").fadeIn(150);
@@ -1261,48 +1263,48 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateShowConEdit: function(){
-					var _this = this;
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+					var self = this;
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
 					//显示tab头
 					$("#tabSonAlias").show();
 					//判断是否指定栏目
-					if(_this.MY.sonAlias){
-						var curAlias = _this.MY.sonAlias;
-						var curId = _this.MY.sonId;
-						var curTabDom = $("#tabSonAlias>ul>li>a[sonalias='"+_this.MY.sonAlias+"']");
+					if(self.MY.sonAlias){
+						var curAlias = self.MY.sonAlias;
+						var curId = self.MY.sonId;
+						var curTabDom = $("#tabSonAlias>ul>li>a[sonalias='"+self.MY.sonAlias+"']");
 						var sn = $("#tabSonAlias>ul>li>a").index(curTabDom);
 						$("#tabSonAlias>ul>li").removeClass("active").eq(sn).addClass("active");
 					}else{
-						var curAlias = _this.MY.alias;
-						var curId = _this.MY.id;
+						var curAlias = self.MY.alias;
+						var curId = self.MY.id;
 						$("#tabSonAlias>ul>li").removeClass("active").eq(0).addClass("active");
-						_this.MY.sonId = '';
+						self.MY.sonId = '';
 					}
 
 					$("#btnAddSonAlias").hide();
 					$("#btnPLAddSonAlias").hide();
 
 					//定义当前状态指针 包含list,edit,add
-					_this.MY.action = _this.MY.act.conEdit;
+					self.MY.action = self.MY.act.conEdit;
 
 					//修改history和地址栏URL
-					_this.API.private("privatePushState",{
-						action: _this.MY.action,
-						alias: _this.MY.alias,
-						sonAlias: _this.MY.sonAlias,
-						id: _this.MY.id,
-						nodeid: _this.MY.nodeid,
-						sonId: _this.MY.sonId
+					self.API.private("privatePushState",{
+						action: self.MY.action,
+						alias: self.MY.alias,
+						sonAlias: self.MY.sonAlias,
+						id: self.MY.id,
+						nodeid: self.MY.nodeid,
+						sonId: self.MY.sonId
 					});
 
 					//替换操作标题
 					$("#actionName").text("内容修改");
 					//显示内容编辑视图
-					_this.API.show(_this.param.viewConEdit);
+					self.API.show(self.param.viewConEdit);
 					//获得dom
-					var formDom = _this.API.find("#"+_this.param.formConEdit);
+					var formDom = self.API.find("#"+self.param.formConEdit);
 					//增加视图独立样式class
-					formDom.addClass(curAlias+"_"+_this.MY.action).addClass(_this.MY.action);
+					formDom.addClass(curAlias+"_"+self.MY.action).addClass(self.MY.action);
 					//定义内容修改的data数据 的参数
 					var param = {
 						alias: curAlias,
@@ -1310,25 +1312,25 @@ define(function(require, exports, module) {
 							id: curId
 						}
 					};
-					_this.API.doServer(_this.MY.serverName.qCon, _this.MY.package, param, function(code,data){
+					self.API.doServer(self.MY.serverName.qCon, self.MY.package, param, function(code,data){
 						if(code>0 && data && data.listData){
-							if(_this.MY.alias != "model"){
-								if(_this.MY.sonAlias){
-									_this.MY.sonAlias = data.listData[0].alias;
+							if(self.MY.alias != "model"){
+								if(self.MY.sonAlias){
+									self.MY.sonAlias = data.listData[0].alias;
 								}else{
-									_this.MY.alias = data.listData[0].alias;
+									self.MY.alias = data.listData[0].alias;
 								}
 							}
-							_this.API.private("privateContentDesc",curAlias,function(){
+							self.API.private("privateContentDesc",curAlias,function(){
 								//将数据库数据进行类型转换
-								_this.API.private("privateDataToForm", _this.MY.contentDesc[curAlias], data.listData);
+								self.API.private("privateDataToForm", self.MY.contentDesc[curAlias], data.listData);
 								//重新显示列表数据
 								function reShowOutLink(_data){
 									//表单生成前，对数据描述和数据的自定义接口
-									_this.API.private("privateSetDescAndData", curAlias, _data, function(){
+									self.API.private("privateSetDescAndData", curAlias, _data, function(){
 										//生成表单
-										FW.use().createForm(_this.MY.contentDesc[curAlias], formDom, _data, function(fieldName,fieldValue){
-											_this.API.private("privateOutLinkCB",_this.MY.contentDesc[curAlias], formDom, fieldName, fieldValue,function(newdata){
+										FW.use().createForm(self.MY.contentDesc[curAlias], formDom, _data, function(fieldName,fieldValue){
+											self.API.private("privateOutLinkCB",self.MY.contentDesc[curAlias], formDom, fieldName, fieldValue,function(newdata){
 												reShowOutLink(newdata);
 											})
 										})
@@ -1336,7 +1338,7 @@ define(function(require, exports, module) {
 								}
 								reShowOutLink(data.listData[0]);
 								//内容编辑视图显示完的mess
-								_this.API.private("privateMessConEditOk", data.listData[0]);
+								self.API.private("privateMessConEditOk", data.listData[0]);
 								//显示提交\返回按钮
 								setTimeout(function(){
 									$("#submitBtn").fadeIn(150);
@@ -1373,8 +1375,8 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateShowClassEdit: function(){
-					var _this = this;
-					if(!_this.MY.nodeid){
+					var self = this;
+					if(!self.MY.nodeid){
 						FW.use('Widget').alert("请先选择栏目!","warning");
 						return;
 					}
@@ -1384,18 +1386,18 @@ define(function(require, exports, module) {
 					$("#btnPLAddSonAlias").hide();
 
 					//定义当前状态指针 包含list,edit,add
-					_this.MY.action = _this.MY.act.classEdit;
+					self.MY.action = self.MY.act.classEdit;
 
-					_this.MY.sonAlias = '';
-					_this.MY.id = '';
-					_this.MY.sonId = '';
+					self.MY.sonAlias = '';
+					self.MY.id = '';
+					self.MY.sonId = '';
 
 					//修改history和地址栏URL
-					_this.API.private("privatePushState",{
-						action: _this.MY.action,
-						alias: _this.MY.alias,
+					self.API.private("privatePushState",{
+						action: self.MY.action,
+						alias: self.MY.alias,
 						sonAlias: '',
-						nodeid: _this.MY.nodeid,
+						nodeid: self.MY.nodeid,
 						id: '',
 						sonId: ''
 					});
@@ -1403,35 +1405,35 @@ define(function(require, exports, module) {
 					//替换操作标题
 					$("#actionName").text("栏目修改");
 					//显示视图
-					_this.API.show(_this.param.viewClassEdit);
+					self.API.show(self.param.viewClassEdit);
 					//获得dom
-					var formDom = _this.API.find("#"+_this.param.formClassEdit);
+					var formDom = self.API.find("#"+self.param.formClassEdit);
 					//增加视图独立样式class
-					formDom.addClass(_this.MY.alias+"_"+_this.MY.action).addClass(_this.MY.action);
+					formDom.addClass(self.MY.alias+"_"+self.MY.action).addClass(self.MY.action);
 					//定义获取栏目修改的data数据
 					var param = {
-						alias: _this.MY.alias,
+						alias: self.MY.alias,
 						target: 'parent',
 						filterParam:{
-							id: _this.MY.nodeid
+							id: self.MY.nodeid
 						}
 					};
-					_this.API.doServer(_this.MY.serverName.qCon, _this.MY.package, param, function(code,data){
+					self.API.doServer(self.MY.serverName.qCon, self.MY.package, param, function(code,data){
 						if(code>0 && data.listData){
 							//表单生成前，对数据描述和数据的自定义接口
-							_this.API.private("privateDataToForm", _this.MY.contentDesc[_this.MY.alias], data.listData);
+							self.API.private("privateDataToForm", self.MY.contentDesc[self.MY.alias], data.listData);
 							//重新显示列表数据
 							function reShowOutLink(_data){
 								//生成表单
-								FW.use().createForm(_this.MY.nodeDesc, formDom, _data, function(fieldName,fieldValue){
-									_this.API.private("privateOutLinkCB",_this.MY.nodeDesc, formDom, fieldName, fieldValue,function(newdata){
+								FW.use().createForm(self.MY.nodeDesc, formDom, _data, function(fieldName,fieldValue){
+									self.API.private("privateOutLinkCB",self.MY.nodeDesc, formDom, fieldName, fieldValue,function(newdata){
 										reShowOutLink(newdata);
 									})
 								})
 							}
 							reShowOutLink(data.listData[0]);
 							//栏目编辑视图显示完的mess
-							_this.API.private("privateMessClassEditOk");
+							self.API.private("privateMessClassEditOk");
 							//显示提交、返回按钮
 							setTimeout(function(){
 								$("#submitBtn").fadeIn(150);
@@ -1466,8 +1468,8 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateShowClassAdd: function(){
-					var _this = this;
-					if(!_this.MY.isding && !_this.MY.nodeid){
+					var self = this;
+					if(!self.MY.isding && !self.MY.nodeid){
 						FW.use('Widget').alert("请先选择栏目!","warning");
 						return;
 					}
@@ -1477,45 +1479,45 @@ define(function(require, exports, module) {
 					$("#btnPLAddSonAlias").hide();
 
 					//定义当前状态指针
-					_this.MY.action = _this.MY.act.classAdd;
+					self.MY.action = self.MY.act.classAdd;
 
-					_this.MY.sonAlias = '';
-					_this.MY.id = '';
-					_this.MY.sonId = '';
+					self.MY.sonAlias = '';
+					self.MY.id = '';
+					self.MY.sonId = '';
 
 					//修改history和地址栏URL
-					_this.API.private("privatePushState",{
-						action: _this.MY.action,
-						alias: _this.MY.alias,
+					self.API.private("privatePushState",{
+						action: self.MY.action,
+						alias: self.MY.alias,
 						sonAlias: '',
-						nodeid: _this.MY.nodeid,
+						nodeid: self.MY.nodeid,
 						id: '',
 						sonId: ''
 					});
 
 					//判断是否添加顶级栏目
-					if(_this.MY.isding){
+					if(self.MY.isding){
 						$("#actionName").text("添加顶栏目");
 					}else{
 						$("#actionName").text("添加子栏目");
 					}
 					//显示栏目添加视图
-					_this.API.show(_this.param.viewClassAdd);
+					self.API.show(self.param.viewClassAdd);
 					//获得dom
-					var formDom = _this.API.find("#"+_this.param.formClassAdd);
+					var formDom = self.API.find("#"+self.param.formClassAdd);
 					//增加视图独立样式class
-					formDom.addClass(_this.MY.alias+"_"+_this.MY.action).addClass(_this.MY.action);
+					formDom.addClass(self.MY.alias+"_"+self.MY.action).addClass(self.MY.action);
 					//重新显示列表数据
 					function reShowOutLink(_data){
-						FW.use().createForm(_this.MY.nodeDesc, formDom, _data, function(fieldName,fieldValue){
-							_this.API.private("privateOutLinkCB",_this.MY.nodeDesc, formDom, fieldName, fieldValue,function(newdata){
+						FW.use().createForm(self.MY.nodeDesc, formDom, _data, function(fieldName,fieldValue){
+							self.API.private("privateOutLinkCB",self.MY.nodeDesc, formDom, fieldName, fieldValue,function(newdata){
 								reShowOutLink(newdata);
 							})
 						})
 					}
 					reShowOutLink(null);
 					//栏目添加视图显示完的mess
-					_this.API.private("privateMessClassAddOk");
+					self.API.private("privateMessClassAddOk");
 					//显示提交返回按钮
 					setTimeout(function(){
 						$("#submitBtn").fadeIn(150);
@@ -1540,7 +1542,7 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateBtnConEdit: function(_dom,_data){
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
 					if(this.MY.sonAlias){
 						this.MY.sonId = _data.id;
 					}else{
@@ -1555,26 +1557,26 @@ define(function(require, exports, module) {
 				*@memberOf cmsMgrGadget
 				*@description 内容列表视图通用删除按钮函数
 				* 需要完成的功能如下：
-				* 1、判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+				* 1、判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
 				* 2、doServer从数据库删除该条数据
 				* 3、删除成功后重新执行内容列表视图
 				*@example
 				*/
 				privateBtnConDel: function(_dom,_data){
-					var _this = this;
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
-					var curAlias = _this.MY.sonAlias || _this.MY.alias;
+					var self = this;
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
+					var curAlias = self.MY.sonAlias || self.MY.alias;
 					if(confirm("确认要删除该内容吗？")){
 						var _param = {
 							alias: curAlias,
 							id: _data.id
 						}
 						var _serverName = curAlias=='model'
-							? _this.MY.serverName.dModel
-							: _this.MY.serverName.dCon;
-						_this.API.doServer(_serverName, _this.MY.package, _param, function(code,data){
+							? self.MY.serverName.dModel
+							: self.MY.serverName.dCon;
+						self.API.doServer(_serverName, self.MY.package, _param, function(code,data){
 							if(code>0){
-								_this.API.private("privateShowConList");
+								self.API.private("privateShowConList");
 							}else{
 								FW.use('Widget').alert("内容删除失败！","danger");
 							}
@@ -1588,17 +1590,17 @@ define(function(require, exports, module) {
 				*@description 内容列表视图批量删除按钮
 				* 需要完成的功能如下：
 				* 1、获得表单的dom
-				* 2、判断当前视图是否存在_this.MY.sonAlias，如果存在则为子集alias操作
+				* 2、判断当前视图是否存在self.MY.sonAlias，如果存在则为子集alias操作
 				* 3、绑定按钮点击事件，doServer从数据库删除该条数据
 				* 4、删除成功后重新执行内容列表视图
 				*@example
 				*/
 				privateBtnConPLDel: function(){
-					var _this = this;
+					var self = this;
 					//获得dom
-					var formDom = _this.API.find("#"+_this.param.formConList);
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
-					var curAlias = _this.MY.sonAlias || _this.MY.alias;
+					var formDom = self.API.find("#"+self.param.formConList);
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
+					var curAlias = self.MY.sonAlias || self.MY.alias;
 					if(confirm("确认要删除该内容吗？")){
 						var arrCheckData = formDom[0].batchEdit();
 						var ids = [];
@@ -1610,11 +1612,11 @@ define(function(require, exports, module) {
 							id: ids.join(',')
 						};
 						var _serverName = curAlias=='model'
-							? _this.MY.serverName.dModel
-							: _this.MY.serverName.dCon;
-						_this.API.doServer(_serverName, _this.MY.package, _param, function(code,data){
+							? self.MY.serverName.dModel
+							: self.MY.serverName.dCon;
+						self.API.doServer(_serverName, self.MY.package, _param, function(code,data){
 							if(code>0){
-								_this.API.private("privateShowConList");
+								self.API.private("privateShowConList");
 							}else{
 								FW.use('Widget').alert("删除失败！","danger");
 							}
@@ -1636,22 +1638,16 @@ define(function(require, exports, module) {
 				*/
 				privateCheckAuth:function(_dom){
 					if(this.MY.isrole){
-						$("[authority]").show();
+						$("[data-action]").show();
 					}else{
-						//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+						//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
 						var curAlias = this.MY.sonAlias || this.MY.alias;
-						if(!curAlias || !window.authorityData) return;
-						_dom.find("[authority]").each(function(){
-						 	//获取页面权限的severname
-						 	var serverName = "cms."+$(this).attr("authority");
-						 	//从jsp传过来的authorityData对象中找serviceName，然后遍历其数组找alias
-						 	if(!window.authorityData[serverName]) return true;
-						 	for (var i = 0; i < authorityData[serverName].length; i++){
-						 		if(authorityData[serverName][i].paramJson.alias == curAlias){
-						 			$(this).show();
-						 			break;
-						 		}
-						 	}
+						if(!curAlias || !window.RFBRoles) return;
+						_dom.find("[data-action]").each(function(){
+						 	var actionName = curAlias+'.'+$(this).data("action");
+				      if(~$.inArray(actionName, window.RFBRoles)){
+				        $(this).show();
+				      }
 						})
 					}
 				},
@@ -1669,27 +1665,27 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateSubmitConList: function(_callback){
-					var _this = this;
-					//判断当前视图是否存在__this.MY.sonAlias，如果存在则为内容子alias操作
-					var curAlias = _this.MY.sonAlias || _this.MY.alias;
-					if(!_this.param.plModSet[curAlias]){
+					var self = this;
+					//判断当前视图是否存在_self.MY.sonAlias，如果存在则为内容子alias操作
+					var curAlias = self.MY.sonAlias || self.MY.alias;
+					if(!self.param.plModSet[curAlias]){
 						return;
 					}
 					//将表单转换成json，获取列表的存储数据数组
-					var data = _this.API.find("#"+_this.param.formConList)[0].getDataAndCheck();
+					var data = self.API.find("#"+self.param.formConList)[0].getDataAndCheck();
 					if(!data) return;
 					data = data.formList;
 					if(!data.length) return;
 					//转换data中有数组的情况为字符串
 					for (var i = 0; i < data.length; i++) {
-						_this.API.private("privateFormToData",_this.MY.contentDesc[curAlias],data[i]);
+						self.API.private("privateFormToData",self.MY.contentDesc[curAlias],data[i]);
 					}
 					//多请求同时发送初始化
-					_this.API.initPost();
+					self.API.initPost();
 					var _data = [];
 					for (var i = 0; i < data.length; i++) {
 						(function(iii){
-							_this.API.addPost(_this.MY.serverName.mCon,_this.MY.package,{
+							self.API.addPost(self.MY.serverName.mCon,self.MY.package,{
 								alias: curAlias,
 								keyValue: data[iii]
 							},function(code,data2){
@@ -1701,7 +1697,7 @@ define(function(require, exports, module) {
 							});
 						})(i)
 					}
-					_this.API.doPost(function(){
+					self.API.doPost(function(){
 						_callback && _callback();
 					})
 				},
@@ -1718,28 +1714,28 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateSubmitConAdd: function(_callback){
-					var _this = this;
+					var self = this;
 					//将表单转换成json
-					var data = _this.API.find("#"+_this.param.formConAdd)[0].getDataAndCheck();
+					var data = self.API.find("#"+self.param.formConAdd)[0].getDataAndCheck();
 					if(!data) return;
-					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+					//判断当前视图是否存在self.MY.sonAlias，如果存在则为内容子alias操作
 					//判断是否指定栏目
-					if(_this.MY.sonAlias){
-						var curNodeid = _this.MY.id;
-						var curAlias = _this.MY.sonAlias;
+					if(self.MY.sonAlias){
+						var curNodeid = self.MY.id;
+						var curAlias = self.MY.sonAlias;
 					}else{
-						var curNodeid = _this.MY.nodeid;
-						var curAlias = _this.MY.alias;
+						var curNodeid = self.MY.nodeid;
+						var curAlias = self.MY.alias;
 					}
 					//转换data中有数组的情况为字符串
-					_this.API.private("privateFormToData",_this.MY.contentDesc[curAlias],data);
+					self.API.private("privateFormToData",self.MY.contentDesc[curAlias],data);
 					var _param = {
 						alias: curAlias,
 						keyValue: data
 					};
-					var _serverName = _this.MY.serverName.aCon;
+					var _serverName = self.MY.serverName.aCon;
 					data.nodeid = curNodeid || "0";  //指定栏目nodeid
-					_this.API.doServer(_serverName,_this.MY.package,_param,function(code,data){
+					self.API.doServer(_serverName,self.MY.package,_param,function(code,data){
 						if(code>0){
 							_callback && _callback(data);
 						}else{
@@ -1760,28 +1756,28 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateSubmitConPLAdd: function(_callback){
-					var _this = this;
+					var self = this;
 					//将表单转换成json
-					var data = _this.API.find("#"+_this.param.formConPLAdd)[0].getDataAndCheck();
+					var data = self.API.find("#"+self.param.formConPLAdd)[0].getDataAndCheck();
 					if(!data) return;
 					data = data.formList;
 					if(!data.length) return;
-					//判断当前视图是否存在__this.MY.sonAlias，如果存在则为内容子alias操作
+					//判断当前视图是否存在_self.MY.sonAlias，如果存在则为内容子alias操作
 					//判断是否指定栏目
-					if(_this.MY.sonAlias){
-						var curNodeid = _this.MY.id;
-						var curAlias = _this.MY.sonAlias;
+					if(self.MY.sonAlias){
+						var curNodeid = self.MY.id;
+						var curAlias = self.MY.sonAlias;
 					}else{
-						var curNodeid = _this.MY.nodeid;
-						var curAlias = _this.MY.alias;
+						var curNodeid = self.MY.nodeid;
+						var curAlias = self.MY.alias;
 					}
 					//转换data中有数组的情况为字符串
 					for (var i = 0; i < data.length; i++) {
-						_this.API.private("privateFormToData",_this.MY.contentDesc[curAlias],data[i]);
+						self.API.private("privateFormToData",self.MY.contentDesc[curAlias],data[i]);
 					}
 					//遍历数据，删除空数据，并指定栏目nodeid,生成最新ndata
 					var ndata = [];
-					var hiddenData = _this.API.find("#"+_this.param.formConPLAdd)[0].getHiddenData();
+					var hiddenData = self.API.find("#"+self.param.formConPLAdd)[0].getHiddenData();
 					for (var i = 0; i < data.length; i++) {
 						var status = false;
 						for(var ppp in data[i]){
@@ -1799,7 +1795,7 @@ define(function(require, exports, module) {
 						alias: curAlias,
 						keyValue: ndata
 					};
-					_this.API.doServer(_this.MY.serverName.aCon, _this.MY.package, _param, function(code,data){
+					self.API.doServer(self.MY.serverName.aCon, self.MY.package, _param, function(code,data){
 						if(code>0 && data){
 							_callback && _callback(data);
 						}else{
@@ -1820,20 +1816,20 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateSubmitConEdit: function(_callback){
-					var _this = this;
+					var self = this;
 					//将表单转换成json
-					var data = _this.API.find("#"+_this.param.formConEdit)[0].getDataAndCheck();
+					var data = self.API.find("#"+self.param.formConEdit)[0].getDataAndCheck();
 					if(!data) return;
-					//判断当前视图是否存在__this.MY.sonAlias，如果存在则为内容子alias操作
-					var curAlias = _this.MY.sonAlias || _this.MY.alias;
+					//判断当前视图是否存在_self.MY.sonAlias，如果存在则为内容子alias操作
+					var curAlias = self.MY.sonAlias || self.MY.alias;
 					//转换data中有数组的情况为字符串
-					_this.API.private("privateFormToData",_this.MY.contentDesc[curAlias],data);
+					self.API.private("privateFormToData",self.MY.contentDesc[curAlias],data);
 					var _param = {
 						alias: curAlias,
 						keyValue: data
 					};
-					var _serverName = _this.MY.serverName.mCon;
-					_this.API.doServer(_serverName, _this.MY.package, _param, function(code,data){
+					var _serverName = self.MY.serverName.mCon;
+					self.API.doServer(_serverName, self.MY.package, _param, function(code,data){
 						if(code>0){
 							_callback && _callback();
 						}else{
@@ -1854,18 +1850,18 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateSubmitClassEdit: function(_callback){
-					var _this = this;
+					var self = this;
 					//将表单转换成json
-					var data = _this.API.find("#"+_this.param.formClassEdit)[0].getDataAndCheck();
+					var data = self.API.find("#"+self.param.formClassEdit)[0].getDataAndCheck();
 					if(!data) return;
 					//转换data中有数组的情况为字符串
-					_this.API.private("privateFormToData",_this.MY.nodeDesc,data);
+					self.API.private("privateFormToData",self.MY.nodeDesc,data);
 					var param = {
-						alias:_this.MY.alias,
+						alias:self.MY.alias,
 						target: 'parent',
 						keyValue: data
 					};
-					_this.API.doServer(_this.MY.serverName.mCon, _this.MY.package, param, function(code,data){
+					self.API.doServer(self.MY.serverName.mCon, self.MY.package, param, function(code,data){
 						if(code>0){
 							_callback && _callback();
 						}else{
@@ -1886,21 +1882,21 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				privateSubmitClassAdd: function(_callback){
-					var _this = this;
+					var self = this;
 					//将表单转换成json
-					var data = _this.API.find("#"+_this.param.formClassAdd)[0].getDataAndCheck();
+					var data = self.API.find("#"+self.param.formClassAdd)[0].getDataAndCheck();
 					if(!data) return;
-					data.nodeid = _this.MY.isding?0:_this.MY.nodeid;
+					data.nodeid = self.MY.isding?0:self.MY.nodeid;
 					//固定增加店铺id
 					data.store_id = 1;
 					//转换data中有数组的情况为字符串
-					_this.API.private("privateFormToData",_this.MY.nodeDesc,data);
+					self.API.private("privateFormToData",self.MY.nodeDesc,data);
 					var param = {
-							alias: _this.MY.alias,
+							alias: self.MY.alias,
 							target: 'parent',
 							keyValue: data
 						};
-					_this.API.doServer(_this.MY.serverName.aCon, _this.MY.package, param, function(code,data){
+					self.API.doServer(self.MY.serverName.aCon, self.MY.package, param, function(code,data){
 						if(code>0 && data){
 							_callback(data);
 						}else{
@@ -1945,51 +1941,53 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				trigerSubmit: function(){
-					var _this = this;
+					var self = this;
 					//列表提交
-					if(_this.MY.action == _this.MY.act.conList){
-						_this.API.private("privateSubmitConList",function(){
+					if(self.MY.action == self.MY.act.conList){
+						self.API.private("privateSubmitConList",function(){
 							FW.use('Widget').alert("修改完成!","success");
-							_this.API.private("privateShowDefaultView");
+							self.API.private("privateShowDefaultView");
 						});
 					}
 					//内容添加
-					else if(_this.MY.action == _this.MY.act.conAdd){
-						_this.API.private("privateSubmitConAdd",function(){
+					else if(self.MY.action == self.MY.act.conAdd){
+						self.API.private("privateSubmitConAdd",function(){
 							FW.use('Widget').alert("内容添加成功！","success");
-							_this.API.private("privateShowDefaultView");
+							self.API.private("privateShowDefaultView");
 						});
 					}
 					//内容批量添加
-					else if(_this.MY.action == _this.MY.act.conPLAdd){
-						_this.API.private("privateSubmitConPLAdd",function(){
+					else if(self.MY.action == self.MY.act.conPLAdd){
+						self.API.private("privateSubmitConPLAdd",function(){
 							FW.use('Widget').alert("添加完成!","success");
-							_this.API.private("privateShowDefaultView");
+							self.API.private("privateShowDefaultView");
 						});
 					}
 					//编辑内容
-					else if(_this.MY.action == _this.MY.act.conEdit){
-						_this.API.private("privateSubmitConEdit",function(){
+					else if(self.MY.action == self.MY.act.conEdit){
+						self.API.private("privateSubmitConEdit",function(){
 							FW.use('Widget').alert("保存成功！","success");
-							_this.API.private("privateShowDefaultView");
+							self.API.private("privateShowDefaultView");
 						});
 					}
 					//编辑栏目
-					else if(_this.MY.action == _this.MY.act.classEdit){
-						_this.API.private("privateSubmitClassEdit",function(){
+					else if(self.MY.action == self.MY.act.classEdit){
+						self.API.private("privateSubmitClassEdit",function(){
 							FW.use('Widget').alert("保存成功！","success");
-							FW.trigerEvent('trigerReShowNodeTree',_this.MY.alias);
-							_this.API.private("privateShowDefaultView");
+							FW.trigerEvent('trigerReShowNodeTree',self.MY.alias);
+							self.API.private("privateShowDefaultView");
 						});
 					}
 					//添加栏目
-					else if(_this.MY.action == _this.MY.act.classAdd){
-						_this.API.private("privateSubmitClassAdd",function(){
+					else if(self.MY.action == self.MY.act.classAdd){
+						self.API.private("privateSubmitClassAdd",function(){
 							FW.use('Widget').alert("栏目添加成功！","success");
 							setTimeout(function(){
 								window.location.reload();
 							},1500);
 						});
+					}else{
+						self.API.private('privateSubmit_'+self.MY.action);
 					}
 				},
 				/**
@@ -2003,17 +2001,17 @@ define(function(require, exports, module) {
 				*@example
 				*/
 				trigerChangeClass: function(nodeid,ctalias){
-					var _this = this;
+					var self = this;
 					//赋值给this对象的nodeid
-					_this.MY.nodeid = nodeid;
+					self.MY.nodeid = nodeid;
 					//删除sonAlias
 					delete this.MY.sonAlias;
-					if(_this.MY.isSelfAlias){  //如果自己挂自己
-						_this.API.private("privateShowClassEdit");
+					if(self.MY.isSelfAlias){  //如果自己挂自己
+						self.API.private("privateShowClassEdit");
 					}else{
-						if(ctalias) _this.MY.alias = ctalias;
-						_this.API.private("privateContentDesc",_this.MY.alias,function(){
-							_this.API.private("privateShowConList");
+						if(ctalias) self.MY.alias = ctalias;
+						self.API.private("privateContentDesc",self.MY.alias,function(){
+							self.API.private("privateShowConList");
 						})
 					}
 				},

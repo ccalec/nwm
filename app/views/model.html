@@ -35,12 +35,12 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-primary pull-right">
-                            <li authority="queryContent" style="display:none;">
+                            <li data-action="queryData" style="display:none;">
                                 <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerContentList')"> <i class="icon-bar-chart"></i>
                                     模型列表
                                 </a>
                             </li>
-                            <li authority="addContent" style="display:none;">
+                            <li data-action="addData" style="display:none;">
                                 <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerContentAdd')">
                                     <i class="icon-check"></i>
                                     模型添加
@@ -55,25 +55,25 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-success pull-right">
-                            <li authority="modifyNode" style="display:none;">
+                            <li data-action="modData" style="display:none;">
                                 <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerClassEdit')">
                                     <i class="icon-edit"></i>
                                     栏目编辑
                                 </a>
                             </li>
-                            <li authority="addNode" style="display:none;">
+                            <li data-action="addData" style="display:none;">
                                 <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerClassAdd','0')">
                                     <i class="icon-plus"></i>
                                     添加顶栏目
                                 </a>
                             </li>
-                            <li authority="addNode" style="display:none;">
+                            <li data-action="addData" style="display:none;">
                                 <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerClassAdd')">
                                     <i class="icon-plus"></i>
                                     添加子栏目
                                 </a>
                             </li>
-                            <li authority="deleteNode" style="display:none;">
+                            <li data-action="deLData" style="display:none;">
                                 <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerClassDel')">
                                     <i class="icon-trash"></i>
                                     删除栏目
