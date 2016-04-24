@@ -7,11 +7,12 @@
 
 "use strict"
 
-
 var co = require('co');
 var mysql = require('./app/lib/mysql');
+var getRoles = require("./app/controllers/getroles");
 var doService = require("./app/controllers/doservice");
 var tools = require("./app/controllers/tools");
+var logout = require("./app/controllers/logout");
 
 // mysql连接状态检查
 mysql.init();
@@ -28,7 +29,9 @@ function cothunk(controller){
 }
 
 module.exports = {
+  getRoles : cothunk(getRoles),
   doService : cothunk(doService),
   createDB  : cothunk(tools.createDB),
-  saveFiles  : cothunk(tools.saveFiles)
+  saveFiles  : cothunk(tools.saveFiles),
+  logout: cothunk(logout)
 }

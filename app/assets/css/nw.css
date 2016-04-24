@@ -77,6 +77,30 @@ textarea {
   line-height: 28px;
   font-weight: 13px;
 }
+.bgimg {
+  background: url('../img/bg2.jpg') center center no-repeat;
+  -webkit-background-size: 100% 100%;
+}
+.login-layout {
+  background: url('../img/bg2.jpg') center center no-repeat;
+  -webkit-background-size: 100% 100%;
+}
+.login-layout .login-container {
+  position: relative;
+  left: -25%;
+  top: 100px;
+}
+.login-layout .login-box {
+  background: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.login-layout .widget-body,
+.login-layout .widget-main {
+  background: none!important;
+}
+.login-layout .widget-main {
+  height: 220px;
+}
 .sysinfo .widget-box {
   border: none;
 }

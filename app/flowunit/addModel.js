@@ -58,7 +58,27 @@ module.exports = class AddModel extends FlowUnitClass {
     }).execute();
     // 根据model_desc创建表
     yield TableClass.createTable(param['table_name'], JSON.parse(param['model_desc']), this.chain);
-    //TODO: 是否设置权限，做权限记录操作
+    //默认給表设置权限
+    var roleKeyValue =[{
+      action_name: param.model_name+'查询权限',
+      action_alias: param.model_alias+'.queryData'
+    },{
+      action_name: param.model_name+'增加权限',
+      action_alias: param.model_alias+'.addData'
+    },{
+      action_name: param.model_name+'修改权限',
+      action_alias: param.model_alias+'.modData'
+    },{
+      action_name: param.model_name+'删除权限',
+      action_alias: param.model_alias+'.delData'
+    }];
+    yield new AddData({
+      _Chain: this.chain,
+      _Param: {
+        alias: 'action',
+        keyValue: roleKeyValue
+      }
+    }).execute();
     return this.execEnd(1,'模型添加成功', res.data);
   }
 }

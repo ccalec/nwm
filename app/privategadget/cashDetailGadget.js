@@ -1,2 +1,349 @@
-define("./../gadget/cmsMgrGadget",["./../breeze/framework/js/BreezeFW","./../breeze/framework/js/tools/Widget","./../breeze/framework/js/tools/DateTime"],function(require){var t=require("./../breeze/framework/js/BreezeFW");return require("./../breeze/framework/js/tools/Widget")(t),require("./../breeze/framework/js/tools/DateTime")(t),t.register({name:"cmsMgrGadget",param:{norole:!0,alias:"",id:"",nodeid:"",action:"",pagesize:10,plModSet:{xxalias:!0},plAddSetNum:10,listType:{xxalias:0},btnForList:{"default":[{title:"\u7f16\u8f91",action:"modData","class":"btn btn-mini btn-info",style:"display:none",html:" <i class='icon-edit bigger-120'> \u7f16\u8f91</i>",onclick:"privateBtnConEdit"},{title:"\u5220\u9664",action:"delData","class":"btn btn-mini btn-danger",style:"display:none",html:" <i class='icon-trash bigger-120'> \u5220\u9664</i>",onclick:"privateBtnConDel"}],roles:[{title:"\u6743\u9650\u8bbe\u7f6e","class":"btn btn-mini btn-success",html:" <i class='icon-group bigger-120'> \u6743\u9650</i>",onclick:"privateSetRoles"},{title:"\u7f16\u8f91",action:"modData","class":"btn btn-mini btn-info",style:"display:none",html:" <i class='icon-edit bigger-120'> \u7f16\u8f91</i>",onclick:"privateBtnConEdit"},{title:"\u5220\u9664",action:"delData","class":"btn btn-mini btn-danger",style:"display:none",html:" <i class='icon-trash bigger-120'> \u5220\u9664</i>",onclick:"privateBtnConDel"}]},viewConList:"viewContentList",viewConAdd:"viewContentAdd",viewConPLAdd:"viewContentPLAdd",viewClassEdit:"viewClassEdit",viewClassAdd:"viewClassAdd",viewConEdit:"viewContentEdit",formConList:"formContentList",formConAdd:"formContentAdd",formConPLAdd:"formContentPLAdd",formClassEdit:"formClassEdit",formClassAdd:"formClassAdd",formConEdit:"formContentEdit"},onCreate:function(){var t=this;t.API.private("privateSetGlobalVar"),t.API.private("privateGetNodeDesc"),t.API.private("privateContentDesc",t.MY.alias,function(a){t.API.private("privateGetSonDesc",function(){a.parent_alias==t.MY.alias&&(t.MY.isSelfAlias=!0),$("#aliasTitle").text(a.model_name),$("#aliasTitle").text(a.model_name),$("#pageH1").show(),t.API.private("privateShowDefaultView"),t.API.private("privateCheckAuth",$("body"))})})},FireEvent:{},"private":{privateSetGlobalVar:function(){var a=this;a.MY.alias=a.param.alias||t.use().getParameter("alias")||"",a.MY.action=a.param.action||t.use().getParameter("action")||"",a.MY.id=a.param.id||t.use().getParameter("id")||"",a.MY.nodeid=a.param.nodeid||t.use().getParameter("nodeid")||"",a.MY.isrole=a.param.norole||t.use().getParameter("norole")||"",a.MY.listType=a.param.listType[this.MY.alias]||t.use().getParameter("listType")||"",a.MY.contentDesc={},a.MY.sonAlias=a.param.sonAlias||t.use().getParameter("sonAlias")||"",a.MY.sonId=a.param.sonId||t.use().getParameter("sonId")||"",a.MY.isSelfAlias=!1,a.MY.noClass=!1,a.MY.act={conList:"conList",conAdd:"conAdd",conPLAdd:"conPLAdd",classEdit:"classEdit",classAdd:"classAdd",conEdit:"conEdit"},a.MY.package="cms",a.MY.serverName={aCon:"addData",dCon:"delData",mCon:"modData",qCon:"queryData",aModel:"addModel",dModel:"delModel",mModel:"modModel",qModel:"queryModel"}},privateGetNodeDesc:function(){var t=this,a={alias:t.MY.alias,target:"parent"};t.API.doServer(t.MY.serverName.qModel,t.MY.package,a,function(a,i){a>0&&i?(t.MY.nodeDesc=i.model_desc||{},t.MY.nodeDesc.id={type:"Hidden",title:"id",islist:"0"}):(t.MY.noClass=!0,$("#btnAction .btn-group:eq(1)").remove())})},privateGetSonDesc:function(t){var a=this,i={alias:a.MY.alias,target:"son"};a.API.doServer(a.MY.serverName.qModel,a.MY.package,i,function(i,e){if(i>0&&e){for(var n="",s=0;s<e.length;s++)n+="<li>",n+="<a href='javascript:void(0)' sonalias='"+e[s].alias+"' data-toggle='tab'>"+e[s].model_name+"</a>",n+="</li>";$("#tabSonAlias>ul>li:gt(0)").remove(),$("#tabSonAlias>ul").append(n),t&&t(),$("#tabSonAlias>ul>li>a").on("click",function(){if(!$(this).parent().hasClass("active")){var t=$("#tabSonAlias>ul>li>a").index($(this));0==t?(delete a.MY.sonAlias,$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),a.API.private("privateShowConEdit")):(a.MY.sonAlias=$(this).attr("sonalias"),$("#btnAddSonAlias").show().on("click",function(){a.API.private("privateShowConAdd")}),$("#btnPLAddSonAlias").show().on("click",function(){a.API.private("privateShowConPLAdd"),a.API.find(".table_formlist:eq(0)").next().find(".btn-add-con").show()}),a.API.private("privateContentDesc",a.MY.sonAlias,function(){a.API.private("privateShowConList")}))}})}})},privateContentDesc:function(t,a){var i=this;i.API.doServer(i.MY.serverName.qModel,i.MY.package,{alias:t},function(e,n){e>0&&n&&(i.MY.contentDesc[t]=n.model_desc,i.MY.contentDesc[t].id||(i.MY.contentDesc[t].id={type:"Hidden",title:"id",islist:"1"}),a&&a(n))})},privateShowDefaultView:function(){this.MY.action==this.MY.act.conAdd?(t.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConAdd")):this.MY.action==this.MY.act.conPLAdd?(t.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConPLAdd")):this.MY.action==this.MY.act.classAdd?(t.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.MY.isding=!0,this.API.private("privateShowClassAdd")):this.MY.action==this.MY.act.conEdit?(t.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConEdit")):this.MY.action==this.MY.act.classEdit&&this.MY.nodeid?(t.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowClassEdit")):(t.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConList"))},privateOutLinkCB:function(t,a,i,e,n){function s(t,a,i){o.API.private("privateContentDesc",a.alias,function(e){v||(v="\u8bf7\u9009\u62e9"+e.model_name),o.API.private("privateBindFormListPage",f,a,2,function(){t.empty(),f.appendTo(t),i&&i()})})}var o=this,r=/data.formList\[(.*?)\].*?/g.exec(i),d=null==r?-1:r[1];i=i.split(".")[i.split(".").length-1];var l=t[i].outerLink;if(2===l.split(".").length){var c=l.split(".")[0],v=(l.split(".")[1],""),u={alias:c,filterParam:{},orderBy:[{fieldName:"id",isDesc:!0}]};$("#newViewDom").length||($("body").append("<div style='display:none;' id='newViewDom'></div>"),$("body").append("<div id='preOuterLinkEditForm'></div>"));var p=$("#newViewDom"),f=$("#preOuterLinkEditForm");o.API.private("privateSetOutlinkView",p,u,d,function(t,a){s(t,a)},function(r,l,u){u&&(v=u),s(r,l,function(){o.API.private("privateMaskLayer",p,v,1e3,function(){var s=f[0].batchEdit();if(s.length){var r=a[0].getData();if((o.MY.action==o.MY.act.conPLAdd||o.MY.action==o.MY.act.conList)&&(r=a[0].getData().formList),r){for(var l in t)if(t[l].outerLink){var v=t[l].outerLink.split(".");if(2!==v.length)return;var u=v[0],p=v[1];u==c&&(-1!==d?r[d][l]=s[0][p]:r[l]=s[0][p])}o.API.private("privateMessOutLinkOk",t,a,i,e,r),n&&n(r)}}})})})}},privateMessOutLinkOk:function(){},privateSetOutlinkView:function(t,a,i,e,n){n&&n(t,a)},privateMaskLayer:function(a,i,e,n){var s="<div style='text-align:left;cursor:default; background:#fff; padding:10px;'><div class='modal-header' style='margin-bottom:20px;'><h3>"+i+"</h3></div>";if(s+="<div class='modal-body'><form id='outerLinkEditForm' class='form-horizontal outlinkform_"+this.MY.alias+" clearfix' style='margin:0px;'></form></div>",n){if(s+="<div class='modal-footer'>",n instanceof Function&&(s+="<a href='javascript:;' class='btn btn btn-small btn-success'><i class='icon-ok bigger-110'></i> \u4fdd\u5b58</a>",s+="<a href='javascript:;' class='btn btn btn-small'><i class='icon-undo bigger-110'></i> \u53d6\u6d88</a>"),"[object Array]"===toString.apply(n))for(var o=0;o<n.length;o++)s+=n[o].html;s+="</div>"}s+="</div>",t.blockUI(s,($(window).width()-e)/2,100,e,"auto",0),a.appendTo($("#outerLinkEditForm")).show(),$("#outerLinkEditForm").find(".form-wrap").removeClass("pull-left"),$(".chosen-select").chosen(),n&&$(".modal-footer>a").click(function(){var a=$(".modal-footer>a").index($(this));n instanceof Function&&(t.unblockUI(),0==a&&n&&n()),"[object Array]"===toString.apply(n)&&n[a].callback&&n[a].callback()})},privateSetDescAndData:function(t,a,i){i&&i()},privateDataToForm:function(a,i){if(i&&i.length)for(var e in a)for(var n=0;n<i.length;n++)i[n][e]&&(-1!=$.inArray(a[e].type,["List","Pics","CheckBox","MultSelect"])?"string"===i[n][e]&&(i[n][e]=t.use().evalJSON(i[n][e])):"DatePicker"==a[e].type?i[n][e]=t.use("DateTime").format(new Date(i[n][e]),"yyyy-MM-dd"):"DateTimePicker"==a[e].type&&(i[n][e]=t.use("DateTime").format(new Date(i[n][e]),"yyyy-MM-dd hh:mm:ss")))},privateFormToData:function(a,i){if(i)for(var e in a)if(-1!=$.inArray(a[e].type,["List","Pics","CheckBox","MultSelect"])){if(!i[e])continue;i[e]=t.use().toJSONString(i[e])}},privateShowConList:function(){var t=this;if(t.MY.sonAlias){var a=t.MY.id,i=t.MY.sonAlias,e=$("#tabSonAlias>ul>li>a[sonalias='"+t.MY.sonAlias+"']"),n=$("#tabSonAlias>ul>li>a").index(e);$("#tabSonAlias>ul>li").removeClass("active").eq(n).addClass("active"),$("#tabSonAlias").show(),$("#btnAddSonAlias").show(),$("#btnPLAddSonAlias").show()}else{var a=t.MY.nodeid,i=t.MY.alias;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),t.MY.id=""}t.param.plModSet[i]||$("#submitBtn").hide(),t.MY.action=t.MY.act.conList,t.API.private("privatePushState",{action:t.MY.action,alias:t.MY.alias,sonAlias:t.MY.sonAlias,nodeid:t.MY.nodeid,id:t.MY.id,sonId:""}),$("#actionName").text("\u5185\u5bb9\u5217\u8868"),t.API.show(t.param.viewConList);var s=t.API.find("#"+t.param.formConList);t.param.plModSet[i]?s.addClass(i+"_editConList").addClass("editConList"):s.addClass(i+"_"+t.MY.action).addClass(t.MY.action);var o={alias:i,filterParam:{},orderBy:[{fieldName:"id",isDesc:!0}]};a&&(o.filterParam.nodeid=a),t.API.private("privateBindFormListPage",s,o,t.MY.listType||0,function(a){t.API.private("privateShowConListCB",a)})},privateShowConListCB:function(a){function i(t){for(var i=0;i<t.length;i++){var n="<a href='javascript:void(0);' ";!function(i){for(var o in t[i])if("onclick"==o.toLowerCase())var r=t[i][o];else if("html"==o)var d=t[i][o];else n+="action"==o?"data-action='"+t[i][o]+"' ":o+"='"+t[i][o]+"' ";n+=">",$(n+d+"</a>").appendTo(s.find("table:eq(0)>tbody>tr>td>.actionBtnForList")).on("click",function(){var t=s.find("table:eq(0)>tbody>tr>td>.actionBtnForList").index($(this).parents(".actionBtnForList"));e.API.private(r,$(this),a[t])})}(i)}}var e=this;if(e.MY.sonAlias)var n=(e.MY.id,e.MY.sonAlias);else var n=(e.MY.nodeid,e.MY.alias);var s=e.API.find("#"+e.param.formConList);s.find("table:eq(0)>tbody>tr>td>label>input[type='checkbox']").on("click",function(){var i=s.find("table:eq(0)>tbody>tr>td>label>input[type='checkbox']").index($(this));t.trigerEvent("trigerCheckBoxClick",a[i])}),e.param.btnForList&&e.param.btnForList[n]?i(e.param.btnForList[n]):e.param.btnForList&&e.param.btnForList.default&&i(e.param.btnForList.default),s.find(".btn-del-list").on("click",function(){e.API.private("privateBtnConPLDel")}),e.API.private("privateCheckAuth",s),e.API.private("privateMessConListOk",a),e.param.plModSet[n]&&setTimeout(function(){$("#submitBtn").fadeIn(150)},315)},privateMessConListOk:function(){},privateBindFormListPage:function(a,i,e,n){var s=this;i=s.API.private("privateSetListParam",i),i.resultSet="count",s.API.doServer(s.MY.serverName.qCon,s.MY.package,i,function(o,r){function d(o){t.use().save(v,o);var r=parseInt(o);i.resultSet="",i.limit=(c*r-c).toString()+","+c.toString(),s.API.doServer(s.MY.serverName.qCon,s.MY.package,i,function(o,v){o>0&&s.API.private("privateContentDesc",i.alias,function(){function o(u){s.API.private("privateSetDescAndData",i.alias,u,function(){var p=t.clone(s.MY.contentDesc[i.alias]);$.each(p,function(t,a){return 0==a.islist?!0:(-1!=$.inArray(a.type,["Select","Radio"])?(a.type="Text",valueRange=a.valueRange[0],$.each(u,function(a,i){$.each(valueRange,function(a,e){return i[t]==e?(i[t]=a,!1):void 0})})):-1!=$.inArray(a.type,["CheckBox","MultSelect"])?(a.type="Text",valueRange=a.valueRange[0],$.each(u,function(a,i){return i[t]?($.each(valueRange,function(a,e){var n=$.inArray(e,i[t]);-1!=n&&(i[t][n]=a)}),i[t]=i[t].join("\u3001"),void 0):!0})):"TextArea"==a.type&&(a.type="Text"),void 0)}),t.use().createFormList(p,a,u,function(t,i){s.API.private("privateOutLinkCB",p,a,t,i,function(t){o(t)})},e),t.use().showPagination(a.find("#pagination"),l,c,r,function(t){d(t)}),n&&n(v.listData)})}s.API.private("privateDataToForm",s.MY.contentDesc[i.alias],v.listData),o(v.listData)})})}if(o>0&&r){var l=parseInt(r.listCount)||0;if(l){var c=s.param.pagesize||20,v=i.filterParam.nodeid?i.alias+i.filterParam.nodeid:i.alias,u=parseInt(t.use().load(v))||1;u>Math.ceil(l/c)&&(u=Math.ceil(l/c)),d(u)}else s.API.private("privateContentDesc",i.alias,function(){s.API.private("privateSetDescAndData",i.alias,null,function(){t.use().createFormList(s.MY.contentDesc[i.alias],a,null,function(t,e){s.API.private("privateOutLinkCB",s.MY.contentDesc[i.alias],a,t,e)},e),t.use().showPagination(a.find("#pagination")),n&&n([])})})}})},privateSetListParam:function(t){return t},privateShowConAdd:function(){function a(e){i.API.private("privateSetDescAndData",n,e,function(){t.use().createForm(i.MY.contentDesc[n],r,e,function(t,e){i.API.private("privateOutLinkCB",i.MY.contentDesc[n],r,t,e,function(t){a(t)})})})}var i=this;if(i.MY.sonAlias)var e=i.MY.id,n=i.MY.sonAlias;else{var e=i.MY.nodeid,n=i.MY.alias;i.MY.id=""}if(!e&&!i.MY.noClass)return t.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;if(i.MY.sonAlias){var e=i.MY.id,n=i.MY.sonAlias,s=$("#tabSonAlias>ul>li>a[sonalias='"+i.MY.sonAlias+"']"),o=$("#tabSonAlias>ul>li>a").index(s);$("#tabSonAlias>ul>li").removeClass("active").eq(o).addClass("active"),$("#tabSonAlias").show()}else{var e=i.MY.nodeid,n=i.MY.alias;$("#tabSonAlias").hide()}$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.conAdd,i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:i.MY.sonAlias,nodeid:i.MY.nodeid,id:i.MY.id,sonId:""}),$("#actionName").text("\u5185\u5bb9\u6dfb\u52a0"),i.API.show(i.param.viewConAdd);var r=i.API.find("#"+i.param.formConAdd);r.addClass(n+"_"+i.MY.action).addClass(i.MY.action),a(null),i.API.private("privateMessConAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessConAddOk:function(){},privateShowConPLAdd:function(){function a(e){i.API.private("privateSetDescAndData",n,e,function(){t.use().createFormList(i.MY.contentDesc[n],r,e,function(t,e){i.API.private("privateOutLinkCB",i.MY.contentDesc[n],r,t,e,function(t){a(t)})},1)})}var i=this;if(i.MY.sonAlias)var e=i.MY.id,n=i.MY.sonAlias;else{var e=i.MY.nodeid,n=i.MY.alias;i.MY.id=""}if(!e&&!i.MY.noClass)return t.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;if(i.MY.sonAlias){var s=$("#tabSonAlias>ul>li>a[sonalias='"+i.MY.sonAlias+"']"),o=$("#tabSonAlias>ul>li>a").index(s);$("#tabSonAlias>ul>li").removeClass("active").eq(o).addClass("active"),$("#tabSonAlias").show()}else $("#tabSonAlias").hide();$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.conPLAdd,i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:i.MY.sonAlias,id:i.MY.id,nodeid:i.MY.nodeid,sonId:""}),$("#actionName").text("\u5185\u5bb9\u6279\u91cf\u6dfb\u52a0"),i.API.show(i.param.viewConPLAdd);var r=i.API.find("#"+i.param.formConPLAdd);r.addClass(n+"_"+i.MY.action).addClass(i.MY.action);var d=[],l={};for(var c in i.MY.contentDesc[n])l[c]="";for(var v=0;v<i.param.plAddSetNum;v++)d.push(l);a(d),i.API.private("privateMessConPLAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessConPLAddOk:function(){},privateShowConEdit:function(){var a=this;if($("#tabSonAlias").show(),a.MY.sonAlias){var i=a.MY.sonAlias,e=a.MY.sonId,n=$("#tabSonAlias>ul>li>a[sonalias='"+a.MY.sonAlias+"']"),s=$("#tabSonAlias>ul>li>a").index(n);$("#tabSonAlias>ul>li").removeClass("active").eq(s).addClass("active")}else{var i=a.MY.alias,e=a.MY.id;$("#tabSonAlias>ul>li").removeClass("active").eq(0).addClass("active"),a.MY.sonId=""}$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),a.MY.action=a.MY.act.conEdit,a.API.private("privatePushState",{action:a.MY.action,alias:a.MY.alias,sonAlias:a.MY.sonAlias,id:a.MY.id,nodeid:a.MY.nodeid,sonId:a.MY.sonId}),$("#actionName").text("\u5185\u5bb9\u4fee\u6539"),a.API.show(a.param.viewConEdit);var o=a.API.find("#"+a.param.formConEdit);o.addClass(i+"_"+a.MY.action).addClass(a.MY.action);var r={alias:i,filterParam:{id:e}};a.API.doServer(a.MY.serverName.qCon,a.MY.package,r,function(e,n){e>0&&n&&n.listData&&("model"!=a.MY.alias&&(a.MY.sonAlias?a.MY.sonAlias=n.listData[0].alias:a.MY.alias=n.listData[0].alias),a.API.private("privateContentDesc",i,function(){function e(n){a.API.private("privateSetDescAndData",i,n,function(){t.use().createForm(a.MY.contentDesc[i],o,n,function(t,n){a.API.private("privateOutLinkCB",a.MY.contentDesc[i],o,t,n,function(t){e(t)})})})}a.API.private("privateDataToForm",a.MY.contentDesc[i],n.listData),e(n.listData[0]),a.API.private("privateMessConEditOk",n.listData[0]),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)}))})},privateMessConEditOk:function(){},privateShowClassEdit:function(){var a=this;if(!a.MY.nodeid)return t.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),a.MY.action=a.MY.act.classEdit,a.MY.sonAlias="",a.MY.id="",a.MY.sonId="",a.API.private("privatePushState",{action:a.MY.action,alias:a.MY.alias,sonAlias:"",nodeid:a.MY.nodeid,id:"",sonId:""}),$("#actionName").text("\u680f\u76ee\u4fee\u6539"),a.API.show(a.param.viewClassEdit);var i=a.API.find("#"+a.param.formClassEdit);i.addClass(a.MY.alias+"_"+a.MY.action).addClass(a.MY.action);var e={alias:a.MY.alias,target:"parent",filterParam:{id:a.MY.nodeid}};a.API.doServer(a.MY.serverName.qCon,a.MY.package,e,function(e,n){function s(e){t.use().createForm(a.MY.nodeDesc,i,e,function(t,e){a.API.private("privateOutLinkCB",a.MY.nodeDesc,i,t,e,function(t){s(t)})})}e>0&&n.listData&&(a.API.private("privateDataToForm",a.MY.contentDesc[a.MY.alias],n.listData),s(n.listData[0]),a.API.private("privateMessClassEditOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150))})},privateMessClassEditOk:function(){},privateShowClassAdd:function(){function a(n){t.use().createForm(i.MY.nodeDesc,e,n,function(t,n){i.API.private("privateOutLinkCB",i.MY.nodeDesc,e,t,n,function(t){a(t)})})}var i=this;if(!i.MY.isding&&!i.MY.nodeid)return t.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.classAdd,i.MY.sonAlias="",i.MY.id="",i.MY.sonId="",i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:"",nodeid:i.MY.nodeid,id:"",sonId:""}),i.MY.isding?$("#actionName").text("\u6dfb\u52a0\u9876\u680f\u76ee"):$("#actionName").text("\u6dfb\u52a0\u5b50\u680f\u76ee"),i.API.show(i.param.viewClassAdd);var e=i.API.find("#"+i.param.formClassAdd);e.addClass(i.MY.alias+"_"+i.MY.action).addClass(i.MY.action),a(null),i.API.private("privateMessClassAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessClassAddOk:function(){},privateBtnConEdit:function(t,a){this.MY.sonAlias?this.MY.sonId=a.id:this.MY.id=a.id,this.API.private("privateShowConEdit")},privateBtnConDel:function(a,i){var e=this,n=e.MY.sonAlias||e.MY.alias;if(confirm("\u786e\u8ba4\u8981\u5220\u9664\u8be5\u5185\u5bb9\u5417\uff1f")){var s={alias:n,id:i.id},o="model"==n?e.MY.serverName.dModel:e.MY.serverName.dCon;e.API.doServer(o,e.MY.package,s,function(a){a>0?e.API.private("privateShowConList"):t.use("Widget").alert("\u5185\u5bb9\u5220\u9664\u5931\u8d25\uff01","danger")})}},privateBtnConPLDel:function(){var a=this,i=a.API.find("#"+a.param.formConList),e=a.MY.sonAlias||a.MY.alias;if(confirm("\u786e\u8ba4\u8981\u5220\u9664\u8be5\u5185\u5bb9\u5417\uff1f")){for(var n=i[0].batchEdit(),s=[],o=0;o<n.length;o++)s.push(n[o].id);var r={alias:e,id:s.join(",")},d="model"==e?a.MY.serverName.dModel:a.MY.serverName.dCon;a.API.doServer(d,a.MY.package,r,function(i){i>0?a.API.private("privateShowConList"):t.use("Widget").alert("\u5220\u9664\u5931\u8d25\uff01","danger")})}},privateCheckAuth:function(t){if(this.MY.isrole)$("[data-action]").show();else{var a=this.MY.sonAlias||this.MY.alias;if(!a||!window.RFBRoles)return;t.find("[data-action]").each(function(){var t=a+"."+$(this).data("action");~$.inArray(t,window.RFBRoles)&&$(this).show()})}},privateSubmitConList:function(a){var i=this,e=i.MY.sonAlias||i.MY.alias;if(i.param.plModSet[e]){var n=i.API.find("#"+i.param.formConList)[0].getDataAndCheck();if(n&&(n=n.formList,n.length)){for(var s=0;s<n.length;s++)i.API.private("privateFormToData",i.MY.contentDesc[e],n[s]);i.API.initPost();for(var o=[],s=0;s<n.length;s++)!function(a){i.API.addPost(i.MY.serverName.mCon,i.MY.package,{alias:e,keyValue:n[a]},function(i,e){i>0?o.push(e):t.use("Widget").alert("Cid="+n[a].id+":\u4fee\u6539\u5931\u8d25\uff01","danger")})}(s);i.API.doPost(function(){a&&a()})}}},privateSubmitConAdd:function(a){var i=this,e=i.API.find("#"+i.param.formConAdd)[0].getDataAndCheck();if(e){if(i.MY.sonAlias)var n=i.MY.id,s=i.MY.sonAlias;else var n=i.MY.nodeid,s=i.MY.alias;i.API.private("privateFormToData",i.MY.contentDesc[s],e);var o={alias:s,keyValue:e},r=i.MY.serverName.aCon;e.nodeid=n||"0",i.API.doServer(r,i.MY.package,o,function(i,e){i>0?a&&a(e):t.use("Widget").alert("\u5185\u5bb9\u6dfb\u52a0\u5931\u8d25\uff01","danger")})}},privateSubmitConPLAdd:function(a){var i=this,e=i.API.find("#"+i.param.formConPLAdd)[0].getDataAndCheck();if(e&&(e=e.formList,e.length)){if(i.MY.sonAlias)var n=i.MY.id,s=i.MY.sonAlias;else var n=i.MY.nodeid,s=i.MY.alias;for(var o=0;o<e.length;o++)i.API.private("privateFormToData",i.MY.contentDesc[s],e[o]);for(var r=[],d=i.API.find("#"+i.param.formConPLAdd)[0].getHiddenData(),o=0;o<e.length;o++){var l=!1;for(var c in e[o])e[o][c]!==d[0][c]&&(l=!0);l&&(e[o].nodeid=n,r.push(e[o]))}if(r.length){var v={alias:s,keyValue:r};i.API.doServer(i.MY.serverName.aCon,i.MY.package,v,function(i,e){i>0&&e?a&&a(e):t.use("Widget").alert("\u6570\u636e\u6dfb\u52a0\u5931\u8d25\uff01","danger")})}}},privateSubmitConEdit:function(a){var i=this,e=i.API.find("#"+i.param.formConEdit)[0].getDataAndCheck();if(e){var n=i.MY.sonAlias||i.MY.alias;i.API.private("privateFormToData",i.MY.contentDesc[n],e);var s={alias:n,keyValue:e},o=i.MY.serverName.mCon;i.API.doServer(o,i.MY.package,s,function(i){i>0?a&&a():t.use("Widget").alert("\u4fee\u6539\u5185\u5bb9\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privateSubmitClassEdit:function(a){var i=this,e=i.API.find("#"+i.param.formClassEdit)[0].getDataAndCheck();if(e){i.API.private("privateFormToData",i.MY.nodeDesc,e);var n={alias:i.MY.alias,target:"parent",keyValue:e};i.API.doServer(i.MY.serverName.mCon,i.MY.package,n,function(i){i>0?a&&a():t.use("Widget").alert("\u4fee\u6539\u680f\u76ee\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privateSubmitClassAdd:function(a){var i=this,e=i.API.find("#"+i.param.formClassAdd)[0].getDataAndCheck();if(e){e.nodeid=i.MY.isding?0:i.MY.nodeid,e.store_id=1,i.API.private("privateFormToData",i.MY.nodeDesc,e);var n={alias:i.MY.alias,target:"parent",keyValue:e};i.API.doServer(i.MY.serverName.aCon,i.MY.package,n,function(i,e){i>0&&e?a(e):t.use("Widget").alert("\u6dfb\u52a0\u680f\u76ee\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privatePushState:function(){}},TrigerEvent:{trigerSubmit:function(){var a=this;a.MY.action==a.MY.act.conList?a.API.private("privateSubmitConList",function(){t.use("Widget").alert("\u4fee\u6539\u5b8c\u6210!","success"),a.API.private("privateShowDefaultView")}):a.MY.action==a.MY.act.conAdd?a.API.private("privateSubmitConAdd",function(){t.use("Widget").alert("\u5185\u5bb9\u6dfb\u52a0\u6210\u529f\uff01","success"),a.API.private("privateShowDefaultView")}):a.MY.action==a.MY.act.conPLAdd?a.API.private("privateSubmitConPLAdd",function(){t.use("Widget").alert("\u6dfb\u52a0\u5b8c\u6210!","success"),a.API.private("privateShowDefaultView")}):a.MY.action==a.MY.act.conEdit?a.API.private("privateSubmitConEdit",function(){t.use("Widget").alert("\u4fdd\u5b58\u6210\u529f\uff01","success"),a.API.private("privateShowDefaultView")}):a.MY.action==a.MY.act.classEdit?a.API.private("privateSubmitClassEdit",function(){t.use("Widget").alert("\u4fdd\u5b58\u6210\u529f\uff01","success"),t.trigerEvent("trigerReShowNodeTree",a.MY.alias),a.API.private("privateShowDefaultView")}):a.MY.action==a.MY.act.classAdd?a.API.private("privateSubmitClassAdd",function(){t.use("Widget").alert("\u680f\u76ee\u6dfb\u52a0\u6210\u529f\uff01","success"),setTimeout(function(){window.location.reload()},1500)}):a.API.private("privateSubmit_"+a.MY.action)},trigerChangeClass:function(t,a){var i=this;i.MY.nodeid=t,delete this.MY.sonAlias,i.MY.isSelfAlias?i.API.private("privateShowClassEdit"):(a&&(i.MY.alias=a),i.API.private("privateContentDesc",i.MY.alias,function(){i.API.private("privateShowConList")}))},trigerContentList:function(){delete this.MY.sonAlias,this.API.private("privateShowConList")},trigerContentAdd:function(){delete this.MY.sonAlias,this.API.private("privateShowConAdd")},trigerContentPLAdd:function(){delete this.MY.sonAlias,this.API.private("privateShowConPLAdd")},trigerClassEdit:function(){this.API.private("privateShowClassEdit")},trigerClassAdd:function(t){this.MY.isding="0"==t?!0:!1,this.API.private("privateShowClassAdd")},trigerClassDel:function(){if(!this.MY.nodeid)return t.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee","warning"),void 0;var a={alias:this.MY.alias,target:"parent",id:this.MY.nodeid};confirm("\u786e\u5b9a\u8981\u5220\u9664\u8be5\u680f\u76ee\u5417\uff1f")&&this.API.doServer(this.MY.serverName.dCon,this.MY.package,a,function(a,i){a>0&&i?(t.use("Widget").alert("\u680f\u76ee\u5220\u9664\u6210\u529f\uff01","success"),this.MY.nodeid="",this.API.private("privatePushState",{nodeid:""}),setTimeout(function(){window.location.reload()},1500)):t.use("Widget").alert("\u680f\u76ee\u5220\u9664\u5931\u8d25\uff01","success")})},trigerGoBack:function(){this.API.private("privateShowConList")},trigerReset:function(){this.API.private("privateShowDefaultView")},trigerCheckBoxClick:function(){}}}),t}),define("",["./../breeze/framework/js/BreezeFW","./../breeze/framework/js/tools/DateTime","./../breeze/framework/js/tools/Widget","./../gadget/cmsMgrGadget"],function(require){var t=require("./../breeze/framework/js/BreezeFW");return require("./../breeze/framework/js/tools/DateTime")(t),require("./../breeze/framework/js/tools/Widget")(t),require("./../gadget/cmsMgrGadget"),t.register({param:{alias:"cash_detail",formConList:"formCashDetailList",action:"conList",btnForList:{cash_detail:[{title:"\u5220\u9664","class":"btn btn-mini btn-danger",html:" <i class='icon-trash bigger-120'> \u5220\u9664</i>",onclick:"privateBtnConDel"}]}},name:"cashDetailGadget","extends":["cmsMgrGadget"],onCreate:function(){this.API.private("privateSetGlobalVar"),this.API.show("viewCashDetailGadget"),this.MY.userDiscount=100,this.MY.noClass=!0,this.MY.formDom=$("#"+this.param.formConList),this.MY.itemMap={},setTimeout(function(){$("#submitBtn").fadeIn(150)},150),this.API.private("bindSerBox"),$(document).on("click",function(t){var a=t.target;$(a).parents("#J_serBox").length||"J_serKey"==$(a).attr("id")||"btnSerKeyItem"==$(a).attr("id")||$("#J_serBox").slideUp(100)})},"private":{showDetailView:function(a){var i=this;this.API.private("privateContentDesc",i.MY.alias,function(){function e(a){var n=i.MY.contentDesc[i.MY.alias];if(n.item_name.type="ReadOnly",n.technician_name.type="ReadOnly",a&&a.length)for(var s=0;s<a.length;s++){var o=a[s];o.push_percent&&(o.push_amount=parseInt(o.unit_price)*parseInt(o.push_percent)/100)}t.use().createFormList(n,i.MY.formDom,a,function(t,a){i.API.private("privateOutLinkCB",n,i.MY.formDom,t,a,function(t){e(t)})},0),i.API.private("privateShowConListCB",a),i.API.private("updateTj"),i.API.find("._formlist_quantity_inp").each(function(){var e;$(this).ace_spinner({value:parseInt(this.value),min:1,max:1e4,step:1,btn_up_class:"btn-info",btn_down_class:"btn-info"}).on("change",function(){var n=this;e&&clearTimeout(e),e=setTimeout(function(){var e=$("._formlist_quantity_inp").index($(n)),s=parseInt(i.MY.itemMap[a[e].item_id].inventory)||"-1";s<n.value&&"-1"!=s&&(t.use("Widget").alert("\u5df2\u8fbe\u5e93\u5b58\u4e0a\u9650","warning",1200),n.value=s);var o=i.MY.formDom[0].getData().formList||[];i.API.private("showDetailView",o)},300)})}),i.API.find("._formlist_total_amount_inp").each(function(){var t;$(this).ace_spinner({value:this.value,min:0,max:1e7,step:1,btn_up_class:"hidden",btn_down_class:"hidden"}).on("change",function(){t&&clearTimeout(t),t=setTimeout(function(){var t=i.MY.formDom[0].getData().formList||[];i.API.private("showDetailView",t)},300)})}),i.API.find("._formlist_item_type_sel,._formlist_unit_price_inp,._formlist_push_amount_inp").attr("disabled","true")}e(a)})},updateTj:function(){for(var t=this.MY.formDom[0].getData().formList,a={cTQuantity:0,cTAmout:0,daTAmout:0,cScore:0,cpTAmout:0},i=0;i<t.length;i++){var e=t[i],n=parseInt(e.quantity),s=this.MY.itemMap[e.item_id].active_price,o=parseInt(e.total_amount),r=parseInt(e.push_percent)/100;a.cTQuantity+=n,a.cTAmout+=s*n,a.daTAmout+=o,a.cScore+=Math.floor(o/this.MY.userScoreRatio/100),a.cpTAmout+=o*r}a.cTAmout=(a.cTAmout/100).toFixed(2),a.daTAmout=(a.daTAmout/100).toFixed(2),a.cpTAmout=(a.cpTAmout/100).toFixed(2),this.MY.tjData=a;for(var d in a){var l="<b>"+a[d]+"</b>";this.API.find("#"+d).html(l)}},bindSerBox:function(){var a,i=this,e=this.API.find("#J_serKey");e.on("keyup focus",function(){a&&clearTimeout(a),a=setTimeout(function(){var a=i.API.find('input[name="item_type"]:checked').val(),n={alias:a,target:"self",orderby:[{fieldName:"id",isDesc:!1}],limit:10};if(e.val()){var s=t.use().toJSONString("%"+e.val()+"%");if("goods"==a)var o="(nw_goods.name like "+s+" or nw_goods.no like "+s+") and nw_goods.status = 1";else var o="nw_services.name like "+s+" and nw_services.status = 1";n.tableWhere=o}var r=["\u6536\u8d39\u540d\u79f0","\u9500\u552e\u5355\u4ef7","\u6298\u540e\u5355\u4ef7(\u5143)","\u5e93\u5b58(\u4ef6)"],d=['<table class="table table-bordered table-hover"><thead>'];d.push("<tr>");for(var l=0;l<r.length;l++)d.push("<th>"+r[l]+"</th>");d.push("</tr></thead><tbody>"),i.API.doServer("queryData","cms",n,function(n,s){if(n>0&&s.listData&&s.listData.length)for(var o=0;o<s.listData.length;o++){d.push('<tr class="J_itemTr" style="cursor: pointer;">');for(var r=s.listData[o],l=[r.name,parseFloat(r.active_price/100).toFixed(2),parseFloat(r.active_price*i.MY.userDiscount/1e4).toFixed(2),r.inventory||"-"],c=0;c<l.length;c++){var v=l[c];d.push("<td>"+v+"</td>")}d.push("</tr>")}else d.push('<tr><td colspan="4"><div class="nodata">\u6682\u65e0\u6570\u636e</div></td></tr>');d.push("</tbody></table>"),$("#J_serBox").length||$("body").append('<div id="J_serBox" class="search-box"></div>');var u=e.offset().left+e.outerWidth()+60,p=e.offset().top;$("#J_serBox").html(d.join("\n")).css({left:u,top:p}).slideDown(100),$("#J_serBox .J_itemTr").click(function(){if(!i.MY.cashInfo||!i.MY.cashInfo.serBoxStatus)return t.use("Widget").alert("\u8bf7\u9009\u62e9\u4f1a\u5458\u6216\u52fe\u9009\u6563\u6237","danger"),void 0;var e=$("#J_serBox .J_itemTr").index($(this)),n=s.listData[e];i.MY.itemMap[n.id]=n;for(var o=parseFloat(n.active_price*i.MY.userDiscount/100).toFixed(2),r={item_type:a,item_id:n.id,item_name:n.name,quantity:1,technician_name:"",cash_type:i.MY.cashInfo.cash_type,push_percent:0,push_amount:0,unit_price:o,total_amount:o,card_no:i.MY.cashInfo.card_no,user_id:i.MY.cashInfo.user_id,user_name:i.MY.cashInfo.user_name},d=i.MY.formDom[0].getData().formList||[],l=!1,c=0;c<d.length;c++){var v=d[c];v.item_id==r.item_id&&v.item_type==r.item_type&&(v.quantity=parseInt(v.quantity)+1,v.quantity>n.inventory&&"-1"!=n.inventory&&(v.quantity=n.inventory,t.use("Widget").alert("\u5df2\u8fbe\u5e93\u5b58\u4e0a\u9650","warning",1200)),v.total_amount=v.quantity*parseFloat(v.unit_price),l=!0)}l||d.push(r),i.MY.detailData=d,i.API.private("showDetailView",d)})})},200)})},privateBtnConDel:function(t,a){for(var i=this.MY.detailData||[],e=[],n=0;n<i.length;n++){var s=i[n];(s.item_type!=a.item_type||s.item_id!=a.item_id)&&e.push(s)}this.MY.detailData=e,this.API.private("showDetailView",e)}},FireEvent:{submitJieSuan:function(){var a=this.MY.formDom[0].getData().formList,i=this.MY.cashInfo;i&&a.length||t.use("Widget").alert("\u8bf7\u9009\u62e9\u6d88\u8d39\u7684\u5546\u54c1\u4fe1\u606f","danger");var e={cashData:{alias:"cash_record",cash_no:i.cash_no,cash_type:i.cash_type,card_no:i.card_no,user_id:i.user_id,user_name:i.user_name,cash_time:i.cash_time,amount:100*this.MY.tjData.cTAmout,real_amount:100*this.MY.tjData.daTAmout,score:this.MY.tjData.cScore||0,comment:this.API.find("#comment").val(),status:1},cashDetailData:a};this.MY.tjData.cScore&&i.card_no&&(e.scoreRecordData={type:1,from_type:1,score:this.MY.tjData.cScore,card_no:i.card_no,user_id:i.user_id,user_name:i.user_name,comment:"\u4f1a\u5458\u6d88\u8d39\u79ef\u5206\uff0c\u6d88\u8d39\u603b\u91d1\u989d["+100*this.MY.tjData.daTAmout+"]\uff0c\u83b7\u5f97\u79ef\u5206["+this.MY.tjData.cScore+"]"}),this.API.doServer("cashSubmit","cms",e,function(a,i,e){1==a?(t.use("Widget").alert("\u6536\u94f6\u6210\u529f","success",1500),setTimeout(function(){t.trigerEvent("reShowDefault")},1500)):t.use("Widget").alert(e,"danger")})},fireCloseSerBox:function(){$("#J_serBox").slideToggle(100)},resetForm:function(){t.trigerEvent("reShowDefault")
-}},TrigerEvent:{setCashInfo:function(t){this.MY.cashInfo=t,this.MY.userDiscount=t.discount,this.MY.userScoreRatio=t.score_ratio,this.API.private("showDetailView")}}}),t});
+/**
+* @fileOverview CMS后台内容操作视图的扩展函数Gadget
+* @author <a href="http://ju.taobao.com">jianhui.fjh</a>
+* @version 0.1
+*/
+
+/**
+* @namespace
+* @author jianhui.fjh
+* @name cashDetailGadget
+* @description  CMS后台内容操作视图的扩展函数Gadget
+*/
+
+define(function(require, exports, module) {
+  var FW = require("../breeze/framework/js/BreezeFW");
+  require("../breeze/framework/js/tools/DateTime")(FW);
+  require("../breeze/framework/js/tools/Widget")(FW);
+  require("../gadget/cmsMgrGadget"); //引入扩展函数
+  FW.register(
+    {
+      param:{
+        alias: 'cash_detail',
+        formConList: 'formCashDetailList',
+        action: 'conList',
+        btnForList:{
+          'cash_detail': [{
+            title:"删除",
+            class:"btn btn-mini btn-danger",
+            html:" <i class='icon-trash bigger-120'> 删除</i>",
+            onclick:"privateBtnConDel"
+          }]
+        }
+      },
+      name:"cashDetailGadget",
+      extends:['cmsMgrGadget'],
+      onCreate:function(){
+        var self = this;
+        this.API.private("privateSetGlobalVar");
+        this.API.show('viewCashDetailGadget');
+        this.MY.userDiscount = 100;
+        this.MY.noClass = true;
+        this.MY.formDom = $("#"+this.param.formConList);
+        this.MY.itemMap = {}; //商品map
+        //显示消费项目列表
+        // self.API.private("showDetailView");
+        //显示提交返回按钮
+        setTimeout(function(){
+          $("#submitBtn").fadeIn(150);
+        },150);
+        //绑定搜索事件
+        this.API.private('bindSerBox');
+        $(document).on('click',function(e){
+          var target = e.target;
+          if(!$(target).parents('#J_serBox').length && $(target).attr('id')!='J_serKey' && $(target).attr('id')!='btnSerKeyItem'){
+            $('#J_serBox').slideUp(100);
+          }
+        });
+      },
+      private:{
+        showDetailView: function(data){
+          var self = this;
+          this.API.private("privateContentDesc", self.MY.alias, function(_modelDesc){
+            reShowOutLink(data);
+            function reShowOutLink(_data){
+              //表单生成前，对数据描述和数据的自定义接口
+              //数据描述改造
+              var curModelDesc = self.MY.contentDesc[self.MY.alias];
+              curModelDesc.item_name.type = 'ReadOnly';
+              curModelDesc.technician_name.type = 'ReadOnly';
+              //处理提成金额
+              if(_data && _data.length){
+                for (var i = 0; i < _data.length; i++) {
+                  var item = _data[i];
+                  if(item.push_percent){
+                    item.push_amount = parseInt(item.unit_price)*parseInt(item.push_percent)/100;
+                  }
+                }
+              }
+              FW.use().createFormList(curModelDesc,self.MY.formDom,_data,function(fieldName,fieldValue){
+                self.API.private("privateOutLinkCB",curModelDesc, self.MY.formDom, fieldName, fieldValue,function(newdata){
+                  reShowOutLink(newdata);
+                })
+              },0);
+              self.API.private("privateShowConListCB",_data);
+              self.API.private("updateTj"); //更新统计信息
+              // 绑定事件
+              self.API.find('._formlist_quantity_inp').each(function(){
+                var t;
+                $(this).ace_spinner({
+                  value: parseInt(this.value),
+                  min: 1,
+                  max: 10000,
+                  step: 1,
+                  btn_up_class:'btn-info',
+                  btn_down_class:'btn-info'
+                }).on('change', function(){
+                  var _this = this;
+                  if(t) clearTimeout(t);
+                  t = setTimeout(function(){
+                    var idx = $('._formlist_quantity_inp').index($(_this));
+                    var inventory = parseInt(self.MY.itemMap[_data[idx].item_id].inventory) || '-1';
+                    if(inventory < _this.value && inventory != '-1'){
+                      FW.use('Widget').alert('已达库存上限','warning',1200);
+                      _this.value = inventory;
+                    }
+                    var newData = self.MY.formDom[0].getData().formList || [];
+                    self.API.private("showDetailView", newData);
+                  },300);
+                })
+              })
+              self.API.find('._formlist_total_amount_inp').each(function(){
+                var t;
+                $(this).ace_spinner({
+                  value: this.value,
+                  min: 0,
+                  max: 10000000,
+                  step: 1,
+                  btn_up_class: 'hidden',
+                  btn_down_class: 'hidden'
+                }).on('change', function(){
+                  if(t) clearTimeout(t);
+                  t = setTimeout(function(){
+                    var newData = self.MY.formDom[0].getData().formList || [];
+                    self.API.private("showDetailView", newData);
+                  },300);
+                });
+              })
+              self.API.find('._formlist_item_type_sel,._formlist_unit_price_inp,._formlist_push_amount_inp').attr('disabled','true');
+            }
+          })
+        },
+        updateTj: function(){  //统计函数
+          var data = this.MY.formDom[0].getData().formList;
+          var fids = {
+            cTQuantity: 0,
+            cTAmout: 0,
+            daTAmout: 0,
+            cScore: 0,
+            cpTAmout: 0
+          };
+          for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            var quantity = parseInt(item.quantity);
+            var active_price = this.MY.itemMap[item.item_id].active_price;
+            var total_amount = parseInt(item.total_amount);
+            var push_percent = parseInt(item.push_percent)/100;
+            fids.cTQuantity += quantity;
+            fids.cTAmout += active_price*quantity;
+            fids.daTAmout += total_amount;
+            fids.cScore += Math.floor(total_amount/this.MY.userScoreRatio/100);
+            fids.cpTAmout += total_amount*push_percent;
+          }
+          fids.cTAmout = (fids.cTAmout/100).toFixed(2);
+          fids.daTAmout = (fids.daTAmout/100).toFixed(2);
+          fids.cpTAmout = (fids.cpTAmout/100).toFixed(2);
+          this.MY.tjData = fids;
+          for (var id in fids) {
+            var html = '<b>'+fids[id]+'</b>';
+            this.API.find('#'+id).html(html);
+          }
+        },
+        bindSerBox: function(callback){
+          var self = this;
+          var t;
+          var serDom = this.API.find('#J_serKey');
+          serDom.on('keyup focus',function(e){
+            if(t) clearTimeout(t);
+            t = setTimeout(function(){
+              //获取数据
+              var alias = self.API.find('input[name="item_type"]:checked').val();
+              var _param = {
+                alias: alias,
+                target: 'self',
+                orderby: [{
+                  fieldName: 'id',
+                  isDesc: false
+                }],
+                limit: 10
+              };
+              if(serDom.val()){
+                var key = FW.use().toJSONString('%'+serDom.val()+'%');
+                if(alias=='goods'){
+                  var tableWhere = '(nw_goods.name like '+key+' or nw_goods.no like '+key+') and nw_goods.status = 1';
+                }else{
+                  var tableWhere = 'nw_services.name like '+key+' and nw_services.status = 1';
+                }
+                _param.tableWhere = tableWhere;
+              }
+              var thArr = ['收费名称','销售单价','折后单价(元)','库存(件)'];
+              var htmlArr = ['<table class="table table-bordered table-hover"><thead>'];
+              htmlArr.push('<tr>');
+              for (var i = 0; i < thArr.length; i++) {
+                htmlArr.push('<th>'+thArr[i]+'</th>');
+              }
+              htmlArr.push('</tr></thead><tbody>');
+              self.API.doServer('queryData', 'cms', _param, function(code,data){
+                if(code>0 && data.listData && data.listData.length){
+                  for (var i = 0; i < data.listData.length; i++) {
+                    htmlArr.push('<tr class="J_itemTr" style="cursor: pointer;">');
+                    var item = data.listData[i];
+                    var tdField = [
+                      item.name,
+                      parseFloat(item.active_price/100).toFixed(2),
+                      parseFloat(item.active_price*self.MY.userDiscount/10000).toFixed(2),
+                      (item.inventory || '-')
+                    ];
+                    for (var j = 0; j < tdField.length; j++) {
+                      var field = tdField[j];
+                      htmlArr.push('<td>'+field+'</td>');
+                    }
+                    htmlArr.push('</tr>');
+                  }
+                }else{
+                  htmlArr.push('<tr><td colspan="4"><div class="nodata">暂无数据</div></td></tr>');
+                }
+                htmlArr.push('</tbody></table>');
+                if(!$('#J_serBox').length){
+                  $('body').append('<div id="J_serBox" class="search-box"></div>');
+                }
+                var left = serDom.offset().left +serDom.outerWidth()+60;
+                var top = serDom.offset().top;
+                $('#J_serBox').html(htmlArr.join('\n')).css({
+                  left: left,
+                  top: top
+                }).slideDown(100);
+                $('#J_serBox .J_itemTr').click(function(e){
+                  if(!self.MY.cashInfo || !self.MY.cashInfo.serBoxStatus){
+                    FW.use('Widget').alert('请选择会员或勾选散户','danger');
+                    return;
+                  }
+                  var idx = $('#J_serBox .J_itemTr').index($(this));
+                  var oneData = data.listData[idx];
+                  self.MY.itemMap[oneData.id] = oneData;
+                  var unit_price = parseFloat(oneData.active_price*self.MY.userDiscount/100).toFixed(2);
+                  var trData = {
+                    item_type: alias,
+                    item_id: oneData.id,
+                    item_name: oneData.name,
+                    quantity: 1,
+                    technician_name: '',
+                    cash_type: self.MY.cashInfo.cash_type,
+                    push_percent: 0,
+                    push_amount: 0,
+                    unit_price: unit_price,
+                    total_amount: unit_price,
+                    card_no: self.MY.cashInfo.card_no,
+                    user_id: self.MY.cashInfo.user_id,
+                    user_name: self.MY.cashInfo.user_name
+                  };
+                  var newData = self.MY.formDom[0].getData().formList || [];
+                  var inData = false;
+                  for (var i = 0; i < newData.length; i++) {
+                    var item = newData[i];
+                    if(item.item_id == trData.item_id && item.item_type == trData.item_type){
+                      item.quantity = parseInt(item.quantity) + 1;
+                      if(item.quantity > oneData.inventory && oneData.inventory != '-1'){
+                        item.quantity = oneData.inventory;
+                        FW.use('Widget').alert('已达库存上限','warning',1200);
+                      }
+                      item.total_amount = item.quantity * parseFloat(item.unit_price);
+                      inData = true;
+                    }
+                  }
+                  if(!inData) newData.push(trData);
+                  self.MY.detailData = newData;
+                  self.API.private("showDetailView", newData);
+                })
+              })
+            },200)
+          })
+        },
+        privateBtnConDel: function(_dom,_data){
+          var data = this.MY.detailData || [];
+          var newData = [];
+          for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            if(item.item_type == _data.item_type && item.item_id == _data.item_id) continue;
+            newData.push(item);
+          }
+          this.MY.detailData = newData;
+          this.API.private("showDetailView", newData);
+        }
+      },
+      FireEvent:{
+        submitJieSuan: function(){
+          var cashDetailData = this.MY.formDom[0].getData().formList;
+          var cashInfo = this.MY.cashInfo;
+          if(!cashInfo || !cashDetailData.length){
+            FW.use('Widget').alert('请选择消费的商品信息','danger');
+          }
+          var param = {
+            cashData: {
+              alias: 'cash_record',
+              cash_no: cashInfo.cash_no,
+              cash_type: cashInfo.cash_type,
+              card_no: cashInfo.card_no,
+              user_id: cashInfo.user_id,
+              user_name: cashInfo.user_name,
+              cash_time: cashInfo.cash_time,
+              amount: this.MY.tjData.cTAmout*100,
+              real_amount: this.MY.tjData.daTAmout*100,
+              score: this.MY.tjData.cScore || 0,
+              comment: this.API.find('#comment').val(),
+              status: 1
+            },
+            cashDetailData: cashDetailData
+          };
+          if(this.MY.tjData.cScore && cashInfo.card_no){
+            param.scoreRecordData = {
+              type: 1,
+              from_type: 1,
+              score: this.MY.tjData.cScore,
+              card_no: cashInfo.card_no,
+              user_id: cashInfo.user_id,
+              user_name: cashInfo.user_name,
+              comment: "会员消费积分，消费总金额["+this.MY.tjData.daTAmout*100+"]，获得积分["+this.MY.tjData.cScore+"]"
+            }
+          }
+          this.API.doServer('cashSubmit','cms', param, function(code, data, msg){
+            if(code==1){
+              FW.use('Widget').alert('收银成功','success',1500);
+              setTimeout(function(){
+                FW.trigerEvent('reShowDefault');
+              },1500)
+            }else{
+              FW.use('Widget').alert(msg,'danger');
+            }
+          })
+        },
+        fireCloseSerBox: function(){
+          $('#J_serBox').slideToggle(100);
+        },
+        resetForm: function(){
+          FW.trigerEvent('reShowDefault');
+        }
+      },
+      TrigerEvent:{
+        setCashInfo: function(cashInfo){
+          this.MY.cashInfo = cashInfo;
+          this.MY.userDiscount = cashInfo.discount;
+          this.MY.userScoreRatio = cashInfo.score_ratio;
+          this.API.private("showDetailView");
+        }
+      }
+    }
+  );
+  return FW;
+});
+

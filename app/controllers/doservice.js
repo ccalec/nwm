@@ -1,4 +1,3 @@
-'use strict';
 /**
 * @fileOverview 系统请求
 * @author 月飞
@@ -17,10 +16,13 @@ var fs = require('co-fs');
 var QueryData = require('../flowunit/queryData');
 var Mysql = require('../lib/mysql');
 var copy = require('copy-to');
+var Session = require('../class/sessionClass')();
 
 module.exports = function* (reqParam) {
   var res;
-  var context = {};
+  var context = {
+    session: Session //session模拟
+  };
   if(isArray(reqParam)){  //处理批量请求
     res = [];
     for(let oneReqParam of reqParam){

@@ -17,7 +17,14 @@ var FlowUnitClass = require('../class/flowUnitClass');
 module.exports = class OperData extends FlowUnitClass {
   // 单元执行主逻辑
   * execute(){
+    var param = this.param;
     var targetFlowUnit = this.getConfig('targetFlowUnit');
+    //数据权限校验
+    var action_alias = param.alias+'.'+targetFlowUnit;
+    if(this.session.admin.roles.indexOf(action_alias)==-1){
+      console.log(targetFlowUnit,this.param.alias);
+      return this.execEnd(-101, '没有操作权限');
+    }
     var flowunit = require('./'+targetFlowUnit);
     var res = yield new flowunit(this.context).execute();
     return this.execEnd(res.code, res.message, res.data); // 单元操作结果码

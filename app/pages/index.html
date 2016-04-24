@@ -17,6 +17,17 @@
   <link rel="stylesheet" href="../assets/css/ace-responsive.min.css" />
   <link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
   <link rel="stylesheet" href="../assets/css/nw.css" />
+  <!-- //权限校验 -->
+  <script type="text/javascript">
+    var NW = process.mainModule.exports;
+    NW.getRoles(null, function(roles){
+      if(roles){
+        window.RFBRoles = roles;
+      }else{
+        top.location.href = 'login.html';
+      }
+    })
+  </script>
 </head>
 <body class="skin-1">
 
@@ -31,7 +42,7 @@
         </a>
         <ul class="nav ace-nav pull-right">
           <li class="light-blue">
-            <a href="../adminUserPage/logout.jsp" target="_top">
+            <a id="J_Logout" href="javascript:void(0)" target="_top">
               <i class="icon-exclamation-sign"></i>
               注销
             </a>
@@ -77,43 +88,43 @@
           </a>
         </li>
         <li>
-          <a href="cash.html">
+          <a data-action="cash_record.addData" href="cash.html">
             <i class="icon-shopping-cart"></i>
             <span class="menu-text">收银台</span>
           </a>
         </li>
         <li>
-          <a href="usecard.html">
+          <a data-action="user.queryData" href="usecard.html">
             <i class="icon-barcode"></i>
             <span class="menu-text">会员刷卡</span>
           </a>
         </li>
         <li>
-          <a href="cmsadd.html?alias=user&action=conAdd">
+          <a data-action="user.addData" href="cmsadd.html?alias=user&action=conAdd">
             <i class="icon-user"></i>
             <span class="menu-text">会员注册</span>
           </a>
         </li>
         <li>
-          <a href="cmsadd.html?alias=card&action=conAdd">
+          <a data-action="card.addData"  href="cmsadd.html?alias=card&action=conAdd">
             <i class="icon-credit-card"></i>
             <span class="menu-text">会员开卡</span>
           </a>
         </li>
         <li>
-          <a href="cmsadd.html?alias=case&action=conAdd">
+          <a data-action="case.addData" href="cmsadd.html?alias=case&action=conAdd">
             <i class="icon-headphones"></i>
             <span class="menu-text">会员就诊</span>
           </a>
         </li>
         <li>
-          <a href="cmsadd.html?alias=reservation&action=conAdd">
+          <a data-action="reservation.addData" href="cmsadd.html?alias=reservation&action=conAdd">
             <i class="icon-bookmark-empty"></i>
             <span class="menu-text">会员预约</span>
           </a>
         </li>
         <li>
-          <a href="sendsms.html?alias=sms_record&action=conAdd">
+          <a data-action="sms_record.addData" href="sendsms.html?alias=sms_record&action=conAdd">
             <i class="icon-envelope"></i>
             <span class="menu-text">发送短信</span>
           </a>
@@ -152,7 +163,7 @@
               <li><a href="cmslist.html?alias=cash_detail">消费明细</a></li>
             </ul>
           </div>
-          <div class="btn-group">
+          <div class="btn-group" >
             <button data-toggle="dropdown" data-hover="dropdown" class="btn btn-small btn-primary dropdown-toggle">
               <i class="icon-user"></i>会员管理
               <i class="icon-angle-down icon-on-right"></i>
@@ -254,7 +265,7 @@
           </div>
         </div>
       </div>
-      <iframe name="myframe" id="ifr" src="home.html" width="100%" height="500" scrolling-y="yes" frameborder="0"></iframe>
+      <iframe name="myframe" id="ifr" src="" width="100%" height="500" scrolling-y="yes" frameborder="0"></iframe>
     </div>
   </div>
     <script charset="utf-8" src="../breeze/lib/js/jquery.js"></script>
@@ -290,7 +301,7 @@
   <script>
     // 计算页面的实际高度，iframe自适应会用到
     var height = $(window).height();
-    $('#ifr').height(height-87);
+    $('#ifr').height(height-87).attr('src','home.html');
     // 左边菜单进行history修改地址操作
     $('#sidebar a, #nav-search a').on('click', function(e){
       e.preventDefault();
@@ -307,6 +318,12 @@
       $("#sidebar li, #sidebar li a").removeClass('active').removeClass('open');
       $(this).parent().addClass("open");
       $(this).parents("li").addClass("active").remove("open");
+    })
+    $("#J_Logout").click(function(e){
+      var NW = process.mainModule.exports;
+      NW.logout(null, function(){
+        top.location.href = 'login.html';
+      })
     })
   </script>
   </body>

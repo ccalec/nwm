@@ -63,7 +63,7 @@
                       <div class="con">
                         <ul class="aalist J_aalist">
                           <!--$for(var i=0; i<data.aaData.length;i++){ -->
-                          <li><a onclick="FireEvent.fireAA(${i})">${data.aaData[i].title}</a><span>${DateTime:format(data.aaData[i].gmt_create,'yyyy-MM-dd')}</span></li>
+                          <li><a onclick="FireEvent.fireAA(${i})">${data.aaData[i].title}</a><span>${data.aaData[i].time_ymd}</span></li>
                           <!--$} -->
                         </ul>
                       </div>
@@ -122,7 +122,7 @@
       <div id="viewAA">
         <div class="aadiolag">
            <div class="tit">${data.title}</div>
-           <div class="pubtime">发表于：${DateTime:format(data.gmt_create,'yyyy-MM-dd hh:mm:ss')}</div>
+           <div class="pubtime">发表于：${data.time_ymdhms}</div>
            <div class="content">
             ${data.content}
            </div>

@@ -32,6 +32,7 @@ var SysConfig = require('../global/config').sysFields;
 var ModData = require('./modData');
 var FlowUnitClass = require('../class/flowUnitClass');
 var QueryModel = require('./queryModel');
+var AddData = require('./addData');
 
 
 module.exports = class ModModel extends FlowUnitClass {
@@ -84,8 +85,6 @@ module.exports = class ModModel extends FlowUnitClass {
         keyValue: param
       }
     }).execute();
-    //TODO: 是否设置权限，做权限记录操作
-
     // 返回结果码
     return this.execEnd(1,'模型修改成功', res.data);
   }

@@ -7,7 +7,6 @@
 
 'use strict';
 
-
 var mysql = require('mysql');
 var thunkify = require('thunkify-wrap');
 var util = require("util");

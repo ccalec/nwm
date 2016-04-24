@@ -1,1 +1,120 @@
-define("",["./../breeze/framework/js/BreezeFW","./../breeze/framework/js/tools/Widget","./../breeze/framework/js/tools/DateTime"],function(require){var e=require("./../breeze/framework/js/BreezeFW");return require("./../breeze/framework/js/tools/Widget")(e),require("./../breeze/framework/js/tools/DateTime")(e),e.register({param:{navTxt:{user:["\u4f1a\u5458\u7ba1\u7406","\u4f1a\u5458\u4fe1\u606f"],card:["\u4f1a\u5458\u7ba1\u7406","\u4f1a\u5458\u5f00\u5361"],cash_record:["\u4f1a\u5458\u6d88\u8d39","\u6d88\u8d39\u8bb0\u5f55"],cash_detail:["\u4f1a\u5458\u6d88\u8d39","\u6d88\u8d39\u660e\u7ec6"],card_rank:["\u4f1a\u5458\u7ba1\u7406","\u4f1a\u5458\u5361\u7b49\u7ea7"],score_record:["\u4f1a\u5458\u7ba1\u7406","\u79ef\u5206\u8bb0\u5f55"],"case":["\u75c5\u4f8b\u7ba1\u7406","\u5c31\u8bca\u8bb0\u5f55"],reservation:["\u75c5\u4f8b\u7ba1\u7406","\u4f1a\u5458\u9884\u7ea6"],technician:["\u6280\u5e08\u7ba1\u7406","\u6280\u5e08\u4fe1\u606f"],technician_rank:["\u6280\u5e08\u7ba1\u7406","\u6280\u5e08\u7b49\u7ea7"],services:["\u9879\u76ee\u7ba1\u7406","\u670d\u52a1\u9879\u76ee"],services_category:["\u9879\u76ee\u7ba1\u7406","\u670d\u52a1\u5206\u7c7b"],goods:["\u9879\u76ee\u7ba1\u7406","\u5546\u54c1\u4fe1\u606f"],goods_category:["\u9879\u76ee\u7ba1\u7406","\u5546\u54c1\u5206\u7c7b"],supplier:["\u9879\u76ee\u7ba1\u7406","\u4f9b\u5e94\u5546\u4fe1\u606f"],prepaid_record:["\u5145\u503c\u7ba1\u7406","\u5145\u503c\u8bb0\u5f55"],sms_record:["\u77ed\u4fe1\u7ba1\u7406","\u53d1\u9001\u77ed\u4fe1"],sms_template:["\u77ed\u4fe1\u7ba1\u7406","\u77ed\u4fe1\u6a21\u7248"],store:["\u5e97\u94fa\u7ba1\u7406","\u5e97\u94fa\u4fe1\u606f"],tj_usercash:["\u7edf\u8ba1\u62a5\u8868","\u6d88\u8d39\u6c47\u603b"],batch_in:["\u5546\u54c1\u7ba1\u7406","\u91c7\u8d2d\u660e\u7ec6"],batch_out:["\u5546\u54c1\u7ba1\u7406","\u51fa\u5e93\u660e\u7ec6"],tj_store:["\u7edf\u8ba1\u62a5\u8868","\u5e97\u94fa\u6570\u636e"],global_announcement:["\u7cfb\u7edf\u4fe1\u606f","\u516c\u544a"],administrator:["\u7cfb\u7edf\u7ba1\u7406","\u7ba1\u7406\u5458\u7ba1\u7406"],role:["\u7cfb\u7edf\u7ba1\u7406","\u6743\u9650\u914d\u7f6e"]}},name:"cmsListHeadGadget",onCreate:function(){this.API.private("showDefault")},"private":{showDefault:function(){var a=this;a.MY.alias=e.use().getParameter("alias")||"";var t="true"==e.use().getParameter("addcon");a.MY.param={alias:a.MY.alias,target:"self",resultSet:"",limit:1e3},a.param.navTxt[a.MY.alias]&&($(".cateName",window.parent.document).text(a.param.navTxt[a.MY.alias][0]),$(".aliasName",window.parent.document).text(a.param.navTxt[a.MY.alias][1])),a.API.show("viewCmsListHead",{addBtnShow:t,aliasName:a.param.navTxt[a.MY.alias]&&a.param.navTxt[a.MY.alias][1]})}},FireEvent:{fireGoToList:function(){location.href="cmslist.html?alias="+this.MY.alias+"&addcon=true"},fireGoToAdd:function(){location.href="score_record"==this.MY.alias?"scoreoper.html":"cmsadd.html?alias="+this.MY.alias+"&action=conAdd"},firePrinter:function(){},fireExport:function(a){if(!$(a).data("status")){$(a).data("status","true"),$(a).find("i").attr("class","icon-spinner icon-spin orange");var t=this;t.MY.param.resultSet="",t.API.doServer("jsonToXls","cms",t.MY.param,function(t,r){1==t&&r?$(a).attr("href",r.filepath).attr("download",r.filename).removeClass("btn-light").addClass("btn-success").html('<i class="icon-download"></i>\u4e0b\u8f7d'):-1==t?e.use("Widget").alert("\u65e0\u4efb\u4f55\u6570\u636e","warning"):e.use("Widget").alert("\u5bfc\u51fa\u5931\u8d25","danger")})}}},TrigerEvent:{trigerUpdatefilterParam:function(e){this.API.private("showDefault"),this.MY.param=$.extend({},e)}}}),e});
+/**
+* @fileOverview 列表视图通用套头
+* @author <a href="http://ju.taobao.com">jianhui.fjh</a>
+* @version 0.1
+*/
+
+/**
+* @namespace
+* @author jianhui.fjh
+* @name cmsListHeadGadget
+*/
+define(function(require, exports, module) {
+  var FW = require("../breeze/framework/js/BreezeFW");
+  require("../breeze/framework/js/tools/Widget")(FW);
+  require("../breeze/framework/js/tools/DateTime")(FW);
+  FW.register(
+    {
+      param:{
+        navTxt: {
+          'user': ['会员管理','会员信息'],
+          'card': ['会员管理','会员开卡'],
+          'cash_record': ['会员消费','消费记录'],
+          'cash_detail': ['会员消费','消费明细'],
+          'card_rank': ['会员管理','会员卡等级'],
+          'score_record': ['会员管理','积分记录'],
+          'case': ['病例管理','就诊记录'],
+          'reservation': ['病例管理','会员预约'],
+          'technician': ['技师管理','技师信息'],
+          'technician_rank': ['技师管理','技师等级'],
+          'services': ['项目管理','服务项目'],
+          'services_category': ['项目管理','服务分类'],
+          'goods': ['项目管理','商品信息'],
+          'goods_category': ['项目管理','商品分类'],
+          'supplier': ['项目管理','供应商信息'],
+          'prepaid_record': ['充值管理','充值记录'],
+          'sms_record': ['短信管理','发送短信'],
+          'sms_template': ['短信管理','短信模版'],
+          'store': ['店铺管理','店铺信息'],
+          'tj_usercash': ['统计报表','消费汇总'],
+          'batch_in': ['商品管理','采购明细'],
+          'batch_out': ['商品管理','出库明细'],
+          'tj_store': ['统计报表','店铺数据'],
+          'global_announcement': ['系统信息','公告'],
+          'administrator': ['系统管理','管理员管理'],
+          'role': ['系统管理','权限配置']
+        }
+      },
+      name:'cmsListHeadGadget',
+      onCreate:function(){
+        this.API.private('showDefault');
+      },
+      private:{
+        showDefault: function(){
+          var self = this;
+          //获取alias
+          self.MY.alias = FW.use().getParameter("alias") || '';
+          var addBtnShow = FW.use().getParameter("addcon") == 'true';
+          //默认导出数据
+          self.MY.param = {
+            alias: self.MY.alias,
+            target: 'self',
+            resultSet: '',
+            limit: 1000
+          };
+          //更新导航栏
+          if(self.param.navTxt[self.MY.alias]){
+            $(".cateName",window.parent.document).text(self.param.navTxt[self.MY.alias][0]);
+            $(".aliasName",window.parent.document).text(self.param.navTxt[self.MY.alias][1]);
+          }
+          //显示默认视图
+          self.API.show('viewCmsListHead', {
+            addBtnShow: addBtnShow,
+            aliasName: self.param.navTxt[self.MY.alias] && self.param.navTxt[self.MY.alias][1]
+          });
+        }
+      },
+      FireEvent:{
+        fireGoToList: function(){
+          location.href = 'cmslist.html?alias='+this.MY.alias+'&addcon=true';
+        },
+        fireGoToAdd: function(){
+          if(this.MY.alias=='score_record'){
+            location.href = 'scoreoper.html';
+          }else{
+            location.href = 'cmsadd.html?alias='+this.MY.alias+'&action=conAdd';
+          }
+        },
+        firePrinter: function(){
+        },
+        fireExport: function(e){
+          if($(e).data('status')) return;
+          $(e).data('status','true');
+          $(e).find('i').attr('class','icon-spinner icon-spin orange');
+          var self = this;
+          self.MY.param.resultSet = '';
+          self.API.doServer("jsonToXls", "cms", self.MY.param, function(code,data){
+            if(code==1 && data){
+              $(e).attr('href',data.filepath)
+              .attr('download',data.filename)
+              .removeClass('btn-light').addClass('btn-success')
+              .html('<i class="icon-download"></i>下载');
+            }else if(code==-1){
+              FW.use('Widget').alert('无任何数据','warning');
+            }else{
+              FW.use('Widget').alert('导出失败','danger');
+            }
+          })
+        }
+      },
+      TrigerEvent:{
+        trigerUpdatefilterParam: function(param){
+          this.API.private('showDefault');
+          this.MY.param = $.extend({}, param);
+        }
+      }
+    }
+  );
+  return FW;
+});
+

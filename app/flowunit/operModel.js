@@ -16,6 +16,10 @@ module.exports = class OperModel extends FlowUnitClass {
   // 单元执行主逻辑
   * execute(){
     var targetFlowUnit = this.getConfig('targetFlowUnit');
+    //数据权限校验
+    if(this.session.admin.role_alias!='superAdmin' && targetFlowUnit!='queryModel'){
+      return this.execEnd(-101, '没有操作权限');
+    }
     var flowunit = require('./'+targetFlowUnit);
     var res = yield new flowunit(this.context).execute();
     return this.execEnd(res.code, res.message, res.data); // 单元操作结果码

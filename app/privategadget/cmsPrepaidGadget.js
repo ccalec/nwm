@@ -1,1 +1,180 @@
-define("./../gadget/cmsMgrGadget",["./../breeze/framework/js/BreezeFW","./../breeze/framework/js/tools/Widget","./../breeze/framework/js/tools/DateTime"],function(require){var a=require("./../breeze/framework/js/BreezeFW");return require("./../breeze/framework/js/tools/Widget")(a),require("./../breeze/framework/js/tools/DateTime")(a),a.register({name:"cmsMgrGadget",param:{norole:!0,alias:"",id:"",nodeid:"",action:"",pagesize:10,plModSet:{xxalias:!0},plAddSetNum:10,listType:{xxalias:0},btnForList:{"default":[{title:"\u7f16\u8f91",action:"modData","class":"btn btn-mini btn-info",style:"display:none",html:" <i class='icon-edit bigger-120'> \u7f16\u8f91</i>",onclick:"privateBtnConEdit"},{title:"\u5220\u9664",action:"delData","class":"btn btn-mini btn-danger",style:"display:none",html:" <i class='icon-trash bigger-120'> \u5220\u9664</i>",onclick:"privateBtnConDel"}],roles:[{title:"\u6743\u9650\u8bbe\u7f6e","class":"btn btn-mini btn-success",html:" <i class='icon-group bigger-120'> \u6743\u9650</i>",onclick:"privateSetRoles"},{title:"\u7f16\u8f91",action:"modData","class":"btn btn-mini btn-info",style:"display:none",html:" <i class='icon-edit bigger-120'> \u7f16\u8f91</i>",onclick:"privateBtnConEdit"},{title:"\u5220\u9664",action:"delData","class":"btn btn-mini btn-danger",style:"display:none",html:" <i class='icon-trash bigger-120'> \u5220\u9664</i>",onclick:"privateBtnConDel"}]},viewConList:"viewContentList",viewConAdd:"viewContentAdd",viewConPLAdd:"viewContentPLAdd",viewClassEdit:"viewClassEdit",viewClassAdd:"viewClassAdd",viewConEdit:"viewContentEdit",formConList:"formContentList",formConAdd:"formContentAdd",formConPLAdd:"formContentPLAdd",formClassEdit:"formClassEdit",formClassAdd:"formClassAdd",formConEdit:"formContentEdit"},onCreate:function(){var a=this;a.API.private("privateSetGlobalVar"),a.API.private("privateGetNodeDesc"),a.API.private("privateContentDesc",a.MY.alias,function(t){a.API.private("privateGetSonDesc",function(){t.parent_alias==a.MY.alias&&(a.MY.isSelfAlias=!0),$("#aliasTitle").text(t.model_name),$("#aliasTitle").text(t.model_name),$("#pageH1").show(),a.API.private("privateShowDefaultView"),a.API.private("privateCheckAuth",$("body"))})})},FireEvent:{},"private":{privateSetGlobalVar:function(){var t=this;t.MY.alias=t.param.alias||a.use().getParameter("alias")||"",t.MY.action=t.param.action||a.use().getParameter("action")||"",t.MY.id=t.param.id||a.use().getParameter("id")||"",t.MY.nodeid=t.param.nodeid||a.use().getParameter("nodeid")||"",t.MY.isrole=t.param.norole||a.use().getParameter("norole")||"",t.MY.listType=t.param.listType[this.MY.alias]||a.use().getParameter("listType")||"",t.MY.contentDesc={},t.MY.sonAlias=t.param.sonAlias||a.use().getParameter("sonAlias")||"",t.MY.sonId=t.param.sonId||a.use().getParameter("sonId")||"",t.MY.isSelfAlias=!1,t.MY.noClass=!1,t.MY.act={conList:"conList",conAdd:"conAdd",conPLAdd:"conPLAdd",classEdit:"classEdit",classAdd:"classAdd",conEdit:"conEdit"},t.MY.package="cms",t.MY.serverName={aCon:"addData",dCon:"delData",mCon:"modData",qCon:"queryData",aModel:"addModel",dModel:"delModel",mModel:"modModel",qModel:"queryModel"}},privateGetNodeDesc:function(){var a=this,t={alias:a.MY.alias,target:"parent"};a.API.doServer(a.MY.serverName.qModel,a.MY.package,t,function(t,i){t>0&&i?(a.MY.nodeDesc=i.model_desc||{},a.MY.nodeDesc.id={type:"Hidden",title:"id",islist:"0"}):(a.MY.noClass=!0,$("#btnAction .btn-group:eq(1)").remove())})},privateGetSonDesc:function(a){var t=this,i={alias:t.MY.alias,target:"son"};t.API.doServer(t.MY.serverName.qModel,t.MY.package,i,function(i,e){if(i>0&&e){for(var n="",o=0;o<e.length;o++)n+="<li>",n+="<a href='javascript:void(0)' sonalias='"+e[o].alias+"' data-toggle='tab'>"+e[o].model_name+"</a>",n+="</li>";$("#tabSonAlias>ul>li:gt(0)").remove(),$("#tabSonAlias>ul").append(n),a&&a(),$("#tabSonAlias>ul>li>a").on("click",function(){if(!$(this).parent().hasClass("active")){var a=$("#tabSonAlias>ul>li>a").index($(this));0==a?(delete t.MY.sonAlias,$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),t.API.private("privateShowConEdit")):(t.MY.sonAlias=$(this).attr("sonalias"),$("#btnAddSonAlias").show().on("click",function(){t.API.private("privateShowConAdd")}),$("#btnPLAddSonAlias").show().on("click",function(){t.API.private("privateShowConPLAdd"),t.API.find(".table_formlist:eq(0)").next().find(".btn-add-con").show()}),t.API.private("privateContentDesc",t.MY.sonAlias,function(){t.API.private("privateShowConList")}))}})}})},privateContentDesc:function(a,t){var i=this;i.API.doServer(i.MY.serverName.qModel,i.MY.package,{alias:a},function(e,n){e>0&&n&&(i.MY.contentDesc[a]=n.model_desc,i.MY.contentDesc[a].id||(i.MY.contentDesc[a].id={type:"Hidden",title:"id",islist:"1"}),t&&t(n))})},privateShowDefaultView:function(){this.MY.action==this.MY.act.conAdd?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConAdd")):this.MY.action==this.MY.act.conPLAdd?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConPLAdd")):this.MY.action==this.MY.act.classAdd?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.MY.isding=!0,this.API.private("privateShowClassAdd")):this.MY.action==this.MY.act.conEdit?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConEdit")):this.MY.action==this.MY.act.classEdit&&this.MY.nodeid?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowClassEdit")):(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConList"))},privateOutLinkCB:function(a,t,i,e,n){function o(a,t,i){s.API.private("privateContentDesc",t.alias,function(e){v||(v="\u8bf7\u9009\u62e9"+e.model_name),s.API.private("privateBindFormListPage",f,t,2,function(){a.empty(),f.appendTo(a),i&&i()})})}var s=this,r=/data.formList\[(.*?)\].*?/g.exec(i),d=null==r?-1:r[1];i=i.split(".")[i.split(".").length-1];var l=a[i].outerLink;if(2===l.split(".").length){var c=l.split(".")[0],v=(l.split(".")[1],""),p={alias:c,filterParam:{},orderBy:[{fieldName:"id",isDesc:!0}]};$("#newViewDom").length||($("body").append("<div style='display:none;' id='newViewDom'></div>"),$("body").append("<div id='preOuterLinkEditForm'></div>"));var u=$("#newViewDom"),f=$("#preOuterLinkEditForm");s.API.private("privateSetOutlinkView",u,p,d,function(a,t){o(a,t)},function(r,l,p){p&&(v=p),o(r,l,function(){s.API.private("privateMaskLayer",u,v,1e3,function(){var o=f[0].batchEdit();if(o.length){var r=t[0].getData();if((s.MY.action==s.MY.act.conPLAdd||s.MY.action==s.MY.act.conList)&&(r=t[0].getData().formList),r){for(var l in a)if(a[l].outerLink){var v=a[l].outerLink.split(".");if(2!==v.length)return;var p=v[0],u=v[1];p==c&&(-1!==d?r[d][l]=o[0][u]:r[l]=o[0][u])}s.API.private("privateMessOutLinkOk",a,t,i,e,r),n&&n(r)}}})})})}},privateMessOutLinkOk:function(){},privateSetOutlinkView:function(a,t,i,e,n){n&&n(a,t)},privateMaskLayer:function(t,i,e,n){var o="<div style='text-align:left;cursor:default; background:#fff; padding:10px;'><div class='modal-header' style='margin-bottom:20px;'><h3>"+i+"</h3></div>";if(o+="<div class='modal-body'><form id='outerLinkEditForm' class='form-horizontal outlinkform_"+this.MY.alias+" clearfix' style='margin:0px;'></form></div>",n){if(o+="<div class='modal-footer'>",n instanceof Function&&(o+="<a href='javascript:;' class='btn btn btn-small btn-success'><i class='icon-ok bigger-110'></i> \u4fdd\u5b58</a>",o+="<a href='javascript:;' class='btn btn btn-small'><i class='icon-undo bigger-110'></i> \u53d6\u6d88</a>"),"[object Array]"===toString.apply(n))for(var s=0;s<n.length;s++)o+=n[s].html;o+="</div>"}o+="</div>",a.blockUI(o,($(window).width()-e)/2,100,e,"auto",0),t.appendTo($("#outerLinkEditForm")).show(),$("#outerLinkEditForm").find(".form-wrap").removeClass("pull-left"),$(".chosen-select").chosen(),n&&$(".modal-footer>a").click(function(){var t=$(".modal-footer>a").index($(this));n instanceof Function&&(a.unblockUI(),0==t&&n&&n()),"[object Array]"===toString.apply(n)&&n[t].callback&&n[t].callback()})},privateSetDescAndData:function(a,t,i){i&&i()},privateDataToForm:function(t,i){if(i&&i.length)for(var e in t)for(var n=0;n<i.length;n++)i[n][e]&&(-1!=$.inArray(t[e].type,["List","Pics","CheckBox","MultSelect"])?"string"===i[n][e]&&(i[n][e]=a.use().evalJSON(i[n][e])):"DatePicker"==t[e].type?i[n][e]=a.use("DateTime").format(new Date(i[n][e]),"yyyy-MM-dd"):"DateTimePicker"==t[e].type&&(i[n][e]=a.use("DateTime").format(new Date(i[n][e]),"yyyy-MM-dd hh:mm:ss")))},privateFormToData:function(t,i){if(i)for(var e in t)if(-1!=$.inArray(t[e].type,["List","Pics","CheckBox","MultSelect"])){if(!i[e])continue;i[e]=a.use().toJSONString(i[e])}},privateShowConList:function(){var a=this;if(a.MY.sonAlias){var t=a.MY.id,i=a.MY.sonAlias,e=$("#tabSonAlias>ul>li>a[sonalias='"+a.MY.sonAlias+"']"),n=$("#tabSonAlias>ul>li>a").index(e);$("#tabSonAlias>ul>li").removeClass("active").eq(n).addClass("active"),$("#tabSonAlias").show(),$("#btnAddSonAlias").show(),$("#btnPLAddSonAlias").show()}else{var t=a.MY.nodeid,i=a.MY.alias;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),a.MY.id=""}a.param.plModSet[i]||$("#submitBtn").hide(),a.MY.action=a.MY.act.conList,a.API.private("privatePushState",{action:a.MY.action,alias:a.MY.alias,sonAlias:a.MY.sonAlias,nodeid:a.MY.nodeid,id:a.MY.id,sonId:""}),$("#actionName").text("\u5185\u5bb9\u5217\u8868"),a.API.show(a.param.viewConList);var o=a.API.find("#"+a.param.formConList);a.param.plModSet[i]?o.addClass(i+"_editConList").addClass("editConList"):o.addClass(i+"_"+a.MY.action).addClass(a.MY.action);var s={alias:i,filterParam:{},orderBy:[{fieldName:"id",isDesc:!0}]};t&&(s.filterParam.nodeid=t),a.API.private("privateBindFormListPage",o,s,a.MY.listType||0,function(t){a.API.private("privateShowConListCB",t)})},privateShowConListCB:function(t){function i(a){for(var i=0;i<a.length;i++){var n="<a href='javascript:void(0);' ";!function(i){for(var s in a[i])if("onclick"==s.toLowerCase())var r=a[i][s];else if("html"==s)var d=a[i][s];else n+="action"==s?"data-action='"+a[i][s]+"' ":s+"='"+a[i][s]+"' ";n+=">",$(n+d+"</a>").appendTo(o.find("table:eq(0)>tbody>tr>td>.actionBtnForList")).on("click",function(){var a=o.find("table:eq(0)>tbody>tr>td>.actionBtnForList").index($(this).parents(".actionBtnForList"));e.API.private(r,$(this),t[a])})}(i)}}var e=this;if(e.MY.sonAlias)var n=(e.MY.id,e.MY.sonAlias);else var n=(e.MY.nodeid,e.MY.alias);var o=e.API.find("#"+e.param.formConList);o.find("table:eq(0)>tbody>tr>td>label>input[type='checkbox']").on("click",function(){var i=o.find("table:eq(0)>tbody>tr>td>label>input[type='checkbox']").index($(this));a.trigerEvent("trigerCheckBoxClick",t[i])}),e.param.btnForList&&e.param.btnForList[n]?i(e.param.btnForList[n]):e.param.btnForList&&e.param.btnForList.default&&i(e.param.btnForList.default),o.find(".btn-del-list").on("click",function(){e.API.private("privateBtnConPLDel")}),e.API.private("privateCheckAuth",o),e.API.private("privateMessConListOk",t),e.param.plModSet[n]&&setTimeout(function(){$("#submitBtn").fadeIn(150)},315)},privateMessConListOk:function(){},privateBindFormListPage:function(t,i,e,n){var o=this;i=o.API.private("privateSetListParam",i),i.resultSet="count",o.API.doServer(o.MY.serverName.qCon,o.MY.package,i,function(s,r){function d(s){a.use().save(v,s);var r=parseInt(s);i.resultSet="",i.limit=(c*r-c).toString()+","+c.toString(),o.API.doServer(o.MY.serverName.qCon,o.MY.package,i,function(s,v){s>0&&o.API.private("privateContentDesc",i.alias,function(){function s(p){o.API.private("privateSetDescAndData",i.alias,p,function(){var u=a.clone(o.MY.contentDesc[i.alias]);$.each(u,function(a,t){return 0==t.islist?!0:(-1!=$.inArray(t.type,["Select","Radio"])?(t.type="Text",valueRange=t.valueRange[0],$.each(p,function(t,i){$.each(valueRange,function(t,e){return i[a]==e?(i[a]=t,!1):void 0})})):-1!=$.inArray(t.type,["CheckBox","MultSelect"])?(t.type="Text",valueRange=t.valueRange[0],$.each(p,function(t,i){return i[a]?($.each(valueRange,function(t,e){var n=$.inArray(e,i[a]);-1!=n&&(i[a][n]=t)}),i[a]=i[a].join("\u3001"),void 0):!0})):"TextArea"==t.type&&(t.type="Text"),void 0)}),a.use().createFormList(u,t,p,function(a,i){o.API.private("privateOutLinkCB",u,t,a,i,function(a){s(a)})},e),a.use().showPagination(t.find("#pagination"),l,c,r,function(a){d(a)}),n&&n(v.listData)})}o.API.private("privateDataToForm",o.MY.contentDesc[i.alias],v.listData),s(v.listData)})})}if(s>0&&r){var l=parseInt(r.listCount)||0;if(l){var c=o.param.pagesize||20,v=i.filterParam.nodeid?i.alias+i.filterParam.nodeid:i.alias,p=parseInt(a.use().load(v))||1;p>Math.ceil(l/c)&&(p=Math.ceil(l/c)),d(p)}else o.API.private("privateContentDesc",i.alias,function(){o.API.private("privateSetDescAndData",i.alias,null,function(){a.use().createFormList(o.MY.contentDesc[i.alias],t,null,function(a,e){o.API.private("privateOutLinkCB",o.MY.contentDesc[i.alias],t,a,e)},e),a.use().showPagination(t.find("#pagination")),n&&n([])})})}})},privateSetListParam:function(a){return a},privateShowConAdd:function(){function t(e){i.API.private("privateSetDescAndData",n,e,function(){a.use().createForm(i.MY.contentDesc[n],r,e,function(a,e){i.API.private("privateOutLinkCB",i.MY.contentDesc[n],r,a,e,function(a){t(a)})})})}var i=this;if(i.MY.sonAlias)var e=i.MY.id,n=i.MY.sonAlias;else{var e=i.MY.nodeid,n=i.MY.alias;i.MY.id=""}if(!e&&!i.MY.noClass)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;if(i.MY.sonAlias){var e=i.MY.id,n=i.MY.sonAlias,o=$("#tabSonAlias>ul>li>a[sonalias='"+i.MY.sonAlias+"']"),s=$("#tabSonAlias>ul>li>a").index(o);$("#tabSonAlias>ul>li").removeClass("active").eq(s).addClass("active"),$("#tabSonAlias").show()}else{var e=i.MY.nodeid,n=i.MY.alias;$("#tabSonAlias").hide()}$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.conAdd,i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:i.MY.sonAlias,nodeid:i.MY.nodeid,id:i.MY.id,sonId:""}),$("#actionName").text("\u5185\u5bb9\u6dfb\u52a0"),i.API.show(i.param.viewConAdd);var r=i.API.find("#"+i.param.formConAdd);r.addClass(n+"_"+i.MY.action).addClass(i.MY.action),t(null),i.API.private("privateMessConAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessConAddOk:function(){},privateShowConPLAdd:function(){function t(e){i.API.private("privateSetDescAndData",n,e,function(){a.use().createFormList(i.MY.contentDesc[n],r,e,function(a,e){i.API.private("privateOutLinkCB",i.MY.contentDesc[n],r,a,e,function(a){t(a)})},1)})}var i=this;if(i.MY.sonAlias)var e=i.MY.id,n=i.MY.sonAlias;else{var e=i.MY.nodeid,n=i.MY.alias;i.MY.id=""}if(!e&&!i.MY.noClass)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;if(i.MY.sonAlias){var o=$("#tabSonAlias>ul>li>a[sonalias='"+i.MY.sonAlias+"']"),s=$("#tabSonAlias>ul>li>a").index(o);$("#tabSonAlias>ul>li").removeClass("active").eq(s).addClass("active"),$("#tabSonAlias").show()}else $("#tabSonAlias").hide();$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.conPLAdd,i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:i.MY.sonAlias,id:i.MY.id,nodeid:i.MY.nodeid,sonId:""}),$("#actionName").text("\u5185\u5bb9\u6279\u91cf\u6dfb\u52a0"),i.API.show(i.param.viewConPLAdd);var r=i.API.find("#"+i.param.formConPLAdd);r.addClass(n+"_"+i.MY.action).addClass(i.MY.action);var d=[],l={};for(var c in i.MY.contentDesc[n])l[c]="";for(var v=0;v<i.param.plAddSetNum;v++)d.push(l);t(d),i.API.private("privateMessConPLAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessConPLAddOk:function(){},privateShowConEdit:function(){var t=this;if($("#tabSonAlias").show(),t.MY.sonAlias){var i=t.MY.sonAlias,e=t.MY.sonId,n=$("#tabSonAlias>ul>li>a[sonalias='"+t.MY.sonAlias+"']"),o=$("#tabSonAlias>ul>li>a").index(n);$("#tabSonAlias>ul>li").removeClass("active").eq(o).addClass("active")}else{var i=t.MY.alias,e=t.MY.id;$("#tabSonAlias>ul>li").removeClass("active").eq(0).addClass("active"),t.MY.sonId=""}$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),t.MY.action=t.MY.act.conEdit,t.API.private("privatePushState",{action:t.MY.action,alias:t.MY.alias,sonAlias:t.MY.sonAlias,id:t.MY.id,nodeid:t.MY.nodeid,sonId:t.MY.sonId}),$("#actionName").text("\u5185\u5bb9\u4fee\u6539"),t.API.show(t.param.viewConEdit);var s=t.API.find("#"+t.param.formConEdit);s.addClass(i+"_"+t.MY.action).addClass(t.MY.action);var r={alias:i,filterParam:{id:e}};t.API.doServer(t.MY.serverName.qCon,t.MY.package,r,function(e,n){e>0&&n&&n.listData&&("model"!=t.MY.alias&&(t.MY.sonAlias?t.MY.sonAlias=n.listData[0].alias:t.MY.alias=n.listData[0].alias),t.API.private("privateContentDesc",i,function(){function e(n){t.API.private("privateSetDescAndData",i,n,function(){a.use().createForm(t.MY.contentDesc[i],s,n,function(a,n){t.API.private("privateOutLinkCB",t.MY.contentDesc[i],s,a,n,function(a){e(a)})})})}t.API.private("privateDataToForm",t.MY.contentDesc[i],n.listData),e(n.listData[0]),t.API.private("privateMessConEditOk",n.listData[0]),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)}))})},privateMessConEditOk:function(){},privateShowClassEdit:function(){var t=this;if(!t.MY.nodeid)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),t.MY.action=t.MY.act.classEdit,t.MY.sonAlias="",t.MY.id="",t.MY.sonId="",t.API.private("privatePushState",{action:t.MY.action,alias:t.MY.alias,sonAlias:"",nodeid:t.MY.nodeid,id:"",sonId:""}),$("#actionName").text("\u680f\u76ee\u4fee\u6539"),t.API.show(t.param.viewClassEdit);var i=t.API.find("#"+t.param.formClassEdit);i.addClass(t.MY.alias+"_"+t.MY.action).addClass(t.MY.action);var e={alias:t.MY.alias,target:"parent",filterParam:{id:t.MY.nodeid}};t.API.doServer(t.MY.serverName.qCon,t.MY.package,e,function(e,n){function o(e){a.use().createForm(t.MY.nodeDesc,i,e,function(a,e){t.API.private("privateOutLinkCB",t.MY.nodeDesc,i,a,e,function(a){o(a)})})}e>0&&n.listData&&(t.API.private("privateDataToForm",t.MY.contentDesc[t.MY.alias],n.listData),o(n.listData[0]),t.API.private("privateMessClassEditOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150))})},privateMessClassEditOk:function(){},privateShowClassAdd:function(){function t(n){a.use().createForm(i.MY.nodeDesc,e,n,function(a,n){i.API.private("privateOutLinkCB",i.MY.nodeDesc,e,a,n,function(a){t(a)})})}var i=this;if(!i.MY.isding&&!i.MY.nodeid)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.classAdd,i.MY.sonAlias="",i.MY.id="",i.MY.sonId="",i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:"",nodeid:i.MY.nodeid,id:"",sonId:""}),i.MY.isding?$("#actionName").text("\u6dfb\u52a0\u9876\u680f\u76ee"):$("#actionName").text("\u6dfb\u52a0\u5b50\u680f\u76ee"),i.API.show(i.param.viewClassAdd);var e=i.API.find("#"+i.param.formClassAdd);e.addClass(i.MY.alias+"_"+i.MY.action).addClass(i.MY.action),t(null),i.API.private("privateMessClassAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessClassAddOk:function(){},privateBtnConEdit:function(a,t){this.MY.sonAlias?this.MY.sonId=t.id:this.MY.id=t.id,this.API.private("privateShowConEdit")},privateBtnConDel:function(t,i){var e=this,n=e.MY.sonAlias||e.MY.alias;if(confirm("\u786e\u8ba4\u8981\u5220\u9664\u8be5\u5185\u5bb9\u5417\uff1f")){var o={alias:n,id:i.id},s="model"==n?e.MY.serverName.dModel:e.MY.serverName.dCon;e.API.doServer(s,e.MY.package,o,function(t){t>0?e.API.private("privateShowConList"):a.use("Widget").alert("\u5185\u5bb9\u5220\u9664\u5931\u8d25\uff01","danger")})}},privateBtnConPLDel:function(){var t=this,i=t.API.find("#"+t.param.formConList),e=t.MY.sonAlias||t.MY.alias;if(confirm("\u786e\u8ba4\u8981\u5220\u9664\u8be5\u5185\u5bb9\u5417\uff1f")){for(var n=i[0].batchEdit(),o=[],s=0;s<n.length;s++)o.push(n[s].id);var r={alias:e,id:o.join(",")},d="model"==e?t.MY.serverName.dModel:t.MY.serverName.dCon;t.API.doServer(d,t.MY.package,r,function(i){i>0?t.API.private("privateShowConList"):a.use("Widget").alert("\u5220\u9664\u5931\u8d25\uff01","danger")})}},privateCheckAuth:function(a){if(this.MY.isrole)$("[data-action]").show();else{var t=this.MY.sonAlias||this.MY.alias;if(!t||!window.RFBRoles)return;a.find("[data-action]").each(function(){var a=t+"."+$(this).data("action");~$.inArray(a,window.RFBRoles)&&$(this).show()})}},privateSubmitConList:function(t){var i=this,e=i.MY.sonAlias||i.MY.alias;if(i.param.plModSet[e]){var n=i.API.find("#"+i.param.formConList)[0].getDataAndCheck();if(n&&(n=n.formList,n.length)){for(var o=0;o<n.length;o++)i.API.private("privateFormToData",i.MY.contentDesc[e],n[o]);i.API.initPost();for(var s=[],o=0;o<n.length;o++)!function(t){i.API.addPost(i.MY.serverName.mCon,i.MY.package,{alias:e,keyValue:n[t]},function(i,e){i>0?s.push(e):a.use("Widget").alert("Cid="+n[t].id+":\u4fee\u6539\u5931\u8d25\uff01","danger")})}(o);i.API.doPost(function(){t&&t()})}}},privateSubmitConAdd:function(t){var i=this,e=i.API.find("#"+i.param.formConAdd)[0].getDataAndCheck();if(e){if(i.MY.sonAlias)var n=i.MY.id,o=i.MY.sonAlias;else var n=i.MY.nodeid,o=i.MY.alias;i.API.private("privateFormToData",i.MY.contentDesc[o],e);var s={alias:o,keyValue:e},r=i.MY.serverName.aCon;e.nodeid=n||"0",i.API.doServer(r,i.MY.package,s,function(i,e){i>0?t&&t(e):a.use("Widget").alert("\u5185\u5bb9\u6dfb\u52a0\u5931\u8d25\uff01","danger")})}},privateSubmitConPLAdd:function(t){var i=this,e=i.API.find("#"+i.param.formConPLAdd)[0].getDataAndCheck();if(e&&(e=e.formList,e.length)){if(i.MY.sonAlias)var n=i.MY.id,o=i.MY.sonAlias;else var n=i.MY.nodeid,o=i.MY.alias;for(var s=0;s<e.length;s++)i.API.private("privateFormToData",i.MY.contentDesc[o],e[s]);for(var r=[],d=i.API.find("#"+i.param.formConPLAdd)[0].getHiddenData(),s=0;s<e.length;s++){var l=!1;for(var c in e[s])e[s][c]!==d[0][c]&&(l=!0);l&&(e[s].nodeid=n,r.push(e[s]))}if(r.length){var v={alias:o,keyValue:r};i.API.doServer(i.MY.serverName.aCon,i.MY.package,v,function(i,e){i>0&&e?t&&t(e):a.use("Widget").alert("\u6570\u636e\u6dfb\u52a0\u5931\u8d25\uff01","danger")})}}},privateSubmitConEdit:function(t){var i=this,e=i.API.find("#"+i.param.formConEdit)[0].getDataAndCheck();if(e){var n=i.MY.sonAlias||i.MY.alias;i.API.private("privateFormToData",i.MY.contentDesc[n],e);var o={alias:n,keyValue:e},s=i.MY.serverName.mCon;i.API.doServer(s,i.MY.package,o,function(i){i>0?t&&t():a.use("Widget").alert("\u4fee\u6539\u5185\u5bb9\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privateSubmitClassEdit:function(t){var i=this,e=i.API.find("#"+i.param.formClassEdit)[0].getDataAndCheck();if(e){i.API.private("privateFormToData",i.MY.nodeDesc,e);var n={alias:i.MY.alias,target:"parent",keyValue:e};i.API.doServer(i.MY.serverName.mCon,i.MY.package,n,function(i){i>0?t&&t():a.use("Widget").alert("\u4fee\u6539\u680f\u76ee\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privateSubmitClassAdd:function(t){var i=this,e=i.API.find("#"+i.param.formClassAdd)[0].getDataAndCheck();if(e){e.nodeid=i.MY.isding?0:i.MY.nodeid,e.store_id=1,i.API.private("privateFormToData",i.MY.nodeDesc,e);var n={alias:i.MY.alias,target:"parent",keyValue:e};i.API.doServer(i.MY.serverName.aCon,i.MY.package,n,function(i,e){i>0&&e?t(e):a.use("Widget").alert("\u6dfb\u52a0\u680f\u76ee\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privatePushState:function(){}},TrigerEvent:{trigerSubmit:function(){var t=this;t.MY.action==t.MY.act.conList?t.API.private("privateSubmitConList",function(){a.use("Widget").alert("\u4fee\u6539\u5b8c\u6210!","success"),t.API.private("privateShowDefaultView")}):t.MY.action==t.MY.act.conAdd?t.API.private("privateSubmitConAdd",function(){a.use("Widget").alert("\u5185\u5bb9\u6dfb\u52a0\u6210\u529f\uff01","success"),t.API.private("privateShowDefaultView")}):t.MY.action==t.MY.act.conPLAdd?t.API.private("privateSubmitConPLAdd",function(){a.use("Widget").alert("\u6dfb\u52a0\u5b8c\u6210!","success"),t.API.private("privateShowDefaultView")}):t.MY.action==t.MY.act.conEdit?t.API.private("privateSubmitConEdit",function(){a.use("Widget").alert("\u4fdd\u5b58\u6210\u529f\uff01","success"),t.API.private("privateShowDefaultView")}):t.MY.action==t.MY.act.classEdit?t.API.private("privateSubmitClassEdit",function(){a.use("Widget").alert("\u4fdd\u5b58\u6210\u529f\uff01","success"),a.trigerEvent("trigerReShowNodeTree",t.MY.alias),t.API.private("privateShowDefaultView")}):t.MY.action==t.MY.act.classAdd?t.API.private("privateSubmitClassAdd",function(){a.use("Widget").alert("\u680f\u76ee\u6dfb\u52a0\u6210\u529f\uff01","success"),setTimeout(function(){window.location.reload()},1500)}):t.API.private("privateSubmit_"+t.MY.action)},trigerChangeClass:function(a,t){var i=this;i.MY.nodeid=a,delete this.MY.sonAlias,i.MY.isSelfAlias?i.API.private("privateShowClassEdit"):(t&&(i.MY.alias=t),i.API.private("privateContentDesc",i.MY.alias,function(){i.API.private("privateShowConList")}))},trigerContentList:function(){delete this.MY.sonAlias,this.API.private("privateShowConList")},trigerContentAdd:function(){delete this.MY.sonAlias,this.API.private("privateShowConAdd")},trigerContentPLAdd:function(){delete this.MY.sonAlias,this.API.private("privateShowConPLAdd")},trigerClassEdit:function(){this.API.private("privateShowClassEdit")},trigerClassAdd:function(a){this.MY.isding="0"==a?!0:!1,this.API.private("privateShowClassAdd")},trigerClassDel:function(){if(!this.MY.nodeid)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee","warning"),void 0;var t={alias:this.MY.alias,target:"parent",id:this.MY.nodeid};confirm("\u786e\u5b9a\u8981\u5220\u9664\u8be5\u680f\u76ee\u5417\uff1f")&&this.API.doServer(this.MY.serverName.dCon,this.MY.package,t,function(t,i){t>0&&i?(a.use("Widget").alert("\u680f\u76ee\u5220\u9664\u6210\u529f\uff01","success"),this.MY.nodeid="",this.API.private("privatePushState",{nodeid:""}),setTimeout(function(){window.location.reload()},1500)):a.use("Widget").alert("\u680f\u76ee\u5220\u9664\u5931\u8d25\uff01","success")})},trigerGoBack:function(){this.API.private("privateShowConList")},trigerReset:function(){this.API.private("privateShowDefaultView")},trigerCheckBoxClick:function(){}}}),a}),define("",["./../breeze/framework/js/BreezeFW","./../breeze/framework/js/tools/Widget","./../breeze/framework/js/tools/DateTime","./../gadget/cmsMgrGadget"],function(require){var a=require("./../breeze/framework/js/BreezeFW");return require("./../breeze/framework/js/tools/Widget")(a),require("./../breeze/framework/js/tools/DateTime")(a),require("./../gadget/cmsMgrGadget"),a.register({param:{},name:"cmsPrepaidGadget","extends":["cmsMgrGadget"],onCreate:function(){this.API.private("privateSetGlobalVar"),this.API.show("viewMain"),this.MY.formDom=this.API.find("#formDiy"),$(".cateName",window.parent.document).text(this.param.navTxt[0]),$(".aliasName",window.parent.document).text(this.param.navTxt[1]),$(".aliasName").text(this.param.navTxt[1]),this.API.private("privateShowDefaultView");var t=a.use().getParameter("card_no")||"";t&&($("#J_inpSerVal").val(t),this.API.private("searchUserInfo"))},FireEvent:{fireSearchUser:function(){this.API.private("searchUserInfo")},fireSerBoxUser:function(){var a=this,t={alias:"card",filterParam:{},orderBy:[{fieldName:"id",isDesc:!0}]};this.API.private("outerBox","\u5feb\u901f\u9009\u62e9\u4f1a\u5458",t,function(t){$("#J_inpSerVal").val(t[0].no),a.API.private("searchUserInfo"),$.unblockUI()})},fireSubmit:function(){var t=this;if(!t.MY.cardInfo)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u4f1a\u5458"),void 0;var i=t.MY.formDom[0].getDataAndCheck();if(i){var e={card_no:t.MY.cardInfo.no,user_id:t.MY.cardInfo.user_id,user_name:t.MY.cardInfo.user_name,amount:parseInt(i.amount),comment:i.comment};t.API.doServer("cardPrepaid","cms",e,function(i){i>0?(a.use("Widget").alert("\u5145\u503c\u6210\u529f","success",3e3),t.MY.userKey="",$("#J_inpSerVal").val(t.MY.cardInfo.no),t.API.private("searchUserInfo")):a.use("Widget").alert("\u5145\u503c\u5931\u8d25\uff01","danger",2e3)})}},fireReset:function(){this.API.private("updateUserInfo"),this.API.private("privateShowDefaultView")}},"private":{privateShowDefaultView:function(){var t={amount:{title:"\u5145\u503c\u91d1\u989d",type:"Price",desc:"\uff08\u5355\u4f4d\uff1a\u5143\uff09",valueRange:[{checkers:"^\\d+$",failTips:"\u8bf7\u6b63\u786e\u8f93\u5165\u5145\u503c\u91d1\u989d"}]},comment:{title:"\u5907\u6ce8",type:"TextArea"}};a.use().createForm(t,this.MY.formDom),$("._amount_inp").ace_spinner({value:0,min:1,max:1e5,step:100,btn_up_class:"btn-info",btn_down_class:"btn-info"})},updateUserInfo:function(a){var t=["user_name","card_rank_name","discount","amount","score","user_phone","no"];if(a){$("#J_inpSerVal").val(a.no),a.discount=(a.discount/10).toFixed(1),a.amount=(a.amount/100).toFixed(2);for(var i=0;i<t.length;i++){var e="<b>"+a[t[i]]+"</b>";this.API.find("#"+t[i]).html(e)}this.MY.cardInfo=a}else{$("#J_inpSerVal").val("");for(var i=0;i<t.length;i++)this.API.find("#"+t[i]).html("--")}},outerBox:function(t,i,e){var n=this;$("body").append('<div id="J_outBoxWrap" style="width:0;height:0;overflow:hidden;"><form id="J_outBox" class="form-horizontal clearfix modal-body"></form></div>');var o=$("#J_outBox");n.API.private("privateBindFormListPage",o,i,2,function(){a.use("Widget").prompt(o,t,function(){var a=o[0].batchEdit();a.length&&e&&e(a)},!0),$("#J_outBoxWrap").remove(),$("#J_outBox").delegate("tbody>tr","click",function(){$(this).find('input[name="rowRadio"]').attr("checked","checked")})})},searchUserInfo:function(){var t=a.use().toJSONString($("#J_inpSerVal").val());if(!this.MY.userKey||this.MY.userKey!=t){this.MY.userKey=t;var i={alias:"card",target:"self",tableWhere:"(nw_card.no = "+t+" or nw_user.phone = "+t+") and nw_card.status = 1"};this.API.doServer("queryData","cms",i,function(t,i){if(t>0&&i.listData&&i.listData[0]){var e=i.listData[0];this.API.private("updateUserInfo",e)}else a.use("Widget").alert("\u67e5\u65e0\u6570\u636e!","danger",1200)})}}},TrigerEvent:{}}),a});
+/**
+* @fileOverview 会员充值
+* @author <a href="http://ju.taobao.com">jianhui.fjh</a>
+* @version 0.1
+*/
+
+/**
+* @namespace
+* @author jianhui.fjh
+* @name cmsPrepaidGadget
+*/
+
+define(function(require, exports, module) {
+  var FW = require("../breeze/framework/js/BreezeFW");
+  require("../breeze/framework/js/tools/Widget")(FW);
+  require("../breeze/framework/js/tools/DateTime")(FW);
+  require("../gadget/cmsMgrGadget"); //引入扩展函数
+  FW.register(
+    {
+      param:{
+      },
+      name:"cmsPrepaidGadget",
+      extends:['cmsMgrGadget'],
+      onCreate:function(){
+        //继承权局设置
+        this.API.private("privateSetGlobalVar");
+        this.API.show('viewMain');
+        this.MY.formDom = this.API.find('#formDiy');
+        $(".cateName",window.parent.document).text(this.param.navTxt[0]);
+        $(".aliasName",window.parent.document).text(this.param.navTxt[1]);
+        $(".aliasName").text(this.param.navTxt[1]);
+        this.API.private('privateShowDefaultView');
+        //判断是否制定card_no
+        var card_no = FW.use().getParameter("card_no") || "";  //获取userid
+        if(card_no){
+          $('#J_inpSerVal').val(card_no);
+          this.API.private('searchUserInfo');
+        }
+      },
+      FireEvent:{
+        fireSearchUser: function(){
+          this.API.private('searchUserInfo');
+        },
+        fireSerBoxUser: function(){
+          var self = this;
+          var param = {
+            alias: 'card',
+            filterParam: {},
+            orderBy:[{
+              fieldName:"id",
+              isDesc: true
+            }]
+          };
+          this.API.private('outerBox','快速选择会员', param, function(userData){
+            $('#J_inpSerVal').val(userData[0].no);
+            self.API.private('searchUserInfo');
+            $.unblockUI();
+          });
+        },
+        fireSubmit: function(){
+          var self = this;
+          if(!self.MY.cardInfo){
+            FW.use('Widget').alert("请先选择会员");
+            return;
+          }
+          var data = self.MY.formDom[0].getDataAndCheck();
+          if(!data) return;
+          var param = {
+            card_no: self.MY.cardInfo.no,
+            user_id: self.MY.cardInfo.user_id,
+            user_name: self.MY.cardInfo.user_name,
+            amount: parseInt(data.amount),
+            comment: data.comment
+          }
+          self.API.doServer('cardPrepaid', 'cms', param, function(code,data){
+            if(code>0){
+              FW.use('Widget').alert("充值成功", "success", 3000);
+              self.MY.userKey = '';
+              $('#J_inpSerVal').val(self.MY.cardInfo.no);
+              self.API.private('searchUserInfo');
+            }else{
+              FW.use('Widget').alert("充值失败！","danger", 2000);
+            }
+          })
+        },
+        fireReset: function(){
+          this.API.private('updateUserInfo');
+          this.API.private('privateShowDefaultView');
+        }
+      },
+      private:{
+        privateShowDefaultView: function(){
+          var desc = {
+            amount: {
+              title: "充值金额",
+              type: "Price",
+              desc: "（单位：元）",
+              valueRange: [{
+                checkers: "^\\d+$",
+                failTips: "请正确输入充值金额"
+              }]
+            },
+            comment: {
+              title: "备注",
+              type: "TextArea"
+            }
+          }
+          FW.use().createForm(desc, this.MY.formDom);
+          $('._amount_inp').ace_spinner({
+            value: 0,
+            min: 1,
+            max: 100000,
+            step: 100,
+            btn_up_class:'btn-info',
+            btn_down_class:'btn-info'
+          })
+        },
+        updateUserInfo: function(item){
+          var self = this;
+          var attr = ['user_name','card_rank_name','discount','amount','score','user_phone','no'];
+          if(item){
+            $('#J_inpSerVal').val(item.no);
+            item.discount = (item.discount / 10).toFixed(1);
+            item.amount = (item.amount / 100).toFixed(2);
+            for (var i = 0; i < attr.length; i++) {
+              var html = '<b>'+item[attr[i]]+'</b>';
+              this.API.find('#'+attr[i]).html(html);
+            }
+            this.MY.cardInfo = item;
+          }else{
+            $('#J_inpSerVal').val('');
+            for (var i = 0; i < attr.length; i++) {
+              this.API.find('#'+attr[i]).html('--');
+            }
+          }
+        },
+        outerBox: function(title, param, callback){
+          var self = this;
+          $("body").append('<div id="J_outBoxWrap" style="width:0;height:0;overflow:hidden;"><form id="J_outBox" class="form-horizontal clearfix modal-body"></form></div>');
+          var conListDom = $("#J_outBox");
+          //显示分页列表
+          self.API.private("privateBindFormListPage", conListDom, param, 2, function(data){
+            FW.use('Widget').prompt(conListDom, title, function(){
+              var selData = conListDom[0].batchEdit();
+              if(!selData.length) return;
+              callback && callback(selData);
+            }, true);
+            $('#J_outBoxWrap').remove();
+            //绑定一行点击事件
+            $("#J_outBox").delegate('tbody>tr', 'click', function(e){
+              $(this).find('input[name="rowRadio"]').attr('checked','checked');
+            })
+          })
+        },
+        searchUserInfo: function(){
+          var key = FW.use().toJSONString($('#J_inpSerVal').val());
+          if(this.MY.userKey && this.MY.userKey == key) return;
+          this.MY.userKey = key;
+          var _param = {
+            alias: 'card',
+            target: 'self',
+            tableWhere: '(nw_card.no = '+key+' or nw_user.phone = '+key+') and nw_card.status = 1'
+          };
+          this.API.doServer('queryData', 'cms', _param, function(code,data){
+            if(code>0 && data.listData && data.listData[0]){
+              var item = data.listData[0];
+              this.API.private('updateUserInfo', item);
+            }else{
+              FW.use('Widget').alert('查无数据!','danger',1200);
+            }
+          })
+        }
+      },
+      TrigerEvent:{
+      }
+    }
+  );
+  return FW;
+});
+

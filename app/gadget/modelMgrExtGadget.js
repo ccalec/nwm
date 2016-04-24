@@ -1,1 +1,270 @@
-define("./../gadget/cmsMgrGadget",["./../breeze/framework/js/BreezeFW","./../breeze/framework/js/tools/Widget","./../breeze/framework/js/tools/DateTime"],function(require){var a=require("./../breeze/framework/js/BreezeFW");return require("./../breeze/framework/js/tools/Widget")(a),require("./../breeze/framework/js/tools/DateTime")(a),a.register({name:"cmsMgrGadget",param:{norole:!0,alias:"",id:"",nodeid:"",action:"",pagesize:10,plModSet:{xxalias:!0},plAddSetNum:10,listType:{xxalias:0},btnForList:{"default":[{title:"\u7f16\u8f91",action:"modData","class":"btn btn-mini btn-info",style:"display:none",html:" <i class='icon-edit bigger-120'> \u7f16\u8f91</i>",onclick:"privateBtnConEdit"},{title:"\u5220\u9664",action:"delData","class":"btn btn-mini btn-danger",style:"display:none",html:" <i class='icon-trash bigger-120'> \u5220\u9664</i>",onclick:"privateBtnConDel"}],roles:[{title:"\u6743\u9650\u8bbe\u7f6e","class":"btn btn-mini btn-success",html:" <i class='icon-group bigger-120'> \u6743\u9650</i>",onclick:"privateSetRoles"},{title:"\u7f16\u8f91",action:"modData","class":"btn btn-mini btn-info",style:"display:none",html:" <i class='icon-edit bigger-120'> \u7f16\u8f91</i>",onclick:"privateBtnConEdit"},{title:"\u5220\u9664",action:"delData","class":"btn btn-mini btn-danger",style:"display:none",html:" <i class='icon-trash bigger-120'> \u5220\u9664</i>",onclick:"privateBtnConDel"}]},viewConList:"viewContentList",viewConAdd:"viewContentAdd",viewConPLAdd:"viewContentPLAdd",viewClassEdit:"viewClassEdit",viewClassAdd:"viewClassAdd",viewConEdit:"viewContentEdit",formConList:"formContentList",formConAdd:"formContentAdd",formConPLAdd:"formContentPLAdd",formClassEdit:"formClassEdit",formClassAdd:"formClassAdd",formConEdit:"formContentEdit"},onCreate:function(){var a=this;a.API.private("privateSetGlobalVar"),a.API.private("privateGetNodeDesc"),a.API.private("privateContentDesc",a.MY.alias,function(e){a.API.private("privateGetSonDesc",function(){e.parent_alias==a.MY.alias&&(a.MY.isSelfAlias=!0),$("#aliasTitle").text(e.model_name),$("#aliasTitle").text(e.model_name),$("#pageH1").show(),a.API.private("privateShowDefaultView"),a.API.private("privateCheckAuth",$("body"))})})},FireEvent:{},"private":{privateSetGlobalVar:function(){var e=this;e.MY.alias=e.param.alias||a.use().getParameter("alias")||"",e.MY.action=e.param.action||a.use().getParameter("action")||"",e.MY.id=e.param.id||a.use().getParameter("id")||"",e.MY.nodeid=e.param.nodeid||a.use().getParameter("nodeid")||"",e.MY.isrole=e.param.norole||a.use().getParameter("norole")||"",e.MY.listType=e.param.listType[this.MY.alias]||a.use().getParameter("listType")||"",e.MY.contentDesc={},e.MY.sonAlias=e.param.sonAlias||a.use().getParameter("sonAlias")||"",e.MY.sonId=e.param.sonId||a.use().getParameter("sonId")||"",e.MY.isSelfAlias=!1,e.MY.noClass=!1,e.MY.act={conList:"conList",conAdd:"conAdd",conPLAdd:"conPLAdd",classEdit:"classEdit",classAdd:"classAdd",conEdit:"conEdit"},e.MY.package="cms",e.MY.serverName={aCon:"addData",dCon:"delData",mCon:"modData",qCon:"queryData",aModel:"addModel",dModel:"delModel",mModel:"modModel",qModel:"queryModel"}},privateGetNodeDesc:function(){var a=this,e={alias:a.MY.alias,target:"parent"};a.API.doServer(a.MY.serverName.qModel,a.MY.package,e,function(e,i){e>0&&i?(a.MY.nodeDesc=i.model_desc||{},a.MY.nodeDesc.id={type:"Hidden",title:"id",islist:"0"}):(a.MY.noClass=!0,$("#btnAction .btn-group:eq(1)").remove())})},privateGetSonDesc:function(a){var e=this,i={alias:e.MY.alias,target:"son"};e.API.doServer(e.MY.serverName.qModel,e.MY.package,i,function(i,t){if(i>0&&t){for(var n="",o=0;o<t.length;o++)n+="<li>",n+="<a href='javascript:void(0)' sonalias='"+t[o].alias+"' data-toggle='tab'>"+t[o].model_name+"</a>",n+="</li>";$("#tabSonAlias>ul>li:gt(0)").remove(),$("#tabSonAlias>ul").append(n),a&&a(),$("#tabSonAlias>ul>li>a").on("click",function(){if(!$(this).parent().hasClass("active")){var a=$("#tabSonAlias>ul>li>a").index($(this));0==a?(delete e.MY.sonAlias,$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),e.API.private("privateShowConEdit")):(e.MY.sonAlias=$(this).attr("sonalias"),$("#btnAddSonAlias").show().on("click",function(){e.API.private("privateShowConAdd")}),$("#btnPLAddSonAlias").show().on("click",function(){e.API.private("privateShowConPLAdd"),e.API.find(".table_formlist:eq(0)").next().find(".btn-add-con").show()}),e.API.private("privateContentDesc",e.MY.sonAlias,function(){e.API.private("privateShowConList")}))}})}})},privateContentDesc:function(a,e){var i=this;i.API.doServer(i.MY.serverName.qModel,i.MY.package,{alias:a},function(t,n){t>0&&n&&(i.MY.contentDesc[a]=n.model_desc,i.MY.contentDesc[a].id||(i.MY.contentDesc[a].id={type:"Hidden",title:"id",islist:"1"}),e&&e(n))})},privateShowDefaultView:function(){this.MY.action==this.MY.act.conAdd?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConAdd")):this.MY.action==this.MY.act.conPLAdd?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConPLAdd")):this.MY.action==this.MY.act.classAdd?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.MY.isding=!0,this.API.private("privateShowClassAdd")):this.MY.action==this.MY.act.conEdit?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConEdit")):this.MY.action==this.MY.act.classEdit&&this.MY.nodeid?(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowClassEdit")):(a.trigerEvent("trigerReShowNodeTree",this.MY.alias),this.API.private("privateShowConList"))},privateOutLinkCB:function(a,e,i,t,n){function o(a,e,i){s.API.private("privateContentDesc",e.alias,function(t){v||(v="\u8bf7\u9009\u62e9"+t.model_name),s.API.private("privateBindFormListPage",f,e,2,function(){a.empty(),f.appendTo(a),i&&i()})})}var s=this,r=/data.formList\[(.*?)\].*?/g.exec(i),d=null==r?-1:r[1];i=i.split(".")[i.split(".").length-1];var l=a[i].outerLink;if(2===l.split(".").length){var c=l.split(".")[0],v=(l.split(".")[1],""),p={alias:c,filterParam:{},orderBy:[{fieldName:"id",isDesc:!0}]};$("#newViewDom").length||($("body").append("<div style='display:none;' id='newViewDom'></div>"),$("body").append("<div id='preOuterLinkEditForm'></div>"));var u=$("#newViewDom"),f=$("#preOuterLinkEditForm");s.API.private("privateSetOutlinkView",u,p,d,function(a,e){o(a,e)},function(r,l,p){p&&(v=p),o(r,l,function(){s.API.private("privateMaskLayer",u,v,1e3,function(){var o=f[0].batchEdit();if(o.length){var r=e[0].getData();if((s.MY.action==s.MY.act.conPLAdd||s.MY.action==s.MY.act.conList)&&(r=e[0].getData().formList),r){for(var l in a)if(a[l].outerLink){var v=a[l].outerLink.split(".");if(2!==v.length)return;var p=v[0],u=v[1];p==c&&(-1!==d?r[d][l]=o[0][u]:r[l]=o[0][u])}s.API.private("privateMessOutLinkOk",a,e,i,t,r),n&&n(r)}}})})})}},privateMessOutLinkOk:function(){},privateSetOutlinkView:function(a,e,i,t,n){n&&n(a,e)},privateMaskLayer:function(e,i,t,n){var o="<div style='text-align:left;cursor:default; background:#fff; padding:10px;'><div class='modal-header' style='margin-bottom:20px;'><h3>"+i+"</h3></div>";if(o+="<div class='modal-body'><form id='outerLinkEditForm' class='form-horizontal outlinkform_"+this.MY.alias+" clearfix' style='margin:0px;'></form></div>",n){if(o+="<div class='modal-footer'>",n instanceof Function&&(o+="<a href='javascript:;' class='btn btn btn-small btn-success'><i class='icon-ok bigger-110'></i> \u4fdd\u5b58</a>",o+="<a href='javascript:;' class='btn btn btn-small'><i class='icon-undo bigger-110'></i> \u53d6\u6d88</a>"),"[object Array]"===toString.apply(n))for(var s=0;s<n.length;s++)o+=n[s].html;o+="</div>"}o+="</div>",a.blockUI(o,($(window).width()-t)/2,100,t,"auto",0),e.appendTo($("#outerLinkEditForm")).show(),$("#outerLinkEditForm").find(".form-wrap").removeClass("pull-left"),$(".chosen-select").chosen(),n&&$(".modal-footer>a").click(function(){var e=$(".modal-footer>a").index($(this));n instanceof Function&&(a.unblockUI(),0==e&&n&&n()),"[object Array]"===toString.apply(n)&&n[e].callback&&n[e].callback()})},privateSetDescAndData:function(a,e,i){i&&i()},privateDataToForm:function(e,i){if(i&&i.length)for(var t in e)for(var n=0;n<i.length;n++)i[n][t]&&(-1!=$.inArray(e[t].type,["List","Pics","CheckBox","MultSelect"])?"string"===i[n][t]&&(i[n][t]=a.use().evalJSON(i[n][t])):"DatePicker"==e[t].type?i[n][t]=a.use("DateTime").format(new Date(i[n][t]),"yyyy-MM-dd"):"DateTimePicker"==e[t].type&&(i[n][t]=a.use("DateTime").format(new Date(i[n][t]),"yyyy-MM-dd hh:mm:ss")))},privateFormToData:function(e,i){if(i)for(var t in e)if(-1!=$.inArray(e[t].type,["List","Pics","CheckBox","MultSelect"])){if(!i[t])continue;i[t]=a.use().toJSONString(i[t])}},privateShowConList:function(){var a=this;if(a.MY.sonAlias){var e=a.MY.id,i=a.MY.sonAlias,t=$("#tabSonAlias>ul>li>a[sonalias='"+a.MY.sonAlias+"']"),n=$("#tabSonAlias>ul>li>a").index(t);$("#tabSonAlias>ul>li").removeClass("active").eq(n).addClass("active"),$("#tabSonAlias").show(),$("#btnAddSonAlias").show(),$("#btnPLAddSonAlias").show()}else{var e=a.MY.nodeid,i=a.MY.alias;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),a.MY.id=""}a.param.plModSet[i]||$("#submitBtn").hide(),a.MY.action=a.MY.act.conList,a.API.private("privatePushState",{action:a.MY.action,alias:a.MY.alias,sonAlias:a.MY.sonAlias,nodeid:a.MY.nodeid,id:a.MY.id,sonId:""}),$("#actionName").text("\u5185\u5bb9\u5217\u8868"),a.API.show(a.param.viewConList);var o=a.API.find("#"+a.param.formConList);a.param.plModSet[i]?o.addClass(i+"_editConList").addClass("editConList"):o.addClass(i+"_"+a.MY.action).addClass(a.MY.action);var s={alias:i,filterParam:{},orderBy:[{fieldName:"id",isDesc:!0}]};e&&(s.filterParam.nodeid=e),a.API.private("privateBindFormListPage",o,s,a.MY.listType||0,function(e){a.API.private("privateShowConListCB",e)})},privateShowConListCB:function(e){function i(a){for(var i=0;i<a.length;i++){var n="<a href='javascript:void(0);' ";!function(i){for(var s in a[i])if("onclick"==s.toLowerCase())var r=a[i][s];else if("html"==s)var d=a[i][s];else n+="action"==s?"data-action='"+a[i][s]+"' ":s+"='"+a[i][s]+"' ";n+=">",$(n+d+"</a>").appendTo(o.find("table:eq(0)>tbody>tr>td>.actionBtnForList")).on("click",function(){var a=o.find("table:eq(0)>tbody>tr>td>.actionBtnForList").index($(this).parents(".actionBtnForList"));t.API.private(r,$(this),e[a])})}(i)}}var t=this;if(t.MY.sonAlias)var n=(t.MY.id,t.MY.sonAlias);else var n=(t.MY.nodeid,t.MY.alias);var o=t.API.find("#"+t.param.formConList);o.find("table:eq(0)>tbody>tr>td>label>input[type='checkbox']").on("click",function(){var i=o.find("table:eq(0)>tbody>tr>td>label>input[type='checkbox']").index($(this));a.trigerEvent("trigerCheckBoxClick",e[i])}),t.param.btnForList&&t.param.btnForList[n]?i(t.param.btnForList[n]):t.param.btnForList&&t.param.btnForList.default&&i(t.param.btnForList.default),o.find(".btn-del-list").on("click",function(){t.API.private("privateBtnConPLDel")}),t.API.private("privateCheckAuth",o),t.API.private("privateMessConListOk",e),t.param.plModSet[n]&&setTimeout(function(){$("#submitBtn").fadeIn(150)},315)},privateMessConListOk:function(){},privateBindFormListPage:function(e,i,t,n){var o=this;i=o.API.private("privateSetListParam",i),i.resultSet="count",o.API.doServer(o.MY.serverName.qCon,o.MY.package,i,function(s,r){function d(s){a.use().save(v,s);var r=parseInt(s);i.resultSet="",i.limit=(c*r-c).toString()+","+c.toString(),o.API.doServer(o.MY.serverName.qCon,o.MY.package,i,function(s,v){s>0&&o.API.private("privateContentDesc",i.alias,function(){function s(p){o.API.private("privateSetDescAndData",i.alias,p,function(){var u=a.clone(o.MY.contentDesc[i.alias]);$.each(u,function(a,e){return 0==e.islist?!0:(-1!=$.inArray(e.type,["Select","Radio"])?(e.type="Text",valueRange=e.valueRange[0],$.each(p,function(e,i){$.each(valueRange,function(e,t){return i[a]==t?(i[a]=e,!1):void 0})})):-1!=$.inArray(e.type,["CheckBox","MultSelect"])?(e.type="Text",valueRange=e.valueRange[0],$.each(p,function(e,i){return i[a]?($.each(valueRange,function(e,t){var n=$.inArray(t,i[a]);-1!=n&&(i[a][n]=e)}),i[a]=i[a].join("\u3001"),void 0):!0})):"TextArea"==e.type&&(e.type="Text"),void 0)}),a.use().createFormList(u,e,p,function(a,i){o.API.private("privateOutLinkCB",u,e,a,i,function(a){s(a)})},t),a.use().showPagination(e.find("#pagination"),l,c,r,function(a){d(a)}),n&&n(v.listData)})}o.API.private("privateDataToForm",o.MY.contentDesc[i.alias],v.listData),s(v.listData)})})}if(s>0&&r){var l=parseInt(r.listCount)||0;if(l){var c=o.param.pagesize||20,v=i.filterParam.nodeid?i.alias+i.filterParam.nodeid:i.alias,p=parseInt(a.use().load(v))||1;p>Math.ceil(l/c)&&(p=Math.ceil(l/c)),d(p)}else o.API.private("privateContentDesc",i.alias,function(){o.API.private("privateSetDescAndData",i.alias,null,function(){a.use().createFormList(o.MY.contentDesc[i.alias],e,null,function(a,t){o.API.private("privateOutLinkCB",o.MY.contentDesc[i.alias],e,a,t)},t),a.use().showPagination(e.find("#pagination")),n&&n([])})})}})},privateSetListParam:function(a){return a},privateShowConAdd:function(){function e(t){i.API.private("privateSetDescAndData",n,t,function(){a.use().createForm(i.MY.contentDesc[n],r,t,function(a,t){i.API.private("privateOutLinkCB",i.MY.contentDesc[n],r,a,t,function(a){e(a)})})})}var i=this;if(i.MY.sonAlias)var t=i.MY.id,n=i.MY.sonAlias;else{var t=i.MY.nodeid,n=i.MY.alias;i.MY.id=""}if(!t&&!i.MY.noClass)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;if(i.MY.sonAlias){var t=i.MY.id,n=i.MY.sonAlias,o=$("#tabSonAlias>ul>li>a[sonalias='"+i.MY.sonAlias+"']"),s=$("#tabSonAlias>ul>li>a").index(o);$("#tabSonAlias>ul>li").removeClass("active").eq(s).addClass("active"),$("#tabSonAlias").show()}else{var t=i.MY.nodeid,n=i.MY.alias;$("#tabSonAlias").hide()}$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.conAdd,i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:i.MY.sonAlias,nodeid:i.MY.nodeid,id:i.MY.id,sonId:""}),$("#actionName").text("\u5185\u5bb9\u6dfb\u52a0"),i.API.show(i.param.viewConAdd);var r=i.API.find("#"+i.param.formConAdd);r.addClass(n+"_"+i.MY.action).addClass(i.MY.action),e(null),i.API.private("privateMessConAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessConAddOk:function(){},privateShowConPLAdd:function(){function e(t){i.API.private("privateSetDescAndData",n,t,function(){a.use().createFormList(i.MY.contentDesc[n],r,t,function(a,t){i.API.private("privateOutLinkCB",i.MY.contentDesc[n],r,a,t,function(a){e(a)})},1)})}var i=this;if(i.MY.sonAlias)var t=i.MY.id,n=i.MY.sonAlias;else{var t=i.MY.nodeid,n=i.MY.alias;i.MY.id=""}if(!t&&!i.MY.noClass)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;if(i.MY.sonAlias){var o=$("#tabSonAlias>ul>li>a[sonalias='"+i.MY.sonAlias+"']"),s=$("#tabSonAlias>ul>li>a").index(o);$("#tabSonAlias>ul>li").removeClass("active").eq(s).addClass("active"),$("#tabSonAlias").show()}else $("#tabSonAlias").hide();$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.conPLAdd,i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:i.MY.sonAlias,id:i.MY.id,nodeid:i.MY.nodeid,sonId:""}),$("#actionName").text("\u5185\u5bb9\u6279\u91cf\u6dfb\u52a0"),i.API.show(i.param.viewConPLAdd);var r=i.API.find("#"+i.param.formConPLAdd);r.addClass(n+"_"+i.MY.action).addClass(i.MY.action);var d=[],l={};for(var c in i.MY.contentDesc[n])l[c]="";for(var v=0;v<i.param.plAddSetNum;v++)d.push(l);e(d),i.API.private("privateMessConPLAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessConPLAddOk:function(){},privateShowConEdit:function(){var e=this;if($("#tabSonAlias").show(),e.MY.sonAlias){var i=e.MY.sonAlias,t=e.MY.sonId,n=$("#tabSonAlias>ul>li>a[sonalias='"+e.MY.sonAlias+"']"),o=$("#tabSonAlias>ul>li>a").index(n);$("#tabSonAlias>ul>li").removeClass("active").eq(o).addClass("active")}else{var i=e.MY.alias,t=e.MY.id;$("#tabSonAlias>ul>li").removeClass("active").eq(0).addClass("active"),e.MY.sonId=""}$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),e.MY.action=e.MY.act.conEdit,e.API.private("privatePushState",{action:e.MY.action,alias:e.MY.alias,sonAlias:e.MY.sonAlias,id:e.MY.id,nodeid:e.MY.nodeid,sonId:e.MY.sonId}),$("#actionName").text("\u5185\u5bb9\u4fee\u6539"),e.API.show(e.param.viewConEdit);var s=e.API.find("#"+e.param.formConEdit);s.addClass(i+"_"+e.MY.action).addClass(e.MY.action);var r={alias:i,filterParam:{id:t}};e.API.doServer(e.MY.serverName.qCon,e.MY.package,r,function(t,n){t>0&&n&&n.listData&&("model"!=e.MY.alias&&(e.MY.sonAlias?e.MY.sonAlias=n.listData[0].alias:e.MY.alias=n.listData[0].alias),e.API.private("privateContentDesc",i,function(){function t(n){e.API.private("privateSetDescAndData",i,n,function(){a.use().createForm(e.MY.contentDesc[i],s,n,function(a,n){e.API.private("privateOutLinkCB",e.MY.contentDesc[i],s,a,n,function(a){t(a)})})})}e.API.private("privateDataToForm",e.MY.contentDesc[i],n.listData),t(n.listData[0]),e.API.private("privateMessConEditOk",n.listData[0]),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)}))})},privateMessConEditOk:function(){},privateShowClassEdit:function(){var e=this;if(!e.MY.nodeid)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),e.MY.action=e.MY.act.classEdit,e.MY.sonAlias="",e.MY.id="",e.MY.sonId="",e.API.private("privatePushState",{action:e.MY.action,alias:e.MY.alias,sonAlias:"",nodeid:e.MY.nodeid,id:"",sonId:""}),$("#actionName").text("\u680f\u76ee\u4fee\u6539"),e.API.show(e.param.viewClassEdit);var i=e.API.find("#"+e.param.formClassEdit);i.addClass(e.MY.alias+"_"+e.MY.action).addClass(e.MY.action);var t={alias:e.MY.alias,target:"parent",filterParam:{id:e.MY.nodeid}};e.API.doServer(e.MY.serverName.qCon,e.MY.package,t,function(t,n){function o(t){a.use().createForm(e.MY.nodeDesc,i,t,function(a,t){e.API.private("privateOutLinkCB",e.MY.nodeDesc,i,a,t,function(a){o(a)})})}t>0&&n.listData&&(e.API.private("privateDataToForm",e.MY.contentDesc[e.MY.alias],n.listData),o(n.listData[0]),e.API.private("privateMessClassEditOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150))})},privateMessClassEditOk:function(){},privateShowClassAdd:function(){function e(n){a.use().createForm(i.MY.nodeDesc,t,n,function(a,n){i.API.private("privateOutLinkCB",i.MY.nodeDesc,t,a,n,function(a){e(a)})})}var i=this;if(!i.MY.isding&&!i.MY.nodeid)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee!","warning"),void 0;$("#tabSonAlias").hide(),$("#btnAddSonAlias").hide(),$("#btnPLAddSonAlias").hide(),i.MY.action=i.MY.act.classAdd,i.MY.sonAlias="",i.MY.id="",i.MY.sonId="",i.API.private("privatePushState",{action:i.MY.action,alias:i.MY.alias,sonAlias:"",nodeid:i.MY.nodeid,id:"",sonId:""}),i.MY.isding?$("#actionName").text("\u6dfb\u52a0\u9876\u680f\u76ee"):$("#actionName").text("\u6dfb\u52a0\u5b50\u680f\u76ee"),i.API.show(i.param.viewClassAdd);var t=i.API.find("#"+i.param.formClassAdd);t.addClass(i.MY.alias+"_"+i.MY.action).addClass(i.MY.action),e(null),i.API.private("privateMessClassAddOk"),setTimeout(function(){$("#submitBtn").fadeIn(150)},150)},privateMessClassAddOk:function(){},privateBtnConEdit:function(a,e){this.MY.sonAlias?this.MY.sonId=e.id:this.MY.id=e.id,this.API.private("privateShowConEdit")},privateBtnConDel:function(e,i){var t=this,n=t.MY.sonAlias||t.MY.alias;if(confirm("\u786e\u8ba4\u8981\u5220\u9664\u8be5\u5185\u5bb9\u5417\uff1f")){var o={alias:n,id:i.id},s="model"==n?t.MY.serverName.dModel:t.MY.serverName.dCon;t.API.doServer(s,t.MY.package,o,function(e){e>0?t.API.private("privateShowConList"):a.use("Widget").alert("\u5185\u5bb9\u5220\u9664\u5931\u8d25\uff01","danger")})}},privateBtnConPLDel:function(){var e=this,i=e.API.find("#"+e.param.formConList),t=e.MY.sonAlias||e.MY.alias;if(confirm("\u786e\u8ba4\u8981\u5220\u9664\u8be5\u5185\u5bb9\u5417\uff1f")){for(var n=i[0].batchEdit(),o=[],s=0;s<n.length;s++)o.push(n[s].id);var r={alias:t,id:o.join(",")},d="model"==t?e.MY.serverName.dModel:e.MY.serverName.dCon;e.API.doServer(d,e.MY.package,r,function(i){i>0?e.API.private("privateShowConList"):a.use("Widget").alert("\u5220\u9664\u5931\u8d25\uff01","danger")})}},privateCheckAuth:function(a){if(this.MY.isrole)$("[data-action]").show();else{var e=this.MY.sonAlias||this.MY.alias;if(!e||!window.RFBRoles)return;a.find("[data-action]").each(function(){var a=e+"."+$(this).data("action");~$.inArray(a,window.RFBRoles)&&$(this).show()})}},privateSubmitConList:function(e){var i=this,t=i.MY.sonAlias||i.MY.alias;if(i.param.plModSet[t]){var n=i.API.find("#"+i.param.formConList)[0].getDataAndCheck();if(n&&(n=n.formList,n.length)){for(var o=0;o<n.length;o++)i.API.private("privateFormToData",i.MY.contentDesc[t],n[o]);i.API.initPost();for(var s=[],o=0;o<n.length;o++)!function(e){i.API.addPost(i.MY.serverName.mCon,i.MY.package,{alias:t,keyValue:n[e]},function(i,t){i>0?s.push(t):a.use("Widget").alert("Cid="+n[e].id+":\u4fee\u6539\u5931\u8d25\uff01","danger")})}(o);i.API.doPost(function(){e&&e()})}}},privateSubmitConAdd:function(e){var i=this,t=i.API.find("#"+i.param.formConAdd)[0].getDataAndCheck();if(t){if(i.MY.sonAlias)var n=i.MY.id,o=i.MY.sonAlias;else var n=i.MY.nodeid,o=i.MY.alias;i.API.private("privateFormToData",i.MY.contentDesc[o],t);var s={alias:o,keyValue:t},r=i.MY.serverName.aCon;t.nodeid=n||"0",i.API.doServer(r,i.MY.package,s,function(i,t){i>0?e&&e(t):a.use("Widget").alert("\u5185\u5bb9\u6dfb\u52a0\u5931\u8d25\uff01","danger")})}},privateSubmitConPLAdd:function(e){var i=this,t=i.API.find("#"+i.param.formConPLAdd)[0].getDataAndCheck();if(t&&(t=t.formList,t.length)){if(i.MY.sonAlias)var n=i.MY.id,o=i.MY.sonAlias;else var n=i.MY.nodeid,o=i.MY.alias;for(var s=0;s<t.length;s++)i.API.private("privateFormToData",i.MY.contentDesc[o],t[s]);for(var r=[],d=i.API.find("#"+i.param.formConPLAdd)[0].getHiddenData(),s=0;s<t.length;s++){var l=!1;for(var c in t[s])t[s][c]!==d[0][c]&&(l=!0);l&&(t[s].nodeid=n,r.push(t[s]))}if(r.length){var v={alias:o,keyValue:r};i.API.doServer(i.MY.serverName.aCon,i.MY.package,v,function(i,t){i>0&&t?e&&e(t):a.use("Widget").alert("\u6570\u636e\u6dfb\u52a0\u5931\u8d25\uff01","danger")})}}},privateSubmitConEdit:function(e){var i=this,t=i.API.find("#"+i.param.formConEdit)[0].getDataAndCheck();if(t){var n=i.MY.sonAlias||i.MY.alias;i.API.private("privateFormToData",i.MY.contentDesc[n],t);var o={alias:n,keyValue:t},s=i.MY.serverName.mCon;i.API.doServer(s,i.MY.package,o,function(i){i>0?e&&e():a.use("Widget").alert("\u4fee\u6539\u5185\u5bb9\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privateSubmitClassEdit:function(e){var i=this,t=i.API.find("#"+i.param.formClassEdit)[0].getDataAndCheck();if(t){i.API.private("privateFormToData",i.MY.nodeDesc,t);var n={alias:i.MY.alias,target:"parent",keyValue:t};i.API.doServer(i.MY.serverName.mCon,i.MY.package,n,function(i){i>0?e&&e():a.use("Widget").alert("\u4fee\u6539\u680f\u76ee\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privateSubmitClassAdd:function(e){var i=this,t=i.API.find("#"+i.param.formClassAdd)[0].getDataAndCheck();if(t){t.nodeid=i.MY.isding?0:i.MY.nodeid,t.store_id=1,i.API.private("privateFormToData",i.MY.nodeDesc,t);var n={alias:i.MY.alias,target:"parent",keyValue:t};i.API.doServer(i.MY.serverName.aCon,i.MY.package,n,function(i,t){i>0&&t?e(t):a.use("Widget").alert("\u6dfb\u52a0\u680f\u76ee\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}},privatePushState:function(){}},TrigerEvent:{trigerSubmit:function(){var e=this;e.MY.action==e.MY.act.conList?e.API.private("privateSubmitConList",function(){a.use("Widget").alert("\u4fee\u6539\u5b8c\u6210!","success"),e.API.private("privateShowDefaultView")}):e.MY.action==e.MY.act.conAdd?e.API.private("privateSubmitConAdd",function(){a.use("Widget").alert("\u5185\u5bb9\u6dfb\u52a0\u6210\u529f\uff01","success"),e.API.private("privateShowDefaultView")}):e.MY.action==e.MY.act.conPLAdd?e.API.private("privateSubmitConPLAdd",function(){a.use("Widget").alert("\u6dfb\u52a0\u5b8c\u6210!","success"),e.API.private("privateShowDefaultView")}):e.MY.action==e.MY.act.conEdit?e.API.private("privateSubmitConEdit",function(){a.use("Widget").alert("\u4fdd\u5b58\u6210\u529f\uff01","success"),e.API.private("privateShowDefaultView")}):e.MY.action==e.MY.act.classEdit?e.API.private("privateSubmitClassEdit",function(){a.use("Widget").alert("\u4fdd\u5b58\u6210\u529f\uff01","success"),a.trigerEvent("trigerReShowNodeTree",e.MY.alias),e.API.private("privateShowDefaultView")}):e.MY.action==e.MY.act.classAdd?e.API.private("privateSubmitClassAdd",function(){a.use("Widget").alert("\u680f\u76ee\u6dfb\u52a0\u6210\u529f\uff01","success"),setTimeout(function(){window.location.reload()},1500)}):e.API.private("privateSubmit_"+e.MY.action)},trigerChangeClass:function(a,e){var i=this;i.MY.nodeid=a,delete this.MY.sonAlias,i.MY.isSelfAlias?i.API.private("privateShowClassEdit"):(e&&(i.MY.alias=e),i.API.private("privateContentDesc",i.MY.alias,function(){i.API.private("privateShowConList")}))},trigerContentList:function(){delete this.MY.sonAlias,this.API.private("privateShowConList")},trigerContentAdd:function(){delete this.MY.sonAlias,this.API.private("privateShowConAdd")},trigerContentPLAdd:function(){delete this.MY.sonAlias,this.API.private("privateShowConPLAdd")},trigerClassEdit:function(){this.API.private("privateShowClassEdit")},trigerClassAdd:function(a){this.MY.isding="0"==a?!0:!1,this.API.private("privateShowClassAdd")},trigerClassDel:function(){if(!this.MY.nodeid)return a.use("Widget").alert("\u8bf7\u5148\u9009\u62e9\u680f\u76ee","warning"),void 0;var e={alias:this.MY.alias,target:"parent",id:this.MY.nodeid};confirm("\u786e\u5b9a\u8981\u5220\u9664\u8be5\u680f\u76ee\u5417\uff1f")&&this.API.doServer(this.MY.serverName.dCon,this.MY.package,e,function(e,i){e>0&&i?(a.use("Widget").alert("\u680f\u76ee\u5220\u9664\u6210\u529f\uff01","success"),this.MY.nodeid="",this.API.private("privatePushState",{nodeid:""}),setTimeout(function(){window.location.reload()},1500)):a.use("Widget").alert("\u680f\u76ee\u5220\u9664\u5931\u8d25\uff01","success")})},trigerGoBack:function(){this.API.private("privateShowConList")},trigerReset:function(){this.API.private("privateShowDefaultView")},trigerCheckBoxClick:function(){}}}),a}),define("",["./../breeze/framework/js/BreezeFW","./../breeze/framework/js/tools/DateTime","./../breeze/framework/js/tools/Widget","./../gadget/cmsMgrGadget"],function(require){var a=require("./../breeze/framework/js/BreezeFW");return require("./../breeze/framework/js/tools/DateTime")(a),require("./../breeze/framework/js/tools/Widget")(a),require("./../gadget/cmsMgrGadget"),a.register({name:"modelMgrExtGadget","extends":["cmsMgrGadget"],param:{alias:"model",nodeid:2},"private":{privateDataToForm:function(e,i){if(this.MY.action==this.MY.act.conEdit){var t=e.model_desc.valueRange[0];t.old_fieldname={islist:"0",title:"fieldname",type:"Hidden",width:"80px"},e.model_alias.type="ReadOnly",e.table_name.type="ReadOnly"}if(i&&i.length)for(var n=0;n<i.length;n++){var o=[];if(i[n].model_desc){"string"==typeof i[n].model_desc&&(i[n].model_desc=a.use().evalJSON(i[n].model_desc));for(var s in i[n].model_desc){var r=i[n].model_desc[s];if(this.MY.action==this.MY.act.conEdit&&"outerField"!==r.fieldType&&(r.old_fieldname=s),r.valueRange){for(var d in r.valueRange){var l=r.valueRange[d];l.checkers&&0==l.checkers.indexOf("function")&&(l.checkers=a.use().evalJSON(l.checkers))}r.valueRange=a.use().toJSONString(r.valueRange)}r.fieldname=s,o.push(r)}i[n].model_desc=o}}},privateFormToData:function(e,i){if(i&&i.model_desc){for(var t={},n=0;n<i.model_desc.length;n++){if(i.model_desc[n].valueRange){i.model_desc[n].valueRange=a.use().evalJSON(i.model_desc[n].valueRange);for(var o in i.model_desc[n].valueRange){var s=i.model_desc[n].valueRange[o];/function/i.test(typeof s.checkers)&&(s.checkers=a.use().toJSONString(s.checkers))}}var r=i.model_desc[n];t[r.fieldname]=r,delete t[r.fieldname].fieldname}i.model_desc=t}},privateBtnConDel:function(e,i){var t=this,n=t.MY.sonAlias||t.MY.alias;if(confirm("\u786e\u8ba4\u8981\u5220\u9664\u8be5\u5185\u5bb9\u5417\uff1f")){var o={alias:n,target_alias:i.model_alias},s="model"==n?t.MY.serverName.dModel:t.MY.serverName.dCon;t.API.doServer(s,t.MY.package,o,function(e){e>0?t.API.private("privateShowConList"):a.use("Widget").alert("\u5185\u5bb9\u5220\u9664\u5931\u8d25\uff01","danger")})}},privateBtnConPLDel:function(){var e=this,i=e.API.find("#"+e.param.formConList),t=e.MY.sonAlias||e.MY.alias;if(confirm("\u786e\u8ba4\u8981\u5220\u9664\u8be5\u5185\u5bb9\u5417\uff1f")){for(var n=i[0].batchEdit(),o=[],s=0;s<n.length;s++)o.push(n[s].model_alias);var r={alias:t,target_alias:o.join(",")},d="model"==t?e.MY.serverName.dModel:e.MY.serverName.dCon;e.API.doServer(d,e.MY.package,r,function(i){i>0?e.API.private("privateShowConList"):a.use("Widget").alert("\u5220\u9664\u5931\u8d25\uff01","danger")})}},privateSubmitConAdd:function(e){var i=this,t=i.API.find("#"+i.param.formConAdd)[0].getDataAndCheck();if(t){if(i.MY.sonAlias)var n=i.MY.id,o=i.MY.sonAlias;else var n=i.MY.nodeid,o=i.MY.alias;t.model_desc&&t.model_desc.sort(function(a,e){return parseInt(a.order)>parseInt(e.order)?1:-1}),i.API.private("privateFormToData",i.MY.contentDesc[o],t),t.nodeid=n||"0",i.API.doServer(i.MY.serverName.aModel,i.MY.package,t,function(i,t){i>0&&t?e(t):a.use("Widget").alert("\u5185\u5bb9\u6dfb\u52a0\u5931\u8d25\uff01","danger")})}},privateSubmitConEdit:function(e){var i=this,t=i.API.find("#"+i.param.formConEdit)[0].getDataAndCheck();if(t){var n=i.MY.sonAlias||i.MY.alias;t.model_desc&&t.model_desc.sort(function(a,e){return parseInt(a.order)>parseInt(e.order)?1:-1}),i.API.private("privateFormToData",i.MY.contentDesc[n],t),i.API.doServer(i.MY.serverName.mModel,i.MY.package,t,function(i,t){i>0&&t?e(t):a.use("Widget").alert("\u4fee\u6539\u5185\u5bb9\u4fdd\u5b58\u5931\u8d25\uff01","danger")})}}}}),a});
+
+/**
+* @namespace
+* @author 月飞
+* @emial jianhui.fjh@alibaba-inc.com
+* @name modelMgrExtGadget
+* @description  CMS后台模型操作视图Gadget
+*/
+define(function(require, exports, module) {
+	var FW = require("../breeze/framework/js/BreezeFW");
+	require("../breeze/framework/js/tools/DateTime")(FW);
+	require("../breeze/framework/js/tools/Widget")(FW);
+	require("../gadget/cmsMgrGadget"); //引入扩展函数
+	FW.register(
+		{
+			name:"modelMgrExtGadget",
+			extends:["cmsMgrGadget"],
+			param:{
+				/**
+				*@name alias
+				*@memberOf modelMgrExtGadget
+				*@description 默认的alias
+				*/
+				alias: "model",
+				nodeid: 2
+			},
+			private:{
+				/**
+				*@function
+				*@name privateDataToForm
+				*@memberOf cmsMgrGadget
+				*@param {Object} _desc 当前数据描述
+				*@param {Object} _arrData 从数据库获取到的多笔数据的一个数组
+				*@description 将createForm函数执行参数的数据描述desc和数据data进行数据转换，主要实现如下
+				* 1、model模型对数据的特殊转换
+				*@example
+				*/
+				privateDataToForm: function(_desc,_arrData){
+					// 当修改操作时，数据描述fieldname增加 old_fieldname字段(外联字段除外)，用于区分是否修改字段
+					if(this.MY.action == this.MY.act.conEdit){  //模型修改的时候
+						var descObj = _desc.model_desc.valueRange[0];
+						descObj['old_fieldname'] = {
+							islist: "0",
+							title: "fieldname",
+							type: "Hidden",
+							width:"80px"
+						};
+						// 2. alias 不可修改
+						_desc['model_alias']['type'] = 'ReadOnly';
+						_desc['table_name']['type'] = 'ReadOnly';
+					}
+					if(_arrData && _arrData.length){
+						for(var i = 0; i < _arrData.length; i++){
+							var _modelDesc = [];
+							if(_arrData[i].model_desc){
+								if(typeof _arrData[i].model_desc === 'string'){
+									_arrData[i].model_desc = FW.use().evalJSON(_arrData[i].model_desc);
+								}
+								for(var prop in _arrData[i].model_desc){
+									var fieldObj = _arrData[i].model_desc[prop];
+									//模型修改的时候, 将fieldname值复制到old_fieldname
+									if(this.MY.action == this.MY.act.conEdit){
+										if(fieldObj.fieldType!=='outerField'){  //如果是非外联字断，则增加old_fieldname
+											fieldObj['old_fieldname'] = prop;
+										}
+									}
+									//转换valueRang为字符串
+									if(fieldObj.valueRange){
+										//将校验的checkers数组里面的函数字符串转化为函数
+										for (var nProp in fieldObj.valueRange){
+											var vOne = fieldObj.valueRange[nProp];
+											if(vOne.checkers && vOne.checkers.indexOf("function") == 0){
+												vOne.checkers = FW.use().evalJSON(vOne.checkers);
+											}
+										}
+										fieldObj.valueRange = FW.use().toJSONString(fieldObj.valueRange);
+									}
+									fieldObj.fieldname = prop;
+									_modelDesc.push(fieldObj);
+								}
+								_arrData[i].model_desc = _modelDesc;
+							}
+						}
+					}
+				},
+				/**
+				*@function
+				*@name privateFormToData
+				*@memberOf cmsMgrGadget
+				*@param {Object} _desc 当前数据描述
+				*@param {Object} _data dom[0].getData()函数获取到的单条数据
+				*@description 数据转换函数:将表单获取到的数据中的数组类型List,Pics等，转换成字符串类型保存至数据库，主要实现如下：
+				* 1、将List和Pics等数组类型，由数组转成字符串
+				*@example
+				*/
+				privateFormToData: function(_desc,_data){
+					if(_data && _data.model_desc){
+						var _modelDesc = {};
+						for(var i=0; i<_data.model_desc.length;i++){
+							//转换valueRang为对象
+							if(_data.model_desc[i].valueRange){
+								_data.model_desc[i].valueRange = FW.use().evalJSON(_data.model_desc[i].valueRange);
+								//将校验的checkers数组里面的函数转化为字符串
+								for (var nProp in _data.model_desc[i].valueRange){
+									var vOne = _data.model_desc[i].valueRange[nProp];
+									if(/function/i.test(typeof(vOne.checkers))){
+										vOne.checkers = FW.use().toJSONString(vOne.checkers);
+									}
+								}
+							}
+							var fObj = _data.model_desc[i];
+							_modelDesc[fObj.fieldname] = fObj;
+							delete _modelDesc[fObj.fieldname].fieldname;
+						}
+						_data.model_desc = _modelDesc;
+					}
+				},
+				/**
+				*@function
+				*@name privateBtnConDel
+				*@memberOf cmsMgrGadget
+				*@description 内容列表视图通用删除按钮函数
+				* 需要完成的功能如下：
+				* 1、判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+				* 2、doServer从数据库删除该条数据
+				* 3、删除成功后重新执行内容列表视图
+				*@example
+				*/
+				privateBtnConDel: function(_dom,_data){
+					var _this = this;
+					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+					var curAlias = _this.MY.sonAlias || _this.MY.alias;
+					if(confirm("确认要删除该内容吗？")){
+						var _param = {
+							alias: curAlias,
+							target_alias: _data.model_alias
+						}
+						var _serverName = curAlias=='model'
+							? _this.MY.serverName.dModel
+							: _this.MY.serverName.dCon;
+						_this.API.doServer(_serverName, _this.MY.package, _param, function(code,data){
+							if(code>0){
+								_this.API.private("privateShowConList");
+							}else{
+								FW.use('Widget').alert("内容删除失败！","danger");
+							}
+						})
+					}
+				},
+				/**
+				*@function
+				*@name privateBtnConPLDel
+				*@memberOf cmsMgrGadget
+				*@description 内容列表视图批量删除按钮
+				* 需要完成的功能如下：
+				* 1、获得表单的dom
+				* 2、判断当前视图是否存在_this.MY.sonAlias，如果存在则为子集alias操作
+				* 3、绑定按钮点击事件，doServer从数据库删除该条数据
+				* 4、删除成功后重新执行内容列表视图
+				*@example
+				*/
+				//
+				privateBtnConPLDel: function(){
+					var _this = this;
+					//获得dom
+					var formDom = _this.API.find("#"+_this.param.formConList);
+					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+					var curAlias = _this.MY.sonAlias || _this.MY.alias;
+					if(confirm("确认要删除该内容吗？")){
+						var arrCheckData = formDom[0].batchEdit();
+						var target_alias = [];
+						for (var i = 0; i < arrCheckData.length; i++) {
+							target_alias.push(arrCheckData[i].model_alias);
+						}
+						var _param = {
+							alias: curAlias,
+							target_alias: target_alias.join(',')
+						};
+						var _serverName = curAlias=='model'
+							? _this.MY.serverName.dModel
+							: _this.MY.serverName.dCon;
+						_this.API.doServer(_serverName, _this.MY.package, _param, function(code,data){
+							if(code>0){
+								_this.API.private("privateShowConList");
+							}else{
+								FW.use('Widget').alert("删除失败！","danger");
+							}
+						});
+					}
+				},
+				/**
+				*@function
+				*@name privateSubmitConAdd
+				*@memberOf cmsMgrGadget
+				*@description 内容添加页面提交按钮函数
+				* 需要完成的功能如下：
+				* 1、getDataAndCheck方法将获取表单数据并进行校验，转换成json
+				* 2、转换data中有List、Pics数组类型为字符串
+				* 3、将数据doServer保存进数据库
+				* 4、执行回调函数_callback
+				*@example
+				*/
+				privateSubmitConAdd: function(_callback){
+					var _this = this;
+					//将表单转换成json
+					var data = _this.API.find("#"+_this.param.formConAdd)[0].getDataAndCheck();
+					if(!data) return;
+					//判断当前视图是否存在_this.MY.sonAlias，如果存在则为内容子alias操作
+					//判断是否指定栏目
+					if(_this.MY.sonAlias){
+						var curNodeid = _this.MY.id;
+						var curAlias = _this.MY.sonAlias;
+					}else{
+						var curNodeid = _this.MY.nodeid;
+						var curAlias = _this.MY.alias;
+					}
+					//按照排序大小重组data ,arr.sort改变原数组
+					if(data.model_desc){
+						data.model_desc.sort(function(a,b){return parseInt(a.order)>parseInt(b.order)?1:-1}); //从小到大排序
+					}
+					//转换data中有数组的情况为字符串
+					_this.API.private("privateFormToData",_this.MY.contentDesc[curAlias],data);
+					data.nodeid = curNodeid || "0";  //指定栏目nodeid
+					_this.API.doServer(_this.MY.serverName.aModel, _this.MY.package, data, function(code,data){
+						if(code>0 && data){
+							_callback(data);
+						}else{
+							FW.use('Widget').alert("内容添加失败！","danger");
+						}
+					})
+				},
+				/**
+				*@function
+				*@name privateSubmitConEdit
+				*@memberOf cmsMgrGadget
+				*@description 内容编辑添加页面提交按钮函数
+				* 需要完成的功能如下：
+				* 1、getDataAndCheck方法将获取表单数据并进行校验，转换成json
+				* 2、转换data中有List、Pics数组类型为字符串
+				* 3、将数据doServer保存进数据库
+				* 4、执行回调函数_callback
+				*@example
+				*/
+				privateSubmitConEdit: function(_callback){
+					var _this = this;
+					//将表单转换成json
+					var data = _this.API.find("#"+_this.param.formConEdit)[0].getDataAndCheck();
+					if(!data) return;
+					//判断当前视图是否存在__this.MY.sonAlias，如果存在则为内容子alias操作
+					var curAlias = _this.MY.sonAlias || _this.MY.alias;
+					//按照排序大小重组data ,arr.sort改变原数组
+					if(data.model_desc){
+						data.model_desc.sort(function(a,b){return parseInt(a.order)>parseInt(b.order)?1:-1}); //从小到大排序
+					}
+					//转换data中有数组的情况为字符串
+					_this.API.private("privateFormToData", _this.MY.contentDesc[curAlias], data);
+					_this.API.doServer(_this.MY.serverName.mModel, _this.MY.package, data, function(code,data){
+						if(code>0 && data){
+							_callback(data);
+						}else{
+							FW.use('Widget').alert("修改内容保存失败！","danger");
+						}
+					})
+				}
+			}
+		}
+	);
+	return FW;
+});
+

@@ -1,0 +1,168 @@
+  <!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>开发后台</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap-responsive.min.css" />
+  <link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../assets/css/chosen.css" />
+  <link rel="stylesheet" href="../assets/css/datepicker.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap-timepicker.css" />
+  <link rel="stylesheet" href="../assets/css/daterangepicker.css" />
+  <link rel="stylesheet" href="../assets/css/bootstrap-datetimepicker.min.css" />
+  <link rel="stylesheet" href="../assets/css/ace.min.css" />
+  <link rel="stylesheet" href="../assets/css/ace-modify.css" />
+  <link rel="stylesheet" href="../assets/css/ace-responsive.min.css" />
+  <link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
+  <link rel="stylesheet" href="../assets/css/nw.css" />
+  <!-- //权限校验 -->
+  <script type="text/javascript">
+    var NW = process.mainModule.exports;
+    NW.getRoles(null, function(roles){
+      if(roles){
+        window.RFBRoles = roles;
+      }else{
+        top.location.href = 'login.html';
+      }
+    })
+  </script>
+</head>
+<body class="skin-1">
+
+  <div class="page-content clearfix">
+    <div class="FWApp" id="cmsMgrRolesGadget">
+      <!--@cmsMgrRolesGadget@
+          {
+          }
+          -->
+      <div id="viewCmsRoles">
+        <div class="page-header position-relative">
+          <h1>
+            <div class="pull-right">
+              <a class="btn btn-primary btn-small" href="cmslist.html?alias=role&addcon=true"> <i class="icon-undo"></i>
+                返回角色列表
+              </a>
+            </div>
+            <span id="rolesName">${data.role_name}</span>
+            <small> <i class="icon-double-angle-right"></i>
+              &emsp;
+              <span id="actionName">${data.role_alias}</span>
+            </small>
+            <small>
+              <i class="icon-double-angle-right"></i>
+              &emsp;
+              <span id="actionName">设置权限</span>
+            </small>
+          </h1>
+        </div>
+
+        <h4 class="header blue">
+          <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+          cms表权限设置 &emsp;
+          <button class="btn btn-mini btn-success cmsSelAll">全选</button>
+          <button class="btn btn-mini btn-info cmsCalAll">反选</button>
+        </h4>
+
+        <div class="profile-user-info profile-user-info-striped" id="cmsList">
+          <!--$for(var cnname in data.cmsData){-->
+          <div class="profile-info-row clearfix">
+            <div class="profile-info-name">${cnname}</div>
+            <div class="profile-info-value">
+              <!--$for(var i=0; i<data.cmsData[cnname].length;i++){-->
+              <!--$var item = data.cmsData[cnname][i];-->
+              <div class="checkbox pull-left">
+                <label>
+                  <!--$if(~$.inArray(item.alias, data.checkedArr)){-->
+                  <input class="ace" type="checkbox" value='${item.alias}' name="rolestatus" checked="checked">
+                  <!--$}else{-->
+                  <input class="ace" type="checkbox" value='${item.alias}' name="rolestatus">
+                  <!--$}-->
+                  <span class="lbl">${item.name}</span>
+                </label>
+              </div>
+              <!--$}-->
+              <button class="btn btn-mini btn-info  pull-right rowCalAll" style="margin:-3px 0 0 0px;">反选</button>
+              <button class="btn btn-mini btn-success  pull-right rowSelAll" style="margin:-3px 0 0 0px;">全选</button>
+            </div>
+          </div>
+          <!--$}-->
+        </div>
+        <div class="hr hr30 hr-double"></div>
+        <h4 class="header blue">
+          <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+          自定义功能权限设置 &emsp;
+          <button class="btn btn-mini btn-success zdySelAll">全选</button>
+          <button class="btn btn-mini btn-info zdyCalAll">反选</button>
+        </h4>
+        <div class="clearfix" id="zdyList">
+          <!--$for(var i=0,item=data.zdyData; i<item.length;i++){-->
+          <div class="checkbox pull-left">
+            <label>
+              <!--$if(~$.inArray(item[i].action_alias, data.checkedArr)){-->
+              <input class="ace" type="checkbox" value="${item[i].action_alias}" name="rolestatus" checked="checked">
+              <!--$}else{-->
+              <input class="ace" type="checkbox" value="${item[i].action_alias}" name="rolestatus">
+              <!--$}-->
+              <span class="lbl">${item[i].action_name}</span>
+            </label>
+          </div>
+          <!--$}-->
+        </div>
+      </div>
+    </div>
+    <!-- end .app -->
+    <div class="space space-30"></div>
+    <div class="clearfix form-actions">
+      <div style="margin-left:130px;">
+        <button type="button" class="btn btn-info" onclick="FW.trigerEvent('eventSubmit')">
+          <i class="icon-ok bigger-110"></i>
+          提 交
+        </button>
+        &nbsp; &nbsp; &nbsp;
+        <button type="button" class="btn btn-default" onclick="FW.trigerEvent('resetBtn')">
+          <i class="icon-undo bigger-110"></i>
+          重 置
+        </button>
+      </div>
+    </div>
+  </div>
+    <script charset="utf-8" src="../breeze/lib/js/jquery.js"></script>
+  <script charset="utf-8" src="../breeze/lib/js/sea.js"></script>
+  <!-- 图片上传 -->
+  <script charset="utf-8" src="../breeze/lib/js/ajaxfileupload.js"></script>
+  <!--page specific plugin scripts-->
+  <script charset="utf-8" src="../assets/js/bootstrap.min.js"></script>
+  <script charset="utf-8" src="../assets/js/bootstrap-hover-dropdown.min.js"></script>
+  <script charset="utf-8" src="../assets/js/fuelux/fuelux.tree.min.js"></script>
+  <script charset="utf-8" src="../assets/js/fuelux/fuelux.spinner.min.js"></script>
+  <script charset="utf-8" src="../assets/js/date-time/moment.min.js"></script>
+  <script charset="utf-8" src="../assets/js/bootbox.min.js"></script>
+  <script charset="utf-8" src="../assets/js/chosen.jquery.min.js"></script>
+  <script charset="utf-8" src="../assets/js/jquery.easy-pie-chart.min.js"></script>
+  <script charset="utf-8" src="../assets/js/jquery.sparkline.min.js"></script>
+  <script charset="utf-8" src="../assets/js/flot/jquery.flot.min.js"></script>
+  <script charset="utf-8" src="../assets/js/flot/jquery.flot.pie.min.js"></script>
+  <script charset="utf-8" src="../assets/js/flot/jquery.flot.resize.min.js"></script>
+  <script charset="utf-8" src="../assets/js/My97DatePicker/WdatePicker.js"></script>
+  <!-- html编辑器 -->
+  <script charset="utf-8" src="../breeze/xheditor/jquery-migrate-1.1.0.min.js"></script>
+  <script charset="utf-8" src="../breeze/xheditor/xheditor-1.2.1.min.js"></script>
+  <script charset="utf-8" src="../breeze/xheditor/xheditor_lang/zh-cn.js"></script>
+  <!-- 多图上传函数 -->
+  <script charset="utf-8" src="../breeze/swfupload/swfupload.js"></script>
+  <script charset="utf-8" src="../breeze/swfupload/handlers.js"></script>
+  <!--ace scripts-->
+  <script charset="utf-8" src="../assets/js/highcharts.js"></script>
+  <script charset="utf-8" src="../assets/js/ace-elements.min.js"></script>
+  <script charset="utf-8" src="../assets/js/ace.min.js"></script>
+  <script charset="utf-8" src="../assets/js/nw.js"></script>
+  <script>
+    seajs.use( ["../gadget/cmsMgrRolesGadget"],function(a) {
+      a.go();
+      window.FW = a;
+    });
+  </script>
+  </body>
+</html>

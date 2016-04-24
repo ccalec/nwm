@@ -25,7 +25,8 @@ define(function(require, exports, module) {
 	 * 这里面放置的是默认的API信息
 	 */
 	var _useAPI = {
-		lang:require("./tools/Lang")//这是默认的
+		lang:require("./tools/Lang"),//这是默认的
+		widget:require("./tools/Widget")//这是默认的
 	};
 
 	//加载jquery.blockUI 源码并执行
@@ -61,13 +62,25 @@ define(function(require, exports, module) {
 					//EDIT:  改造是多个还是单个
 					if(toString.apply(__returndata) === '[object Array]'){
 						for (var i =0;i<__returndata.length;i++){
+							if(__returndata[i].code==-101){
+								toLogin();
+								return;
+							}
 							pObj[i] && pObj[i].apply(pObj[i].thisObj,[__returndata[i].code,__returndata[i].data,__returndata[i].message]);
 						}
 					}else{
+						if(__returndata.code==-101){
+							toLogin();
+							return;
+						}
 						pObj[0] && pObj[0].apply(pObj[0].thisObj,[__returndata.code,__returndata.data,__returndata.message]);
 					}
 					//最后所有都结束了，统一给一个通知
 					__finishedCallback && __finishedCallback.apply(__this||this,[]);
+					//如果没有权限，统一跳转到登录页面
+					function toLogin(){
+						_useAPI.widget.alert('无当前页面数据权限','warning',10000000);
+					}
 				})
 			}
 		}

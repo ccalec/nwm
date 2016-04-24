@@ -14,6 +14,7 @@
 var DataClass = require('../class/dataClass');
 var AddData = require('./addData');
 var FlowUnitClass = require('../class/flowUnitClass');
+var _Cache = require('../class/cacheClass');
 
 module.exports = class ModRoleAction extends FlowUnitClass {
   // 单元执行主逻辑
@@ -37,6 +38,12 @@ module.exports = class ModRoleAction extends FlowUnitClass {
         keyValue: keyValue
       }
     }).execute();
+    //清除权限缓存
+    _Cache.clearDataCache(param.alias);
+    //如果是更新的当前操作用的角色类型，则更新自己的权限
+    if(this.session.admin.role_alias == param.role_alias){
+      this.session.admin.roles = param.action_alias;
+    }
     return this.execEnd(1,'服务模型查询成功',res);
   }
 }

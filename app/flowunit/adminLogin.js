@@ -27,7 +27,7 @@ module.exports = class AdminLogin extends FlowUnitClass {
     var password = md5.update(param.password).digest('hex');
     var sql = `SELECT * FROM sys_administrator WHERE account = '${param.account}' AND password = '${password}'`;
     var res = yield DataClass.execsql(sql);
-    if(!res && !res.length){
+    if(!res || !res.length){
       return this.execEnd(-2,'账号密码不正确');
     }
     //将登录信息，放入到session.admin命名空间下

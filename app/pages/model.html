@@ -17,6 +17,17 @@
   <link rel="stylesheet" href="../assets/css/ace-responsive.min.css" />
   <link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
   <link rel="stylesheet" href="../assets/css/nw.css" />
+  <!-- //权限校验 -->
+  <script type="text/javascript">
+    var NW = process.mainModule.exports;
+    NW.getRoles(null, function(roles){
+      if(roles){
+        window.RFBRoles = roles;
+      }else{
+        top.location.href = 'login.html';
+      }
+    })
+  </script>
 </head>
 <body class="skin-1">
 

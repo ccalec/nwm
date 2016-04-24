@@ -54,7 +54,7 @@ gulp.task('default', ['tpl','html','seajs']);
 
 //实时构建
 gulp.task('watch', function () {
-  gulp.watch("./app/src/**/*.tpl", ['tpl']);
-  gulp.watch("./app/src/**/*.html", ['html']);
-  gulp.watch("./app/src/**/*.js", ['seajs']);
+  gulp.watch(["./src/**/*.tpl"], ['tpl']);
+  gulp.watch(["./src/**/*.html","./src/**/*.htm"], ['html']);
+  gulp.watch(["./src/**/*.js"], ['seajs']);
 });
