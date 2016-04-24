@@ -1,0 +1,111 @@
+  <!--#include file="./layout/header.htm"-->
+  <div class="page-content cashpage clearfix">
+    <div class="FWApp" id="cashGadget">
+      <!--@cashGadget@{
+    }
+    -->
+      <div id="viewCashGadget">
+        <div class="cash_info">
+          <p>消费编号：</p>
+          <span id="cash_no"><b>${data.cash_no}</b></span>
+          <p>消费日期：</p>
+          <p id="cash_time">${data.cash_time}</p>
+        </div>
+        <form class="breadcrumbs" onsubmit="return false;" style="margin-bottom:0;">
+          <ul class="breadcrumb">
+            <li>
+              请输入卡号：
+              <input type="text" id="J_inpSerVal" title="请输入会员卡号/手机号码" maxlength="20" style="width:140px;">
+              <input type="checkbox" class="ace-checkbox-2" id="cashtype" onclick="FireEvent.fireIsSanhu()" />
+              <label class="lbl" for="cashtype" style="margin-right:10px;">散户</label>
+              <input onclick="FireEvent.fireSearchUser()" type="submit" class="btn btn-mini btn-primary" value="查　找">
+              <input onclick="FireEvent.fireSerBoxUser()" id="btnQuickSearch" type="button" class="btn btn-mini btn-primary" value="快速查找">
+              <label style="vertical-align: middle;">输入卡号或手机号，按回车即可定位会员！</label>
+            </li>
+          </ul>
+        </form>
+        <div class="user_info">
+          <p>姓名：</p>
+          <span id="user_name">--</span>
+          <p>会员等级：</p>
+          <span id="card_rank_name">--</span>
+          <p>享受折扣：</p>
+          <span id="discount">--</span>
+          <p>余额：</p>
+          <span id="amount">--</span>
+          <p>积分数量：</p>
+          <span id="score">--</span>
+          <p>卡号：</p>
+          <span id="no">--</span>
+          <p>手机号码：</p>
+          <span id="user_phone">--</span>
+        </div>
+      </div>
+    </div>
+    <div class="FWApp" id="cashDetailGadget">
+      <!--@cashDetailGadget@{
+      }
+    -->
+      <div id="viewCashDetailGadget">
+        <div class="breadcrumbs">
+          <ul class="breadcrumb">
+            <li>
+              请输入名称：
+              <label style="vertical-align: middle; position:relative; top:-2px;">
+                <input name="item_type" type="radio" value="goods" checked>
+                <span class="lbl"> 商品</span>
+              </label>
+              <label style="vertical-align: middle; position:relative; top:-2px;">
+                <input name="item_type" type="radio" value="services">
+                <span class="lbl"> 服务</span>
+              </label>
+              <input type="text" id="J_serKey">
+              <input id="btnSerKeyItem" type="button" onclick="FireEvent.fireCloseSerBox()" class="btn btn-mini btn-success" value="确  定">
+              <label style="vertical-align: middle;">模糊检索商品和服务项目详细信息！</label>
+            </li>
+          </ul>
+        </div>
+        <div class="space-6"></div>
+        <form id="formCashDetailList" class="form-horizontal clearfix" style="width:850px">
+
+        </form>
+        <div class="user_info">
+          <p>消费总数量：</p>
+          <span id="cTQuantity">--</span>
+          <p>消费总金额：</p>
+          <span id="cTAmout">--</span>
+          <p>折后总金额：</p>
+          <span id="daTAmout">--</span>
+          <p>消费总积分：</p>
+          <span id="cScore">--</span>
+          <p>提成总金额：</p>
+          <span id="cpTAmout">--</span>
+        </div>
+        <textarea id="comment" placeholder="消费备注" style="margin: 0px; width: 600px; height: 36px;"></textarea>
+        <div id="submitBtn" class="form-actions" style="display:none;">
+            <a href="javascript:void(0)" onclick="FireEvent.submitJieSuan(true)" class="btn btn-success">
+                <i class="icon-check bigger-110"></i>
+                结 算
+            </a>
+            <!-- &nbsp; &nbsp; &nbsp;
+            <a href="javascript:void(0)" onclick="FireEvent.submitJieSuan(false)" class="btn btn-pink">
+                <i class="icon-headphones bigger-110"></i>
+                挂 单
+            </a> -->
+            &nbsp; &nbsp; &nbsp;
+            <a href="javascript:void(0)" onclick="FireEvent.resetForm(false)" class="btn btn-default">
+                <i class="icon-undo bigger-110"></i>
+                重 置
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--#include file="./layout/assetsjs.htm"-->
+  <script>
+    seajs.use(['../privategadget/cashGadget','../privategadget/cashDetailGadget'],function(a) {
+      a.go();
+      window.FW = a;
+    });
+  </script>
+  <!--#include file="./layout/footer.htm"-->

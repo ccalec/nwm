@@ -1,0 +1,1 @@
+define("",[],function(require,e,i){i.exports={alias:"store",target:"self",filterFields:[{keyField:"id",isshow:!0,otherFields:["name"]}],filterParam:{}}});

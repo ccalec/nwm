@@ -1,0 +1,60 @@
+  <!--#include file="./layout/header.htm"-->
+  <div class="page-content clearfix cmsadd">
+    <div class="FWApp " id="cmsListHeadGadget">
+      <!--@cmsListHeadGadget@
+      {
+      }
+      -->
+      <div id="viewCmsListHead">
+        <div class="page-header position-relative" id="pageH1">
+          <h1>
+            <div class="pull-right" id="btnAction">
+              <div class="btn-toolbar">
+                <a class="btn btn-small btn-light" onclick='FireEvent.fireGoToList()'>
+                  <i class="icon-list"></i>列表
+                </a>
+              </div>
+            </div>
+            <span>商品采购</span>
+            <small>
+              <i class="icon-double-angle-right"></i>
+              <span>入库操作</span>
+            </small>
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="FWApp " id="cmsMgrExtGadget">
+      <!--@cmsMgrExtGadget@
+      {
+      }
+      -->
+      <div id="viewContentAdd">
+        <form id="formContentAdd" class="form-horizontal clearfix batchin_cg">
+        </form>
+      </div>
+    </div>
+    <div id="submitBtn" style="clear:both;padding:20px 0 0 180px; border-top:1px solid #E2E2E2; display:none;">
+      <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerSubmit')" class="btn btn-success">
+        <i class="icon-ok bigger-110"></i>
+        提 交
+      </a>
+      &nbsp; &nbsp; &nbsp;
+      <a href="javascript:void(0)" onclick="FW.trigerEvent('trigerReset')" class="btn btn-default">
+        <i class="icon-undo bigger-110"></i>
+        重 置
+      </a>
+    </div>
+  </div>
+  <!--#include file="./layout/assetsjs.htm"-->
+  <script>
+    seajs.use(['../privategadget/cmsListHeadGadget','../privategadget/cmsMgrExtGadget'],function(a) {
+      a.go('',null,function(){
+        setTimeout(function(){
+          $('._active_price_inp').addClass('readOnly').attr('readOnly',true);
+        },50)
+      });
+      window.FW = a;
+    });
+  </script>
+  <!--#include file="./layout/footer.htm"-->

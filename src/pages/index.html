@@ -1,0 +1,52 @@
+  <!--#include file="./layout/header.htm"-->
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a href="#" class="brand">
+          <small>
+            <i class="icon-flag"></i>
+            欢迎使用管理后台
+          </small>
+        </a>
+        <ul class="nav ace-nav pull-right">
+          <li class="light-blue">
+            <a href="../adminUserPage/logout.jsp" target="_top">
+              <i class="icon-exclamation-sign"></i>
+              注销
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="main-container container-fluid">
+    <!--#include file="./layout/left_menu.htm"-->
+    <div class="main-content">
+      <!--#include file="./layout/top_menu.htm"-->
+      <iframe name="myframe" id="ifr" src="home.html" width="100%" height="500" scrolling-y="yes" frameborder="0"></iframe>
+    </div>
+  </div>
+  <!--#include file="./layout/assetsjs.htm"-->
+  <script>
+    // 计算页面的实际高度，iframe自适应会用到
+    var height = $(window).height();
+    $('#ifr').height(height-87);
+    // 左边菜单进行history修改地址操作
+    $('#sidebar a, #nav-search a').on('click', function(e){
+      e.preventDefault();
+      var href = $(this).attr('href');
+      $('#ifr').attr('src', href);
+    })
+    // 轮训调整iframe高度
+    $(window).resize(function() {
+      var height = $(window).height();
+      $('#ifr').height(height-87);
+    })
+    //高亮展开显示当前菜单
+    $("#sidebar li a").not('.dropdown-toggle').click(function(){
+      $("#sidebar li, #sidebar li a").removeClass('active').removeClass('open');
+      $(this).parent().addClass("open");
+      $(this).parents("li").addClass("active").remove("open");
+    })
+  </script>
+  <!--#include file="./layout/footer.htm"-->

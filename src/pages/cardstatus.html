@@ -1,0 +1,70 @@
+  <!--#include file="./layout/header.htm"-->
+  <div class="page-content cashpage clearfix">
+    <div class="FWApp " id="cmsCardStatusGadget">
+      <!--@cmsCardStatusGadget@
+      {
+        alias: 'modpsd',
+        navTxt: ['会员管理','挂失解挂']
+      }
+      -->
+      <div id="viewMain">
+        <div class="page-header position-relative" id="pageH1">
+          <h1>
+            <span>会员管理</span>
+            <small>
+              <i class="icon-double-angle-right"></i>
+              <span>挂失解挂</span>
+            </small>
+          </h1>
+        </div>
+        <form class="breadcrumbs" onsubmit="return false;" style="margin-bottom:0;">
+          <ul class="breadcrumb">
+            <li>
+              请输入卡号：
+              <input type="text" id="J_inpSerVal" title="请输入会员卡号/手机号码" maxlength="20" style="width:140px;">
+              <input onclick="FireEvent.fireSearchUser()" type="submit" class="btn btn-mini btn-primary" value="查　找">
+              <input onclick="FireEvent.fireSerBoxUser()" id="btnQuickSearch" type="button" class="btn btn-mini btn-primary" value="快速查找">
+              <label style="vertical-align: middle;">输入卡号或手机号，按回车即可定位会员！</label>
+            </li>
+          </ul>
+        </form>
+        <div class="user_info">
+          <p>姓名：</p>
+          <span id="user_name">--</span>
+          <p>会员等级：</p>
+          <span id="card_rank_name">--</span>
+          <p>享受折扣：</p>
+          <span id="discount">--</span>
+          <p>余额：</p>
+          <span id="amount">--</span>
+          <p>积分数量：</p>
+          <span id="score">--</span>
+          <p>卡号：</p>
+          <span id="no">--</span>
+          <p>手机号码：</p>
+          <span id="user_phone">--</span>
+        </div>
+        <form id="formDiy" class="form-horizontal clearfix">
+        </form>
+        <div id="submitBtn" style="clear:both;padding:20px 0 0 180px; border-top:1px solid #E2E2E2;">
+          <a href="javascript:void(0)" onclick="FireEvent.fireSubmit()" class="btn btn-success">
+            <i class="icon-ok bigger-110"></i>
+            提 交
+          </a>
+          &nbsp; &nbsp; &nbsp;
+          <a href="javascript:void(0)" onclick="FireEvent.fireReset()" class="btn btn-default">
+            <i class="icon-undo bigger-110"></i>
+            重 置
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--#include file="./layout/assetsjs.htm"-->
+  <script>
+    seajs.use(['../privategadget/cmsCardStatusGadget'],function(a) {
+      a.go();
+      window.FW = a;
+    });
+  </script>
+  <!--#include file="./layout/footer.htm"-->

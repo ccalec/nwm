@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "nw-version": "0.12.0",
   "branch": "ju",
-  "main": "app/views/index.html",
+  "main": "app/pages/index.html",
   "node-main": "index.js",
   "window": {
     "toolbar": true,
@@ -44,6 +44,7 @@
     "@ali/gulp-civet": "*",
     "father": "*",
     "flex-combo": "*",
+    "essi": "~0.10.21",
     "gulp": "*",
     "gulp-param": "~0.6.3",
     "gulp-clean": "*",

@@ -1,0 +1,140 @@
+  <!--#include file="./layout/header.htm"-->
+  <div class="page-content home clearfix">
+    <div class="FWApp" id="homeGadget">
+      <!--@homeGadget@{
+      }
+      -->
+      <div id="viewHomeGadget">
+        <div class="widget-container sysinfo" style="width:100%;">
+          <div class="widget-box">
+            <div class="widget-header">
+              <h5 class="green"><i class="icon-cog"></i>系统信息</h5>
+            </div>
+            <div class="widget-body">
+              <div class="widget-main">
+                <div class="widget-main padding-10">
+                  <div class="pull-left">
+                    <a href="javascript:void(0)" class="btn btn-app btn-success">
+                      <i class="icon-user bigger-230"></i>
+                      系统统计
+                    </a>
+                  </div>
+                  <div class="con">
+                    <p>
+                      <!--$var sys = data.sysData; -->
+                      <span><i class="icon-home blue icon-primary"></i> <b>${sys.storeInfo.store_name}</b></span>
+                      <span>操作权限：<b style="color: #08c;">${sys.adminInfo.roleName}</b></span>
+                    </p>
+                    <p>
+                      <span><i class="icon-user red"></i> 新增会员：今日 <em>${sys.count_today_user}</em> 人/昨日 <em>${sys.count_yes_user}</em> 人</span>
+                      <span>营业总额：今日 <em>${sys.sum_today_amount}</em> 元/昨日 <em>${sys.sum_yes_amount}</em> 元</span>
+                    </p>
+                    <p><i class="icon-money pink"></i> 充值金额：今日 <em>${sys.sum_today_prepaid}</em> 元/昨日 <em>${sys.sum_yes_prepaid}</em> 元</p>
+                    <p>
+                      <span>联系人：${sys.storeInfo.contacter}</span>
+                      <span>手机：${sys.storeInfo.phone}</span>
+                      <span>电话：${sys.storeInfo.tel}</span>
+                      <span>地址：${sys.storeInfo.address}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="row-fluid">
+          <div class="span6">
+            <div class="widget-container sysinfo" style="width:100%;">
+              <div class="widget-box">
+                <div class="widget-header">
+                  <h5 class="pink"><i class="icon-bullhorn"></i>系统公告</h5>
+                </div>
+                <div class="widget-body">
+                  <div class="widget-main">
+                    <div class="widget-main padding-10" style="height:114px;">
+                      <div class="pull-left">
+                        <a href="cmslist.html?alias=global_announcement&addcon=true" class="btn btn-app btn-pink">
+                          <i class="icon-bullhorn bigger-230"></i>
+                          <!-- <span class="badge badge-warning badge-right">11</span> -->
+                          公告信息
+                        </a>
+                      </div>
+                      <div class="con">
+                        <ul class="aalist J_aalist">
+                          <!--$for(var i=0; i<data.aaData.length;i++){ -->
+                          <li><a onclick="FireEvent.fireAA(${i})">${data.aaData[i].title}</a><span>${DateTime:format(data.aaData[i].gmt_create,'yyyy-MM-dd')}</span></li>
+                          <!--$} -->
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="span6">
+            <div class="widget-container sysinfo" style="width:100%;">
+              <div class="widget-box">
+                <div class="widget-header">
+                  <h5 class="purple"><i class="icon-bar-chart"></i>新增会员趋势图(近30天)</h5>
+                </div>
+                <div class="widget-body">
+                  <div class="char" id="J_user_qs" style="height:158px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="tabbable hometx">
+          <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+              <a data-toggle="tab" href="#user">
+                <i class="green icon-group bigger-110"></i>
+                会员生日提醒(提前3天)
+              </a>
+            </li>
+            <li class="">
+              <a data-toggle="tab" href="#goods">
+                <i class="pink icon-inbox bigger-110"></i>
+                库存不足提醒（10件以内）
+              </a>
+            </li>
+            <li class="dropdown">
+              <a data-toggle="tab" href="#reservation">
+                <i class="primary icon-laptop bigger-110"></i>
+                预约到期提醒（2日内）
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content loading">
+            <div id="user" class="tab-pane active">
+            </div>
+            <div id="goods" class="tab-pane">
+            </div>
+            <div id="reservation" class="tab-pane">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="viewAA">
+        <div class="aadiolag">
+           <div class="tit">${data.title}</div>
+           <div class="pubtime">发表于：${DateTime:format(data.gmt_create,'yyyy-MM-dd hh:mm:ss')}</div>
+           <div class="content">
+            ${data.content}
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--#include file="./layout/assetsjs.htm"-->
+  <script>
+    seajs.use(['../privategadget/homeGadget'],function(a) {
+      a.go();
+      window.FW = a;
+    });
+  </script>
+  <!--#include file="./layout/footer.htm"-->

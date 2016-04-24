@@ -1,0 +1,1 @@
+define("",[],function(require,e,i){i.exports={alias:"technician",target:"self",filterFields:[{keyField:"name",type:"like"},{keyField:"no",type:"like"},{keyField:"rank_id",isshow:!0,otherFields:[{tableName:"nw_technician_rank",fields:["name"]}]},{keyField:"store_id",paramName:"c_store_id",isshow:!0,otherFields:[{tableName:"nw_store",fields:["name"]}]}],filterParam:{}}});

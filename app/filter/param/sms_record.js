@@ -1,0 +1,1 @@
+define("",[],function(require,e,i){i.exports={alias:"sms_record",target:"self",filterFields:[{keyField:"phones",type:"like"},{keyField:"gmt_create",type:"section"},{keyField:"store_id",paramName:"c_store_id",isshow:!0,otherFields:[{tableName:"nw_store",fields:["name"]}]}],filterParam:{}}});

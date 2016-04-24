@@ -18,41 +18,43 @@ var n2a = require('gulp-native2ascii');
 var seajs = require("gulp-seajs-combine");
 var runSequence = require('run-sequence');
 var flexCombo = require("flex-combo");
+var essi = require('essi');
 
 
 gulp.task("tpl", function (cb) {
-  //tpl
-  return gulp.src(["./app/src/**/*.tpl"])
+  return gulp.src(["./src/**/*.tpl"])
     .pipe(civet.build2JsTpl({
       type: 'cmd'
     }))
     .pipe(rename({extname: '.tpl.js'}))
-    .pipe(gulp.dest('./app/views'));
+    .pipe(gulp.dest('./app'));
 });
 
-// /**
-//  * build seajs
-//  */
-// gulp.task("seajs", function (cb) {
-//     return gulp.src(['./index.js'])
-//         .pipe(seajs(null, {
-//             //base: 'http://g-assets.daily.taobao.net/jusp/'
-//         }))
-//         .pipe(uglify({
-//             mangle: {except: ['require']}
-//         }))
-//         .pipe(n2a({reverse: false}))
-//         .pipe(rename({extname: ".js"}))
-//         .pipe(gulp.dest("./build"));
-// });
-
-gulp.task('default', function () {
-  runSequence('tpl',function () {
-    // setTimeout(runSequence('seajs'),200);
-  })
+gulp.task("html", function () {
+  return gulp.src(["./src/**/*.html"])
+    .pipe(essi.gulp({
+      strictPage: false
+    }, '.clam'))
+    .pipe(gulp.dest("./app"));
 });
+
+gulp.task("seajs", function (cb) {
+  return gulp.src(['./src/**/*.js'])
+    .pipe(seajs(null, {
+    }))
+    .pipe(uglify({
+        mangle: {except: ['require']}
+    }))
+    .pipe(n2a({reverse: false}))
+    .pipe(rename({extname: ".js"}))
+    .pipe(gulp.dest("./app"));
+});
+
+gulp.task('default', ['tpl','html','seajs']);
 
 //实时构建
 gulp.task('watch', function () {
   gulp.watch("./app/src/**/*.tpl", ['tpl']);
+  gulp.watch("./app/src/**/*.html", ['html']);
+  gulp.watch("./app/src/**/*.js", ['seajs']);
 });
